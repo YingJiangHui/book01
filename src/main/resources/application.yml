@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: book01
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: root
+    password: rootroot
+    driver-class-name: org.postgresql.Driver
+
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    locations: classpath:db/migration
+    ##??Flyway??????? ??clean-disabled=true
+    #    clean-disabled: true
+    #    out-of-order: true
+    ##??????????Flyway,?????????????baseline-on-migrate=true
+    #    baseline-on-migrate: true
+    ##??baseline???? V1__BaseLine.sql
+#    baseline-version: 1
+#    driver-class-name: org.postgresql.Driver
+
+
+
+#  password=password
+server:
+  port: 8099
+  servlet:
+    context-path: /api
+logging:
+  level:
+    root: DEBUG
