@@ -9,11 +9,11 @@ import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
 import org.ying.book.pojo.UserExample;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Resource
     private EncodeService encodeService;
@@ -42,7 +42,7 @@ public class UserService {
     public User login(UserDto userDto){
         User user = getUserByEmail(userDto.getEmail());
         if( user.getPassword().equals(encodeService.encode(userDto.getPassword()))){
-            logger.info("密码校验通过");
+            log.info("密码校验通过");
             return user;
         }
         throw new CustomException("密码错误", HttpStatus.UNAUTHORIZED);

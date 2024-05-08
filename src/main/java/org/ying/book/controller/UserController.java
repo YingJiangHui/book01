@@ -1,7 +1,9 @@
 package org.ying.book.controller;
 
 import jakarta.annotation.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.User;
 import org.ying.book.service.UserService;
 
@@ -13,8 +15,9 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public User getUsers(@RequestParam("id") Integer id) {
-        return userService.getUser(id);
+    public User getUsers(@RequestParam("id") Integer id) throws Exception {
+        throw new Exception("错误");
+//        return userService.getUser(id);
     }
 
 }
