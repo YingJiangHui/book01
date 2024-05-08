@@ -1,23 +1,23 @@
 services:
-  book:
-    image: book:0.0.1-SNAPSHOT
-    environment:
-#      ELASTIC_APM_ENABLED: false
-#      APPLICATION_SAIKUL_PAY_BASE_URL: https://ep-test.saikul.com/api
-      SERVER_SERVLET_CONTEXT_PATH: /api
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootroot
-      SPRING_FLYWAY_USER: root
-      SPRING_FLYWAY_PASSWORD: rootroot
-#      SPRING_RABBITMQ_HOST: rabbitmq
-#      SPRING_DATA_REDIS_HOST: redis
-    ports:
-      - 8098:8099
-    networks:
-      - network
-    links:
-      - postgres
+#  book:
+#    image: book:0.0.1-SNAPSHOT
+#    environment:
+##      ELASTIC_APM_ENABLED: false
+##      APPLICATION_SAIKUL_PAY_BASE_URL: https://ep-test.saikul.com/api
+#      SERVER_SERVLET_CONTEXT_PATH: /api
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: rootroot
+#      SPRING_FLYWAY_USER: root
+#      SPRING_FLYWAY_PASSWORD: rootroot
+##      SPRING_RABBITMQ_HOST: rabbitmq
+##      SPRING_DATA_REDIS_HOST: redis
+#    ports:
+#      - 8098:8099
+#    networks:
+#      - network
+#    links:
+#      - postgres
   postgres:
     image: 'postgres:latest'
     environment:
