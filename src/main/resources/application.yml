@@ -23,6 +23,7 @@ spring:
 
 
 
+
 #  password=password
 server:
   port: 8099
@@ -31,3 +32,7 @@ server:
 logging:
   level:
     root: DEBUG
+
+jwt:
+  secret: I2ddU/A51ZqBrePymscViPmiGZNIrjSjKcX+YowurDc=
+  expiration: 3600000
