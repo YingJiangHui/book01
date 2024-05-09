@@ -1,9 +1,23 @@
 package org.ying.book.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.ying.book.pojo.User;
+import org.ying.book.utils.JwtUtil;
 
 @Service
 public class AuthService {
+    @Resource
+    ObjectMapper objectMapper;
+
+    @Resource
+    JwtUtil jwtUtil;
+
+    public <T> T parseJWT(String token,Class<T> Clazz) throws Exception {
+        return objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), Clazz);
+    }
+
     public void validateRegister(String email, String password, String confirmPassword){
         validateEmail(email);
         validatePassword(password,confirmPassword);

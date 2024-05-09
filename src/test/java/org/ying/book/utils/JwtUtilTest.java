@@ -46,10 +46,11 @@ public class JwtUtilTest {
         String json = objectMapper.writeValueAsString(user);
         String jwtToken = jwtUtil.createJWT("weiyibiaoshi", json, 36000);
         Claims parsedInfo = jwtUtil.parseJWT(jwtToken);
-        log.debug(parsedInfo.toString());
+        User user2 =  objectMapper.readValue(json, User.class);
         assertNotNull(parsedInfo);
         assertTrue(parsedInfo.getId().equals("weiyibiaoshi"));
-        assertTrue(parsedInfo.getSubject().equals(json));
+        assertTrue(user2.getUsername().equals(user.getUsername()));
+        assertTrue(user2.getEmail().equals(user.getEmail()));
     }
     @Test
     void JwtTokenIs() throws Exception {

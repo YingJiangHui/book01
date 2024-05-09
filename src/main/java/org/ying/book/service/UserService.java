@@ -1,5 +1,6 @@
 package org.ying.book.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,10 @@ import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
 import org.ying.book.pojo.UserExample;
 import lombok.extern.slf4j.Slf4j;
+import org.ying.book.utils.JwtUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -20,11 +25,18 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
-    User getUserByEmail(String email){
-        UserExample userPOExample = new UserExample();
-        userPOExample.createCriteria().andUsernameEqualTo(email);
+    @Resource
+    ObjectMapper objectMapper;
 
-        return userMapper.selectByExample(userPOExample).get(0);
+    @Resource
+    JwtUtil jwtUtil;
+
+    User getUserByEmail(String email){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andEmailEqualTo(email);
+        List<User> userList = userMapper.selectByExample(userExample);
+
+        return userList.isEmpty() ? null : userList.get(0);
     }
 
     public void validateRegister(UserDto userDto){
