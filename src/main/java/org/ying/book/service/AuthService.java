@@ -1,7 +1,6 @@
 package org.ying.book.service;
 
 import org.springframework.stereotype.Service;
-import org.ying.book.dto.UserDto;
 
 @Service
 public class AuthService {

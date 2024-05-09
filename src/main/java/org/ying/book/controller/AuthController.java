@@ -6,14 +6,12 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.ying.book.dto.UserDto;
+import org.ying.book.dto.user.UserDto;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.User;
-import org.ying.book.pojo.UserPO;
 import org.ying.book.service.AuthService;
 import org.ying.book.service.UserService;
 

@@ -1,5 +1,7 @@
 package org.ying.book.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 public class User {
@@ -32,7 +34,7 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

@@ -1,4 +1,4 @@
-package org.ying.book.dto;
+package org.ying.book.dto.user;
 
 public class UserDto {
     private String email;

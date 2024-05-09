@@ -14,10 +14,10 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public User getUsers(@RequestParam("id") Integer id) throws Exception {
-        throw new Exception("错误");
+//        throw new Exception("错误");
 //        return userService.getUser(id);
+        return new User();
     }
 
 }

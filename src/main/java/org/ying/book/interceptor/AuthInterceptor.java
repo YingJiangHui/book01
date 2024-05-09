@@ -2,11 +2,15 @@ package org.ying.book.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.ying.book.pojo.User;
+import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.Result;
 
 import java.io.IOException;
@@ -14,20 +18,37 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
+
+    @Resource
+    ObjectMapper objectMapper;
+
+    @Resource
+    JwtUtil jwtUtil;
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.debug("preHandle1");
-        //从header中获取token
-        String token = request.getHeader("token");
-        //如果token为空
-//        if (token == null) {
-//            setReturn(response,401,"用户未登录，请先登录");
+//        //从header中获取token
+//        String authorizationHeader = request.getHeader("Authorization");//        如果token为空
+//        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
+//            // 如果没有提供Authorization头部或者头部格式不正确，返回401 Unauthorized错误
+//
+//            setReturn(response,HttpServletResponse.SC_UNAUTHORIZED,"用户未登录，请先登录");
 //            return false;
 //        }
-        //在实际使用中还会:
-        // 1、校验token是否能够解密出用户信息来获取访问者
-        // 2、token是否已经过期
+//        // 提取token部分
+//        String token = authorizationHeader.substring(7); // 去掉 "Bearer " 前缀
+//
+//        // 在这里可以对token进行进一步处理，比如解析JWT令牌，验证令牌的有效性等
+//
+//        // 如果需要，你可以将token存储在request的attribute中，以便后续处理程序使用
+//        request.setAttribute("token", token);
+//        Claims JwtClaims = jwtUtil.parseJWT(authorizationHeader);
+//        User user = objectMapper.readValue(JwtClaims.getSubject(), User.class);
 
+
+//        在实际使用中还会:
+//         1、校验token是否能够解密出用户信息来获取访问者
+//         2、token是否已经过期
         return true;
     }
 

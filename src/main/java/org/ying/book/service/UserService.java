@@ -1,10 +1,9 @@
 package org.ying.book.service;
 
 import jakarta.annotation.Resource;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.ying.book.dto.UserDto;
+import org.ying.book.dto.user.UserDto;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
