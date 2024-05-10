@@ -3,7 +3,9 @@ package org.ying.book.service;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.ying.book.utils.GeneratorCode;
@@ -17,8 +19,8 @@ public class EmailServiceTest {
     @Resource
     EmailService emailService;
 
-    @Value("${custom.invite-register-link}")
-    String inviteRegisterLink;
+    @Autowired
+    RedisService redisService;
 
     @Test
     public void sendEmailTest() throws MessagingException, UnsupportedEncodingException {
@@ -27,13 +29,15 @@ public class EmailServiceTest {
 
     @Test
     public void sendValidateCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
-        String validateCode = GeneratorCode.generator(6);
-        emailService.sendVerificationEmail("15867925894@163.com","jh",validateCode);
+        String code = emailService.sendVerificationEmail("15867925894@163.com");
+        // 会在redis中存储
+        Assertions.assertEquals(redisService.getValue("15867925894@163.com"),code);
     }
 
     @Test
     public void sendInviteCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
-        String link = String.format("%s?inviteCode=%s", inviteRegisterLink,GeneratorCode.generator(8));
-        emailService.sendInvitationEmail("15867925894@163.com",link);
+        String code = emailService.sendInvitationEmail("15867925894@163.com");
+        // 会在redis中存储
+        Assertions.assertNotNull(redisService.getValue(code));
     }
 }

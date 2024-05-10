@@ -1,7 +1,6 @@
 spring:
   application:
     name: book01
-
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: root
@@ -35,6 +34,10 @@ spring:
         smtp:
           ssl:
             enable: true
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
 
 
 
@@ -53,4 +56,10 @@ jwt:
 
 
 custom:
-  invite-register-link: http://localhost:8881/admin/register
+  invite-register:
+    code-timeout: 30
+    code-length: 8
+    register-link: http://localhost:8881/admin/register
+  user-validate:
+    code-timeout: 5
+    code-length: 6

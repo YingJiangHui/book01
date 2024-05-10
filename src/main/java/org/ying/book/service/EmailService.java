@@ -20,8 +20,28 @@ public class EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Autowired
+    private RedisService redisService;
+
     @Value("${spring.mail.username}")
     String formEmail;
+
+    @Value("${custom.invite-register.code-timeout}")
+    int inviteCodeTimeout;
+
+    @Value("${custom.user-validate.code-timeout}")
+    int validateCodeTimeout;
+
+    @Value("${custom.invite-register.code-length}")
+    int inviteCodeLength;
+
+    @Value("${custom.user-validate.code-length}")
+    int validateCodeLength;
+
+
+    @Value("${custom.invite-register.register-link}")
+    String inviteRegisterLink;
+
 
     public void sendVerificationCode(String to, String verificationCode) throws MessagingException, MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -44,16 +64,25 @@ public class EmailService {
         javaMailSender.send(mimeMessage);
     }
 
-    public void sendVerificationEmail(String to, String name, String verificationCode) throws MessagingException {
+    public String sendVerificationEmail(String to) throws MessagingException {
+        String validateCode = GeneratorCode.generator(validateCodeLength);
+        redisService.setKey(to, validateCode,validateCodeTimeout);
         Context context = new Context();
-        context.setVariable("name", name);
-        context.setVariable("verificationCode", verificationCode);
+        context.setVariable("verificationCode", validateCode);
+        context.setVariable("timeout", validateCodeTimeout);
         this.sendEmail(to,"图书账号验证",context,"email-validate-code-template.html");
+        return validateCode;
     }
 
-    public void sendInvitationEmail(String to, String link) throws MessagingException {
+    public String sendInvitationEmail(String to) throws MessagingException {
+        String inviteCode = GeneratorCode.generator(validateCodeLength);
+//        可以存一些待注册管理员的权限信息
+        redisService.setKey(inviteCode, String.valueOf(1), inviteCodeTimeout);
+        String link = String.format("%s?inviteCode=%s", inviteRegisterLink,inviteCode);
         Context context = new Context();
         context.setVariable("link", link);
+        context.setVariable("timeout", inviteCodeTimeout);
         this.sendEmail(to,"图书管理员账号申请",context,"email-invite-template.html");
+        return inviteCode;
     }
 }
