@@ -46,9 +46,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public Result login(HttpServletRequest request, @RequestBody UserDto userDto) throws JsonProcessingException {
-        HttpSession session = request.getSession();
         User userDetails = userService.login(userDto);
-        Object JWT  = jwtUtil.createJWT("user_auth",userDetails,20000);
+        Object JWT  = jwtUtil.createJWT("user_auth",userDetails);
         return new Result().success("登录成功",JWT);
     }
 

@@ -20,7 +20,21 @@ spring:
     ##??baseline???? V1__BaseLine.sql
 #    baseline-version: 1
 #    driver-class-name: org.postgresql.Driver
+  mail:
+    # 比如：使用qq邮箱服务(也可以其他服务)
+    host: smtp.qq.com
+    port: 465
+    #发送方的邮箱
 
+    username: 473380917@qq.com
+    # 设置密码，该处的密码是发送方QQ邮箱开启SMTP的授权码而非QQ密码
+    password: gycqdrxgizazbiie
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 
 
 
@@ -36,3 +50,7 @@ logging:
 jwt:
   secret: I2ddU/A51ZqBrePymscViPmiGZNIrjSjKcX+YowurDc=
   expiration: 3600000
+
+
+custom:
+  invite-register-link: http://localhost:8881/admin/register
