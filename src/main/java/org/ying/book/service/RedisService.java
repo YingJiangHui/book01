@@ -11,25 +11,25 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     // 存储键值对到Redis
-    public void setKey(String key, String value) {
+    public void setKey(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
     // 存储键值对到Redis
-    public void setKey(String key, String value, long time) {
+    public void setKey(String key, Object value, long time) {
         redisTemplate.opsForValue().set(key, value, time, TimeUnit.MINUTES);
     }
 
     // 存储键值对到Redis
-    public void setKey(String key, String value, long time, TimeUnit unit) {
+    public void setKey(String key, Object value, long time, TimeUnit unit) {
         redisTemplate.opsForValue().set(key, value, time, unit);
     }
 
     // 从Redis获取指定键的值
-    public String getValue(String key) {
+    public Object getValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
