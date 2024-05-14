@@ -39,7 +39,7 @@ public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         }
         if (body != null) {
             // 其他情况，将返回内容包装在ResponseWrapper中
-            return new Result().success(body);
+            return Result.builder().build().success(body);
         }
         return body;
     }

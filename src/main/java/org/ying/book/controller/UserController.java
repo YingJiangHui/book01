@@ -30,7 +30,7 @@ public class UserController {
 //
 //        return new User();
 //    }
-    @GetMapping("/info")
+    @GetMapping()
     public User getUserInfo() throws Exception {
         Object token = request.getAttribute("token");
         return authService.parseJWT(token.toString(), User.class);

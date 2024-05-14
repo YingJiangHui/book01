@@ -41,14 +41,15 @@ public class AuthController {
             throw new CustomException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         userService.register(userDto);
-        return new Result().success("注册成功");
+
+        return Result.builder().build().success("注册成功");
     }
 
     @PostMapping("/login")
     public Result login(HttpServletRequest request, @RequestBody UserDto userDto) throws JsonProcessingException {
         User userDetails = userService.login(userDto);
         Object JWT  = jwtUtil.createJWT("user_auth",userDetails);
-        return new Result().success("登录成功",JWT);
+        return Result.builder().build().success("登录成功",JWT);
     }
 
 //    @PostMapping("/logout")
