@@ -77,7 +77,7 @@ public class EmailService {
     public String sendInvitationEmail(String to) throws MessagingException {
         String inviteCode = GeneratorCode.generator(validateCodeLength);
 //        可以存一些待注册管理员的权限信息
-        redisService.setKey(inviteCode, 1, inviteCodeTimeout);
+        redisService.setKey(to, inviteCode, inviteCodeTimeout);
         String link = String.format("%s?inviteCode=%s", inviteRegisterLink,inviteCode);
         Context context = new Context();
         context.setVariable("link", link);
@@ -85,4 +85,13 @@ public class EmailService {
         this.sendEmail(to,"图书管理员账号申请",context,"email-invite-template.html");
         return inviteCode;
     }
+
+    public String validateEmailCode(String email, String code,String message) {
+        Object codeInRedis = redisService.getValue(email);
+        if(codeInRedis != null && codeInRedis.toString().equals(code)){
+            return code;
+        }
+        throw new RuntimeException(message);
+    }
+
 }

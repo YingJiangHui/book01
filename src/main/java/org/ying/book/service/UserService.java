@@ -39,24 +39,32 @@ public class UserService {
         return userList.isEmpty() ? null : userList.get(0);
     }
 
+    public User existUserByEmail(String email){
+        User user = getUserByEmail(email);
+        if(user == null){
+            throw new RuntimeException("用户不存在");
+        }
+        return user;
+    }
+
     public void validateRegister(UserDto userDto){
         User user = getUserByEmail(userDto.getEmail());
         if(user != null) {
              throw new RuntimeException("邮箱已存在");
         }
     }
-
     public User getUser(int id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
     public User login(UserDto userDto){
+        existUserByEmail(userDto.getEmail());
         User user = getUserByEmail(userDto.getEmail());
         if( user.getPassword().equals(encodeService.encode(userDto.getPassword()))){
             log.info("密码校验通过");
             return user;
         }
-        throw new CustomException("密码错误", HttpStatus.UNAUTHORIZED);
+        throw new RuntimeException("密码错误");
     }
     public void logout(){
 
@@ -66,6 +74,10 @@ public class UserService {
         user.setEmail(userDto.getEmail());
         user.setPassword(encodeService.encode(userDto.getPassword()));
         userMapper.insertSelective(user);
+    }
+
+    public void updateUserInfo(User user){
+        userMapper.updateByPrimaryKey(user);
     }
 
 }
