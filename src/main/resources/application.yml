@@ -63,3 +63,7 @@ custom:
   user-validate:
     code-timeout: 5
     code-length: 6
+
+springdoc:
+  api-docs:
+    path: /api-docs

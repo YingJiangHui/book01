@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.ying.book.mapper.UserMapper">
+
   <resultMap id="BaseResultMap" type="org.ying.book.pojo.User">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
@@ -9,6 +10,8 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <collection property="roles" ofType="org.ying.book.pojo.Role"
+                select="selectRoleByUserId" column="id" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -247,5 +250,21 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+
+  <select id="selectUserByEmail" resultMap="ResultMapWithRoles">
+    SELECT * FROM public.users WHERE email = #{email}
+  </select>
+
+  <resultMap id="ResultMapWithRoles" extends="BaseResultMap" type="org.ying.book.pojo.User">
+    <collection property="roles" ofType="org.ying.book.pojo.Role"
+                select="selectRoleByUserId" column="id" />
+  </resultMap>
+
+
+  <select id="selectRoleByUserId"  resultMap="org.ying.book.mapper.RoleMapper.BaseResultMap">
+    SELECT * FROM public.roles r
+                               JOIN public.user_roles ur ON r.id = ur.role_id
+    WHERE ur.user_id = #{userId}
   </select>
 </mapper>

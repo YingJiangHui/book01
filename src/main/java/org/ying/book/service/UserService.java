@@ -2,18 +2,13 @@ package org.ying.book.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.ying.book.dto.user.UserDto;
-import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
-import org.ying.book.pojo.UserExample;
 import lombok.extern.slf4j.Slf4j;
 import org.ying.book.utils.JwtUtil;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -32,11 +27,7 @@ public class UserService {
     JwtUtil jwtUtil;
 
     User getUserByEmail(String email){
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andEmailEqualTo(email);
-        List<User> userList = userMapper.selectByExample(userExample);
-
-        return userList.isEmpty() ? null : userList.get(0);
+        return userMapper.selectUserByEmail(email);
     }
 
     public User existUserByEmail(String email){
@@ -53,9 +44,6 @@ public class UserService {
              throw new RuntimeException("邮箱已存在");
         }
     }
-    public User getUser(int id) {
-        return userMapper.selectByPrimaryKey(id);
-    }
 
     public User login(UserDto userDto){
         existUserByEmail(userDto.getEmail());
@@ -66,9 +54,7 @@ public class UserService {
         }
         throw new RuntimeException("密码错误");
     }
-    public void logout(){
 
-    }
     public void register(UserDto userDto){
         User user = new User();
         user.setEmail(userDto.getEmail());
@@ -79,5 +65,4 @@ public class UserService {
     public void updateUserInfo(User user){
         userMapper.updateByPrimaryKey(user);
     }
-
 }

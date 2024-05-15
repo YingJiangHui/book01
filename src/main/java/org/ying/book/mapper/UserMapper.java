@@ -3,6 +3,7 @@ package org.ying.book.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import org.ying.book.pojo.Role;
 import org.ying.book.pojo.User;
 import org.ying.book.pojo.UserExample;
 
@@ -30,4 +31,8 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User row);
 
     int updateByPrimaryKey(User row);
+
+    User selectUserByEmail(String userEmail);
+
+    List<Role> selectRoleByUserId(int userId);
 }
