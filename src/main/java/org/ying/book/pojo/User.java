@@ -9,6 +9,8 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     private Integer id;
 
