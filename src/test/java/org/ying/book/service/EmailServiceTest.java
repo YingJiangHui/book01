@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.utils.GeneratorCode;
 
 import java.io.UnsupportedEncodingException;
@@ -29,14 +30,15 @@ public class EmailServiceTest {
 
     @Test
     public void sendValidateCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
-        String code = emailService.sendVerificationEmail("15867925894@163.com");
+        ;
+        String code = emailService.sendVerificationEmail(EmailValidationDto.builder().email("15867925894@163.com").build());
         // 会在redis中存储
         Assertions.assertEquals(redisService.getValue("15867925894@163.com"),code);
     }
 
     @Test
     public void sendInviteCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
-        String code = emailService.sendInvitationEmail("15867925894@163.com");
+        String code = emailService.sendInvitationEmail(EmailValidationDto.builder().email("15867925894@163.com").build());
         // 会在redis中存储
         Assertions.assertNotNull(redisService.getValue(code));
     }

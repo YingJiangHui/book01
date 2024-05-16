@@ -30,4 +30,6 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role row);
 
     int updateByPrimaryKey(Role row);
+
+    Role selectByRoleName(String roleName);
 }

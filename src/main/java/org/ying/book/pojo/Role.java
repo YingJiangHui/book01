@@ -1,16 +1,19 @@
 package org.ying.book.pojo;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.ying.book.enums.RoleEnum;
 
 import java.util.Date;
 
 @Setter
 @Getter
+@Builder
 public class Role {
     private Integer id;
 
-    private String roleName;
+    private RoleEnum roleName;
 
     private String description;
 

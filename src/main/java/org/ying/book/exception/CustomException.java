@@ -9,6 +9,7 @@ public class CustomException extends RuntimeException {
     private Integer code;
     private HttpStatus status;
 
+
     public Integer getCode() {
         return code;
     }

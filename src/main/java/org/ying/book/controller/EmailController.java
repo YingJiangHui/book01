@@ -16,11 +16,11 @@ public class EmailController {
     private EmailService emailService;
     @PostMapping("/validation-code")
     public void sendValidationCodeForUser(@RequestBody EmailValidationDto emailValidationDto) throws MessagingException {
-        emailService.sendVerificationEmail(emailValidationDto.getEmail());
+        emailService.sendVerificationEmail(emailValidationDto);
     }
 
     @PostMapping("/invitation-code")
     public void sendInvitationCodeForBookAdmin(@RequestBody EmailValidationDto emailValidationDto) throws MessagingException {
-        emailService.sendInvitationEmail(emailValidationDto.getEmail());
+        emailService.sendInvitationEmail(emailValidationDto);
     }
 }

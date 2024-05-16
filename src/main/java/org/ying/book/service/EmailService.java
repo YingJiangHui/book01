@@ -1,4 +1,6 @@
 package org.ying.book.service;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,22 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.ying.book.dto.email.EmailValidationDto;
+import org.ying.book.enums.RoleEnum;
+import org.ying.book.pojo.Role;
+import org.ying.book.pojo.User;
 import org.ying.book.utils.GeneratorCode;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailService {
+    @Resource
+    private ObjectMapper objectMapper;
+
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -22,6 +34,13 @@ public class EmailService {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
 
     @Value("${spring.mail.username}")
     String formEmail;
@@ -64,9 +83,26 @@ public class EmailService {
         javaMailSender.send(mimeMessage);
     }
 
-    public String sendVerificationEmail(String to) throws MessagingException {
+    public String sendVerificationEmail(EmailValidationDto emailValidationDto) throws MessagingException {
+        String to = emailValidationDto.getEmail();
         String validateCode = GeneratorCode.generator(validateCodeLength);
-        redisService.setKey(to, validateCode,validateCodeTimeout);
+        emailValidationDto.setCode(validateCode);
+        User user = userService.getUserByEmail(emailValidationDto.getEmail());
+        if(user==null){
+//            读者在创建用户
+            Role role = roleService.getRoleByRoleName(String.valueOf(RoleEnum.READER));
+            if(role!=null){
+                List<Integer> list = new ArrayList<>();
+                list.add(role.getId());
+                emailValidationDto.setRoleIds(list);
+            }
+        }else{
+//            任意用户在重置密码
+//        用户的话 READER 图书馆管理员 LIBRARY_ADMIN
+//            emailValidationDto.setRoleIds(user.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
+        }
+
+        redisService.setKey(to, emailValidationDto, validateCodeTimeout);
         Context context = new Context();
         context.setVariable("verificationCode", validateCode);
         context.setVariable("timeout", validateCodeTimeout);
@@ -74,10 +110,12 @@ public class EmailService {
         return validateCode;
     }
 
-    public String sendInvitationEmail(String to) throws MessagingException {
+    public String sendInvitationEmail(EmailValidationDto emailValidationDto) throws MessagingException {
+        String to = emailValidationDto.getEmail();
         String inviteCode = GeneratorCode.generator(validateCodeLength);
+        emailValidationDto.setCode(inviteCode);
 //        可以存一些待注册管理员的权限信息
-        redisService.setKey(to, inviteCode, inviteCodeTimeout);
+        redisService.setKey(to, emailValidationDto, inviteCodeTimeout);
         String link = String.format("%s?inviteCode=%s&email=%s", inviteRegisterLink,inviteCode,to);
         Context context = new Context();
         context.setVariable("link", link);
@@ -88,7 +126,8 @@ public class EmailService {
 
     public String validateEmailCode(String email, String code,String message) {
         Object codeInRedis = redisService.getValue(email);
-        if(codeInRedis != null && codeInRedis.toString().equals(code)){
+        EmailValidationDto emailValidationDto = (EmailValidationDto) codeInRedis;
+        if(emailValidationDto != null && emailValidationDto.getCode().equals(code)){
             return code;
         }
         throw new RuntimeException(message);

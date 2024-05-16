@@ -231,4 +231,11 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="selectByRoleName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from public.roles
+    where role_name = #{roleName}
+  </select>
 </mapper>

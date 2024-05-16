@@ -29,7 +29,7 @@ public class JwtUtilTest {
     }
     @Test
     void generationJwtToken() throws Exception {
-        User user = new User();
+        User user = User.builder().build();
         user.setUsername("weiyibiaoshi");
         user.setEmail("47");
         String json = objectMapper.writeValueAsString(user);
@@ -40,7 +40,7 @@ public class JwtUtilTest {
 
     @Test
     void generationJwtTokenParse() throws Exception {
-        User user = new User();
+        User user = User.builder().build();
         user.setUsername("weiyibiaoshi");
         user.setEmail("47");
         String json = objectMapper.writeValueAsString(user);
@@ -54,7 +54,7 @@ public class JwtUtilTest {
     }
     @Test
     void JwtTokenIs() throws Exception {
-        User user = new User();
+        User user = User.builder().build();
         user.setUsername("weiyibiaoshi");
         user.setEmail("47");
         String json = objectMapper.writeValueAsString(user);
