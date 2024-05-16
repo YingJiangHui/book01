@@ -59,7 +59,7 @@ custom:
   invite-register:
     code-timeout: 30
     code-length: 8
-    register-link: http://localhost:8881/admin/register
+    register-link: http://localhost:8000/register
   user-validate:
     code-timeout: 5
     code-length: 6

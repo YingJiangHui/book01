@@ -78,7 +78,7 @@ public class EmailService {
         String inviteCode = GeneratorCode.generator(validateCodeLength);
 //        可以存一些待注册管理员的权限信息
         redisService.setKey(to, inviteCode, inviteCodeTimeout);
-        String link = String.format("%s?inviteCode=%s", inviteRegisterLink,inviteCode);
+        String link = String.format("%s?inviteCode=%s&email=%s", inviteRegisterLink,inviteCode,to);
         Context context = new Context();
         context.setVariable("link", link);
         context.setVariable("timeout", inviteCodeTimeout);
