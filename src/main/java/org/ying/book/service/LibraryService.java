@@ -2,10 +2,13 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.mapper.LibraryMapper;
 import org.ying.book.mapper.LibraryUserMapper;
+import org.ying.book.pojo.Library;
+import org.ying.book.pojo.LibraryExample;
 import org.ying.book.pojo.LibraryUser;
 
 import java.util.List;
@@ -22,6 +25,20 @@ public class LibraryService {
     private LibraryUserMapper libraryUserMapper;
 
 
+    @Transactional
+    public void insertLibrary(Library library) {
+        libraryMapper.insert(library);
+    }
+
+    public Library getLibraryById(int id) {
+        return libraryMapper.selectByPrimaryKey(id);
+    }
+
+    public List<Library> getLibraries() {
+        LibraryExample example = new LibraryExample();
+        RowBounds rowBounds = new RowBounds(0, 100);
+        return libraryMapper.selectByExampleWithRowbounds(example,rowBounds);
+    }
 
     @Transactional
     public void userRelativeLibraries(Integer userId, List<Integer> libraryIds) {
