@@ -1,6 +1,8 @@
 package org.ying.book.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.ying.book.pojo.Role;
@@ -9,6 +11,7 @@ import org.ying.book.pojo.UserExample;
 
 public interface UserMapper extends Mapper{
     long countByExample(UserExample example);
+    long countByExampleWithRoleAndLibrary(UserExample example);
 
     int deleteByExample(UserExample example);
 
@@ -35,4 +38,5 @@ public interface UserMapper extends Mapper{
     User selectUserByEmail(String userEmail);
 
     List<Role> selectRoleByUserId(int userId);
+    List<User> selectByExampleWithRoleNameAndLibraryAndRowbounds(UserExample example, RowBounds rowBounds);
 }

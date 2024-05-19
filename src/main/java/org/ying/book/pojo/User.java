@@ -29,4 +29,5 @@ public class User {
     private Boolean deleted;
 
     List<Role> roles;
+    List<Library> libraries;
 }

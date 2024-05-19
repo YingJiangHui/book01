@@ -2,12 +2,15 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
+import org.ying.book.dto.user.UserQueryParamsDTO;
+import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +18,9 @@ import org.ying.book.pojo.UserExample;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.PaginationHelper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -41,13 +46,17 @@ public class UserService {
     @Resource
     JwtUtil jwtUtil;
 
-    public List<User> getUsers(UserExample example,RowBounds rowBounds) {
+    public List<User> getUsers(UserExample example, RowBounds rowBounds) {
         return userMapper.selectByExampleWithRowbounds(example, rowBounds);
     }
-    public PageResultDto<User> getUsersWithTotal(PageReqDto pageReqDto) {
+
+    public PageResultDto<User> getUsersWithTotal(UserQueryParamsDTO userQueryParamsDTO) {
         UserExample example = new UserExample();
-        return PaginationHelper.paginate(pageReqDto, (rowBounds, reqDto) -> this.getUsers(example, rowBounds), userMapper.countByExample(example));
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andLibraryIdIn(userQueryParamsDTO.getLibraryIds()).andRoleIn(userQueryParamsDTO.getRoleNames());
+        return PaginationHelper.paginate(userQueryParamsDTO, (rowBounds, reqDto) -> userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, new RowBounds()), userMapper.countByExampleWithRoleAndLibrary(example));
     }
+
     public User getUser(Integer id) {
         return userMapper.selectByPrimaryKey(id);
     }
@@ -67,7 +76,7 @@ public class UserService {
     public void validateRegister(UserDto userDto) {
         User user = getUserByEmail(userDto.getEmail());
         if (user != null) {
-            throw new RuntimeException("邮箱已存在");
+            throw new CustomException("邮箱已存在", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -90,16 +99,23 @@ public class UserService {
         //      Insert User
         userMapper.insertSelective(user);
         //      Bind userRoles
-        if(Optional.ofNullable(emailValidationDto.getRoles()).isPresent()){
-            roleService.userRelativeRoles(user.getId(),emailValidationDto.getRoles());
-        }else{
+        if (Optional.ofNullable(emailValidationDto.getRoles()).isPresent()) {
+            roleService.userRelativeRoles(user.getId(), emailValidationDto.getRoles());
+        } else {
             throw new RuntimeException("没有提供用户权限信息");
         }
         //      Bind library
-        libraryService.userRelativeLibraries(user.getId(),emailValidationDto.getLibraryIds());
+        libraryService.userRelativeLibraries(user.getId(), emailValidationDto.getLibraryIds());
     }
 
     public void updateUserInfo(User user) {
         userMapper.updateByPrimaryKey(user);
+    }
+
+    public List<User> selectUserByRoleNameAndLibraryId(UserQueryParamsDTO userQueryParamsDTO) {
+        UserExample example = new UserExample();
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andLibraryIdIn(userQueryParamsDTO.getLibraryIds()).andRoleIn(userQueryParamsDTO.getRoleNames());
+        return userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, new RowBounds());
     }
 }

@@ -1,10 +1,18 @@
 package org.ying.book.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.ying.book.enums.RoleEnum;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Setter
+@Getter
 public class UserExample {
+//    private List<RoleEnum> roleNames;
+//    private List<Integer> libraryIds;
     protected String orderByClause;
 
     protected boolean distinct;
@@ -117,6 +125,16 @@ public class UserExample {
 
         public Criteria andIdEqualTo(Integer value) {
             addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andLibraryIdIn(List<Integer> values) {
+            addCriterion("ul.library_id in", values, "library_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleIn(List<RoleEnum> values) {
+            addCriterion("r.role_name in", values, "role_name");
             return (Criteria) this;
         }
 

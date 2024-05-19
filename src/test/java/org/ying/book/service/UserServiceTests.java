@@ -12,9 +12,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
+import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.utils.GeneratorCode;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,8 +41,12 @@ public class UserServiceTests {
     private RedisService redisService;
 
     @Test
-    public void test() throws JsonProcessingException {
+    public void selectUserByEmailTest() throws JsonProcessingException {
         System.out.println(objectMapper.writeValueAsString(userService.getUserByEmail("473380917@qq.com")));
+    }
+    @Test
+    public void selectUserByRoleNameAndLibraryIdTest() throws JsonProcessingException {
+        System.out.println(objectMapper.writeValueAsString(userService.selectUserByRoleNameAndLibraryId(UserQueryParamsDTO.builder().libraryIds(Arrays.asList(1)).roleNames(Arrays.asList(RoleEnum.SYSTEM_ADMIN)).build())));
     }
     @Test
     @DisplayName("getUsers returns list of users when users exist")
