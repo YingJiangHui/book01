@@ -9,7 +9,7 @@ import org.ying.book.pojo.Role;
 import org.ying.book.pojo.User;
 import org.ying.book.pojo.UserExample;
 
-public interface UserMapper extends Mapper{
+public interface UserMapper{
     long countByExample(UserExample example);
     long countByExampleWithRoleAndLibrary(UserExample example);
 

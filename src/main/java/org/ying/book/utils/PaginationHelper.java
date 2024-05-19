@@ -2,7 +2,6 @@ package org.ying.book.utils;
 import org.apache.ibatis.session.RowBounds;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
-import org.ying.book.mapper.Mapper;
 
 import java.util.List;
 import java.util.function.BiFunction;
