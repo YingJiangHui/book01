@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.ying.book.dto.email.EmailValidationDto;
+import org.ying.book.dto.user.UserDto;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.pojo.Role;
 import org.ying.book.pojo.User;
@@ -18,8 +19,8 @@ import org.ying.book.utils.GeneratorCode;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmailService {
@@ -90,11 +91,9 @@ public class EmailService {
         User user = userService.getUserByEmail(emailValidationDto.getEmail());
         if(user==null){
 //            读者在创建用户
-            Role role = roleService.getRoleByRoleName(String.valueOf(RoleEnum.READER));
+            Role role = roleService.getRoleByRoleName(RoleEnum.READER);
             if(role!=null){
-                List<Integer> list = new ArrayList<>();
-                list.add(role.getId());
-                emailValidationDto.setRoleIds(list);
+                emailValidationDto.setRoles(Arrays.asList(role.getRoleName()));
             }
         }else{
 //            任意用户在重置密码
@@ -112,6 +111,7 @@ public class EmailService {
 
     public String sendInvitationEmail(EmailValidationDto emailValidationDto) throws MessagingException {
         String to = emailValidationDto.getEmail();
+        userService.validateRegister(UserDto.builder().email(to).build());
         String inviteCode = GeneratorCode.generator(validateCodeLength);
         emailValidationDto.setCode(inviteCode);
 //        可以存一些待注册管理员的权限信息

@@ -3,24 +3,22 @@ package org.ying.book.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
-import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
+import org.ying.book.enums.RoleEnum;
 import org.ying.book.utils.GeneratorCode;
-import org.ying.book.utils.Result;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,17 +42,23 @@ public class UserServiceTests {
     public void test() throws JsonProcessingException {
         System.out.println(objectMapper.writeValueAsString(userService.getUserByEmail("473380917@qq.com")));
     }
-
+    @Test
+    @DisplayName("getUsers returns list of users when users exist")
+    public void getUsersReturnsListOfUsersWhenUsersExist() {
+        // Arrange
+        PageReqDto pageReqDto = new PageReqDto();
+        pageReqDto.setPageSize(30);
+        pageReqDto.setCurrent(1);
+//        userService.getUsers(pageReqDto).forEach(System.out::println);
+    }
     @Test void registerTest() {
-
+        String email = "4733809912@qq.com";
         String validateCode = GeneratorCode.generator(6);
 
-        UserDto userDto = UserDto.builder().email("473380991@qq.com").validationCode(validateCode).password("123456").passwordConfirmation("123456").build();
-        List<Integer> roleIds = new ArrayList<>();
-        roleIds.add(1);
-        EmailValidationDto emailValidationDto = EmailValidationDto.builder().roleIds(roleIds).email("473380991@qq.com").code(validateCode).build();
+        UserDto userDto = UserDto.builder().email(email).validationCode(validateCode).password("123456").passwordConfirmation("123456").build();
+        EmailValidationDto emailValidationDto = EmailValidationDto.builder().roles(Arrays.asList(RoleEnum.LIBRARY_ADMIN)).email(email).code(validateCode).build();
 //        emailService.sendVerificationEmail(emailValidationDto);
-        redisService.setKey("473380991@qq.com", emailValidationDto, 5);
+        redisService.setKey(email, emailValidationDto, 5);
 
         userService.register(userDto);
 //        userService.register(userDto);

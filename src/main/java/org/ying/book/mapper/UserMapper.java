@@ -7,7 +7,7 @@ import org.ying.book.pojo.Role;
 import org.ying.book.pojo.User;
 import org.ying.book.pojo.UserExample;
 
-public interface UserMapper {
+public interface UserMapper extends Mapper{
     long countByExample(UserExample example);
 
     int deleteByExample(UserExample example);

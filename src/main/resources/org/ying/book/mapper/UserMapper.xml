@@ -252,14 +252,16 @@
     </if>
   </select>
 
-  <select id="selectUserByEmail" resultMap="ResultMapWithRoles">
-    SELECT * FROM public.users WHERE email = #{email}
+  <select id="selectUserByEmail" resultMap="BaseResultMap">
+    SELECT
+        <include refid="Base_Column_List" />
+    FROM public.users WHERE email = #{email}
   </select>
 
-  <resultMap id="ResultMapWithRoles" extends="BaseResultMap" type="org.ying.book.pojo.User">
-    <collection property="roles" ofType="org.ying.book.pojo.Role"
-                select="selectRoleByUserId" column="id" />
-  </resultMap>
+<!--  <resultMap id="ResultMapWithRoles" extends="BaseResultMap" type="org.ying.book.pojo.User">-->
+<!--    <collection property="roles" ofType="org.ying.book.pojo.Role"-->
+<!--                select="selectRoleByUserId" column="id" />-->
+<!--  </resultMap>-->
 
 
   <select id="selectRoleByUserId"  resultMap="org.ying.book.mapper.RoleMapper.BaseResultMap">

@@ -1,7 +1,6 @@
 package org.ying.book.dto.email;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.ying.book.enums.RoleEnum;
@@ -15,7 +14,7 @@ import java.util.List;
 public class EmailValidationDto implements Serializable {
     String email;
 
-    List<Integer> roleIds;
+    List<RoleEnum> roles;
 
     List<Integer> libraryIds;
 

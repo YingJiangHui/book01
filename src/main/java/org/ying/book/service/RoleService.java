@@ -29,18 +29,18 @@ public class RoleService {
     private UserRoleMapper userRoleMapper;
 
     @Transactional
-    public void userRelativeRoles(Integer userId, List<Integer> roleIds) {
-        Optional.ofNullable(roleIds).ifPresent(ids -> {
-            if (ids.stream().map(roleId -> roleMapper.selectByPrimaryKey(roleId)).anyMatch(Objects::isNull)) {
+    public void userRelativeRoles(Integer userId, List<RoleEnum> roles) {
+        Optional.ofNullable(roles).ifPresent(ids -> {
+            if (ids.stream().map(roleName -> roleMapper.selectByRoleName(roleName)).anyMatch(Objects::isNull)) {
                 throw new CustomException("角色不存在", HttpStatus.BAD_REQUEST);
             }
             ids.stream()
-                    .map(roleId -> UserRole.builder().userId(userId).roleId(roleId).build())
+                    .map(roleName -> UserRole.builder().userId(userId).roleId(roleMapper.selectByRoleName(roleName).getId()).build())
                     .forEach(userRole -> userRoleMapper.insertSelective(userRole));
         });
     }
 
-    public Role getRoleByRoleName(String roleName) {
+    public Role getRoleByRoleName(RoleEnum roleName) {
 //        RoleExample roleExample = new RoleExample();
 //        RoleExample.Criteria criteria = roleExample.createCriteria();
 //        criteria.andRoleNameEqualTo(roleName);
@@ -49,4 +49,27 @@ public class RoleService {
         return roleMapper.selectByRoleName(roleName);
     }
 
+    public List<Role> getRoles() {
+        RoleExample example = new RoleExample();
+        return roleMapper.selectByExample(example);
+    }
+
+    public Role getRoleById(int id) {
+        return roleMapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional
+    public void insertRole(Role role) {
+        roleMapper.insert(role);
+    }
+
+    @Transactional
+    public void updateRole(Role role) {
+        roleMapper.updateByPrimaryKey(role);
+    }
+
+    @Transactional
+    public void deleteRole(int id) {
+        roleMapper.deleteByPrimaryKey(id);
+    }
 }

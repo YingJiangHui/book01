@@ -232,7 +232,7 @@
     </if>
   </select>
 
-  <select id="selectByRoleName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByRoleName" parameterType="org.ying.book.enums.RoleEnum" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from public.roles
