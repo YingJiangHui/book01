@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.dto.user.JwtDTO;
 import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.pojo.User;
 import org.ying.book.service.AuthService;
@@ -36,9 +37,9 @@ public class UserController {
 //        return new User();
 //    }
     @GetMapping("/current")
-    public User getUserInfo() throws Exception {
+    public JwtDTO getUserInfo() throws Exception {
         Object token = request.getAttribute("token");
-        return authService.parseJWT(token.toString(), User.class);
+        return authService.parseJWT(token.toString(), JwtDTO.class);
     }
 //获取所有用户，支持分页
     @GetMapping

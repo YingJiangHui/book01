@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.ying.book.dto.user.JwtDTO;
 import org.ying.book.pojo.User;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -46,10 +47,9 @@ public class JwtUtilTest {
         String json = objectMapper.writeValueAsString(user);
         String jwtToken = jwtUtil.createJWT("weiyibiaoshi", json, 36000);
         Claims parsedInfo = jwtUtil.parseJWT(jwtToken);
-        User user2 =  objectMapper.readValue(json, User.class);
+        JwtDTO user2 =  objectMapper.readValue(json, JwtDTO.class);
         assertNotNull(parsedInfo);
         assertTrue(parsedInfo.getId().equals("weiyibiaoshi"));
-        assertTrue(user2.getUsername().equals(user.getUsername()));
         assertTrue(user2.getEmail().equals(user.getEmail()));
     }
     @Test

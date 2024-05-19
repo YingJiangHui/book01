@@ -17,6 +17,7 @@ import org.ying.book.utils.Result;
 
 import java.io.IOException;
 
+
 @Slf4j
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
@@ -33,7 +34,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.debug("preHandle1");
         //从header中获取token
         String authorizationHeader = request.getHeader("Authorization");//        如果token为空
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
@@ -44,22 +44,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         // 提取token部分
         String token = authorizationHeader.substring(7); // 去掉 "Bearer " 前缀
-
         // 在这里可以对token进行进一步处理，比如解析JWT令牌，验证令牌的有效性等
-        System.out.println(objectMapper);
         // 如果需要，你可以将token存储在request的attribute中，以便后续处理程序使用
         if(jwtUtil.isTokenExpired(token)){
             setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"认证失效请重新登录");
             return false;
         }
-//        Claims JwtClaims = jwtUtil.parseJWT(token);
-        //        User user = objectMapper.readValue(JwtClaims.getSubject(), User.class);
         request.setAttribute("token", token);
 
-
-//        在实际使用中还会:
-//         1、校验token是否能够解密出用户信息来获取访问者
-//         2、token是否已经过期
         return true;
     }
 
@@ -71,7 +63,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     //返回json格式错误信息
-    private static void setReturn(HttpServletResponse response, Integer code, String msg) throws IOException, JsonProcessingException {
+    public static void setReturn(HttpServletResponse response, Integer code, String msg) throws IOException, JsonProcessingException {
         HttpServletResponse httpResponse = response;
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
