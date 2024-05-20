@@ -12,6 +12,9 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <association property="library" column="id" javaType="org.ying.book.pojo.Library" select="selectLibraryByBookId"/>
+<!--    <collection property="libraries"  ofType="org.ying.book.pojo.Library" select="selectLibraryByBookId" column="id"/>-->
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -295,5 +298,9 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+
+  <select id="selectLibraryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
+    select * from public.libraries l join public.library_books lb on l.id = lb.library_id where lb.book_id = #{bookId}
   </select>
 </mapper>

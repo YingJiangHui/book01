@@ -3,13 +3,16 @@ package org.ying.book.service;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ying.book.dto.common.PageReqDto;
+import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.mapper.LibraryBookMapper;
 import org.ying.book.mapper.LibraryMapper;
 import org.ying.book.mapper.LibraryUserMapper;
-import org.ying.book.pojo.Library;
-import org.ying.book.pojo.LibraryExample;
-import org.ying.book.pojo.LibraryUser;
+import org.ying.book.pojo.*;
+import org.ying.book.utils.PaginationHelper;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +27,11 @@ public class LibraryService {
     @Resource
     private LibraryUserMapper libraryUserMapper;
 
+    @Autowired
+    private LibraryBookMapper libraryBookMapper;
+
+    @Resource
+    private BookService bookService;
 
     @Transactional
     public void insertLibrary(Library library) {
@@ -51,5 +59,20 @@ public class LibraryService {
                     .forEach(userRole -> libraryUserMapper.insertSelective(userRole));
         });
 
+    }
+
+    public PageResultDto<Book> getAllBooksInLibrary(Integer libraryId, PageReqDto pageReqDto){
+        LibraryBookExample libraryBookExample = new LibraryBookExample();
+        libraryBookExample.createCriteria().andLibraryIdEqualTo(libraryId);
+        List<Integer> bookIdList = libraryBookMapper.selectByExample(libraryBookExample).stream().map(LibraryBook::getBookId).toList();
+        if (bookIdList.isEmpty()) {
+            // Return an empty result or handle it in another way
+            return new PageResultDto<Book>();
+        }
+        BookExample bookExample = new BookExample();
+        BookExample.Criteria criteria = bookExample.createCriteria();
+        criteria.andIdIn(bookIdList);
+
+        return bookService.getBooksWithPaginate(bookExample, pageReqDto);
     }
 }

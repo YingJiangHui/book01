@@ -126,13 +126,14 @@
 <!--            <columnOverride column="is_deleted" property="deleted"/>-->
 <!--        </table>-->
 
-<!--        <table schema="public" tableName="files" domainObjectName="File">-->
-<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
-<!--            <columnOverride column="url" property="url"/>-->
-<!--            <columnOverride column="created_at" property="createdAt"/>-->
-<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
-<!--            <columnOverride column="is_deleted" property="deleted"/>-->
-<!--        </table>-->
+        <table schema="public" tableName="files" domainObjectName="File">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+            <columnOverride column="url" property="url"/>
+            <columnOverride column="content_type" property="contentType"/>
+            <columnOverride column="created_at" property="createdAt"/>
+            <columnOverride column="updated_at" property="updatedAt"/>
+            <columnOverride column="is_deleted" property="deleted"/>
+        </table>
 <!--        <table schema="public" tableName="books_files" domainObjectName="BookFile">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
 <!--            <columnOverride column="file_id" property="fileId"/>-->

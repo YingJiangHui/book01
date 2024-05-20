@@ -7,6 +7,7 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <result column="content_type" jdbcType="VARCHAR" property="contentType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, url, created_at, updated_at, is_deleted
+    id, url, created_at, updated_at, is_deleted, content_type
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.FileExample" resultMap="BaseResultMap">
     select
@@ -101,9 +102,9 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.File" useGeneratedKeys="true">
     insert into public.files (url, created_at, updated_at, 
-      is_deleted)
+      is_deleted, content_type)
     values (#{url,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT})
+      #{deleted,jdbcType=BIT}, #{contentType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.File" useGeneratedKeys="true">
     insert into public.files
@@ -120,6 +121,9 @@
       <if test="deleted != null">
         is_deleted,
       </if>
+      <if test="contentType != null">
+        content_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="url != null">
@@ -133,6 +137,9 @@
       </if>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
+      </if>
+      <if test="contentType != null">
+        #{contentType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -160,6 +167,9 @@
       <if test="row.deleted != null">
         is_deleted = #{row.deleted,jdbcType=BIT},
       </if>
+      <if test="row.contentType != null">
+        content_type = #{row.contentType,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -171,7 +181,8 @@
       url = #{row.url,jdbcType=VARCHAR},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{row.deleted,jdbcType=BIT}
+      is_deleted = #{row.deleted,jdbcType=BIT},
+      content_type = #{row.contentType,jdbcType=VARCHAR}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -191,6 +202,9 @@
       <if test="deleted != null">
         is_deleted = #{deleted,jdbcType=BIT},
       </if>
+      <if test="contentType != null">
+        content_type = #{contentType,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -199,7 +213,8 @@
     set url = #{url,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{deleted,jdbcType=BIT}
+      is_deleted = #{deleted,jdbcType=BIT},
+      content_type = #{contentType,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.FileExample" resultMap="BaseResultMap">

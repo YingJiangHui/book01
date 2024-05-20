@@ -1,18 +1,19 @@
-package org.ying.book.pojo;
+package org.ying.book.dto.book;
 
-import lombok.*;
-import org.ying.book.dto.file.FileDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
-
+public class BookDto {
+    private List<MultipartFile> file;
     private Integer id;
 
     private String title;
@@ -27,13 +28,7 @@ public class Book {
 
     private Boolean available;
 
-    private Date createdAt;
-
-    private Date updatedAt;
-
-    private Boolean deleted;
-
-    private List<File> files;
-
     private String description;
+
+    private Integer libraryId;
 }

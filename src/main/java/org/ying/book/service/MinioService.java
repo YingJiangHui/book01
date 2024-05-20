@@ -3,17 +3,23 @@ package org.ying.book.service;
 import io.micrometer.common.util.StringUtils;
 import io.minio.*;
 import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.ying.book.dto.file.FileDto;
 
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class MinioService {
 
@@ -26,6 +32,7 @@ public class MinioService {
     @Value("${minio.secret-key}")
     private String secretKey;
 
+//    @Resource
     private MinioClient minioClient;
 
     @PostConstruct
@@ -36,7 +43,7 @@ public class MinioService {
                 .build();
     }
 
-    public void uploadFile(String bucketName, MultipartFile file) throws Exception {
+    public FileDto uploadFile(String bucketName, MultipartFile file) throws Exception {
         boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         if (!isExist) {
             minioClient.makeBucket(MakeBucketArgs.builder()
@@ -53,10 +60,32 @@ public class MinioService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM/dd");
         String formattedDate = date.format(formatter);
         String objectName = formattedDate + "/" + fileName;
-        minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(file.getInputStream(),file.getSize(),-1).contentType(file.getContentType()).build());
+        minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).contentType(file.getContentType()).object(objectName).stream(file.getInputStream(),file.getSize(),-1).contentType(file.getContentType()).build());
+
+        return FileDto.builder().url(String.format("%s/%s/%s", url, bucketName, objectName)).contentType(file.getContentType()).build();
     }
 
     public InputStream getFile(String bucketName, String objectName) throws Exception {
-        return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        try{
+            return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        }catch (Exception e){
+            throw new RuntimeException("文件获取失败");
+        }
+    }
+
+    public String getPresetSignedUrl(String bucketName, String objectName) {
+        try {
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .expiry(30, TimeUnit.DAYS)  // URL will be valid for 60 minutes
+                            .build());
+        } catch (Exception e) {
+//            throw new RuntimeException("Error while generating presigned URL", e);
+            log.info("Error while generating presigned URL: " + e);
+        }
+        return null;
     }
 }

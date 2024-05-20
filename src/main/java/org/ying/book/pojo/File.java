@@ -1,7 +1,16 @@
 package org.ying.book.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class File {
     private Integer id;
 
@@ -13,43 +22,5 @@ public class File {
 
     private Boolean deleted;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
+    private String contentType;
 }

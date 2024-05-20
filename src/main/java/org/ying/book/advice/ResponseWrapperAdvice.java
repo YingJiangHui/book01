@@ -34,7 +34,7 @@ public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         // 在返回内容之前对内容进行包装
         // 这里假设返回的内容是一个Map
 
-        if(body instanceof ResponseEntity||body instanceof Result||body instanceof String){
+        if(body instanceof ResponseEntity||body instanceof Result||body instanceof String || body instanceof byte[]){
             return body;
         }
         if (body != null) {

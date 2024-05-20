@@ -13,5 +13,5 @@ import java.util.List;
 @Data
 public class PageResultDto<T> {
     List<T> data;
-    long total;
+    long total = 0;
 }
