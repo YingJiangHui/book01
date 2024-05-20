@@ -54,7 +54,7 @@ public class UserService {
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         criteria.andLibraryIdIn(userQueryParamsDTO.getLibraryIds()).andRoleIn(userQueryParamsDTO.getRoleNames());
-        return PaginationHelper.paginate(userQueryParamsDTO, (rowBounds, reqDto) -> userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, new RowBounds()), userMapper.countByExampleWithRoleAndLibrary(example));
+        return PaginationHelper.paginate(userQueryParamsDTO, (rowBounds, reqDto) -> userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, rowBounds), userMapper.countByExampleWithRoleAndLibrary(example));
     }
 
     public User getUser(Integer id) {
