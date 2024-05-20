@@ -38,93 +38,109 @@
         </javaClientGenerator>
 
         <!-- 逆向解析的表 domainObjectName 是生成的 POJO 类类名 -->
-        <table schema="public" tableName="users" domainObjectName="User">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="users" domainObjectName="User">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="roles" domainObjectName="Role">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="role_name" property="roleName"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="roles" domainObjectName="Role">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="role_name" property="roleName"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="user_roles" domainObjectName="UserRole">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="user_id" property="userId"/>
-            <columnOverride column="role_id" property="roleId"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="user_roles" domainObjectName="UserRole">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="user_id" property="userId"/>-->
+<!--            <columnOverride column="role_id" property="roleId"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="book_categories" domainObjectName="BookCategory">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="category_name" property="categoryName"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="book_categories" domainObjectName="BookCategory">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="category_name" property="categoryName"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="books" domainObjectName="Book">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="category_id" property="categoryId"/>
-            <columnOverride column="published_year" property="publishedYear"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="books" domainObjectName="Book">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="category_id" property="categoryId"/>-->
+<!--            <columnOverride column="published_year" property="publishedYear"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="borrowings" domainObjectName="Borrowing">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="user_id" property="userId"/>
-            <columnOverride column="book_id" property="bookId"/>
-            <columnOverride column="borrowed_at" property="borrowedAt"/>
-            <columnOverride column="returned_at" property="returnedAt"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="borrowings" domainObjectName="Borrowing">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="user_id" property="userId"/>-->
+<!--            <columnOverride column="book_id" property="bookId"/>-->
+<!--            <columnOverride column="borrowed_at" property="borrowedAt"/>-->
+<!--            <columnOverride column="returned_at" property="returnedAt"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="reservations" domainObjectName="Reservation">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="user_id" property="userId"/>
-            <columnOverride column="book_id" property="bookId"/>
-            <columnOverride column="reserved_at" property="reservedAt"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="reservations" domainObjectName="Reservation">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="user_id" property="userId"/>-->
+<!--            <columnOverride column="book_id" property="bookId"/>-->
+<!--            <columnOverride column="reserved_at" property="reservedAt"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="libraries" domainObjectName="Library">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="circumference" property="circumference"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="libraries" domainObjectName="Library">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="circumference" property="circumference"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="library_books" domainObjectName="LibraryBook">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="library_id" property="libraryId"/>
-            <columnOverride column="book_id" property="bookId"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="library_books" domainObjectName="LibraryBook">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="library_id" property="libraryId"/>-->
+<!--            <columnOverride column="book_id" property="bookId"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
-        <table schema="public" tableName="library_users" domainObjectName="LibraryUser">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="library_id" property="libraryId"/>
-            <columnOverride column="user_id" property="userId"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="library_users" domainObjectName="LibraryUser">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="library_id" property="libraryId"/>-->
+<!--            <columnOverride column="user_id" property="userId"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
+
+<!--        <table schema="public" tableName="files" domainObjectName="File">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="url" property="url"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
+<!--        <table schema="public" tableName="books_files" domainObjectName="BookFile">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="file_id" property="fileId"/>-->
+<!--            <columnOverride column="book_id" property="bookId"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
     </context>
 </generatorConfiguration>

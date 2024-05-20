@@ -27,7 +27,7 @@ public class LibraryService {
 
     @Transactional
     public void insertLibrary(Library library) {
-        libraryMapper.insert(library);
+        libraryMapper.insertSelective(library);
     }
 
     public Library getLibraryById(int id) {
