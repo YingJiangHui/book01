@@ -62,7 +62,7 @@ public class MinioService {
         String objectName = formattedDate + "/" + fileName;
         minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).contentType(file.getContentType()).object(objectName).stream(file.getInputStream(),file.getSize(),-1).contentType(file.getContentType()).build());
 
-        return FileDto.builder().url(String.format("%s/%s/%s", url, bucketName, objectName)).contentType(file.getContentType()).build();
+        return FileDto.builder().objectName(objectName).contentType(file.getContentType()).build();
     }
 
     public InputStream getFile(String bucketName, String objectName) throws Exception {
@@ -80,7 +80,7 @@ public class MinioService {
                             .method(Method.GET)
                             .bucket(bucketName)
                             .object(objectName)
-                            .expiry(30, TimeUnit.DAYS)  // URL will be valid for 60 minutes
+                            .expiry(1, TimeUnit.DAYS)  // URL will be valid for 60 minutes
                             .build());
         } catch (Exception e) {
 //            throw new RuntimeException("Error while generating presigned URL", e);

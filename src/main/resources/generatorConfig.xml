@@ -70,14 +70,18 @@
 <!--            <columnOverride column="is_deleted" property="deleted"/>-->
 <!--        </table>-->
 
-<!--        <table schema="public" tableName="books" domainObjectName="Book">-->
-<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
-<!--            <columnOverride column="category_id" property="categoryId"/>-->
-<!--            <columnOverride column="published_year" property="publishedYear"/>-->
-<!--            <columnOverride column="created_at" property="createdAt"/>-->
-<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
-<!--            <columnOverride column="is_deleted" property="deleted"/>-->
-<!--        </table>-->
+        <table schema="public" tableName="books" domainObjectName="Book">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+            <columnOverride column="title" property="title"/>
+            <columnOverride column="author" property="author"/>
+            <columnOverride column="category_id" property="categoryId"/>
+            <columnOverride column="published_year" property="publishedYear"/>
+            <columnOverride column="isbn" property="isbn"/>
+            <columnOverride column="available" property="available"/>
+            <columnOverride column="created_at" property="createdAt"/>
+            <columnOverride column="updated_at" property="updatedAt"/>
+            <columnOverride column="is_deleted" property="deleted"/>
+        </table>
 
 <!--        <table schema="public" tableName="borrowings" domainObjectName="Borrowing">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
@@ -126,14 +130,16 @@
 <!--            <columnOverride column="is_deleted" property="deleted"/>-->
 <!--        </table>-->
 
-        <table schema="public" tableName="files" domainObjectName="File">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="url" property="url"/>
-            <columnOverride column="content_type" property="contentType"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="files" domainObjectName="File">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="url" property="url"/>-->
+<!--            <columnOverride column="bucket_name" property="bucketName"/>-->
+<!--            <columnOverride column="object_name" property="objectName"/>-->
+<!--            <columnOverride column="content_type" property="contentType"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 <!--        <table schema="public" tableName="books_files" domainObjectName="BookFile">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
 <!--            <columnOverride column="file_id" property="fileId"/>-->

@@ -10,6 +10,7 @@ import org.ying.book.mapper.FileMapper;
 import org.ying.book.pojo.File;
 
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 public class FileService {
@@ -26,7 +27,8 @@ public class FileService {
     public File uploadFile(MultipartFile multipartFile) throws Exception {
         FileDto fileDto = minioService.uploadFile(bucketName, multipartFile);
         File file = File.builder()
-                .url(fileDto.getUrl())
+                .bucketName(bucketName)
+                .objectName(fileDto.getObjectName())
                 .contentType(fileDto.getContentType())
                 .build();
         fileMapper.insertSelective(file);
@@ -34,6 +36,13 @@ public class FileService {
     }
     public InputStream getFile(String fileName) throws Exception {
         return minioService.getFile(bucketName, fileName);
+    }
+
+    public List<File> filesWithUrl(List<File> files) {
+        return files.stream().map(file -> {
+            file.setUrl(minioService.getPresetSignedUrl(bucketName, file.getObjectName()));
+            return file;
+        }).toList();
     }
 
     public String getFileUrl(String fileName){

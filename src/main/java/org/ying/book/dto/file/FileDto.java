@@ -13,4 +13,5 @@ public class FileDto {
     private Integer id;
     private String contentType;
     private String url;
+    private String objectName;
 }

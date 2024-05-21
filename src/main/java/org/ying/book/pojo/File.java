@@ -1,20 +1,18 @@
 package org.ying.book.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class File {
-    private Integer id;
-
     private String url;
+
+    private Integer id;
 
     private Date createdAt;
 
@@ -23,4 +21,8 @@ public class File {
     private Boolean deleted;
 
     private String contentType;
+
+    private String bucketName;
+
+    private String objectName;
 }

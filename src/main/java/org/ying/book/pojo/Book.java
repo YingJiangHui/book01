@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
-
     private Integer id;
 
     private String title;
@@ -36,4 +35,6 @@ public class Book {
     private List<File> files;
 
     private String description;
+
+    private Library library;
 }

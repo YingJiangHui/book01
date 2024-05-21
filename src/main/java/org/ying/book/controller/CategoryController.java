@@ -28,7 +28,7 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public BookCategory createCategory(@ModelAttribute CategoryDto categoryDto) {
+    public BookCategory createCategory(@RequestBody CategoryDto categoryDto) {
         return categoryService.createCategory(categoryDto);
     }
 }

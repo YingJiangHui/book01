@@ -9,7 +9,9 @@ import java.util.function.BiFunction;
 public class PaginationHelper {
 
     public static <T> PageResultDto<T> paginate(PageReqDto pageReqDto, BiFunction<RowBounds, PageReqDto, List<T>> queryFunction, long total) {
-        RowBounds rowBounds = new RowBounds(pageReqDto.getCurrent(), pageReqDto.getPageSize());
+        int page = pageReqDto.getCurrent() - 1;
+        int offset = page * pageReqDto.getPageSize();
+        RowBounds rowBounds = new RowBounds(offset, pageReqDto.getPageSize());
         List<T> data = queryFunction.apply(rowBounds, pageReqDto);
         return new PageResultDto<>(data, total);
     }

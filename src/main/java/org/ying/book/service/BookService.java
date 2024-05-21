@@ -33,16 +33,23 @@ public class BookService {
     @Autowired
     private LibraryBookMapper libraryBookMapper;
 
-    public Book getBook(Integer id){
+    public Book getBook(Integer id) {
         return bookMapper.selectByPrimaryKey(id);
     }
 
-    public PageResultDto<Book> getBooksWithPaginate(BookExample example,PageReqDto pageReqDto){
-        return PaginationHelper.paginate(pageReqDto, (rowBounds, reqDto) -> bookMapper.selectByExampleWithRowbounds(example, rowBounds), bookMapper.countByExample(example));
+    public List<Book> getBooksByExampleWithRowbounds(BookExample example, RowBounds rowBounds) {
+        return bookMapper.selectByExampleWithRowbounds(example, rowBounds).stream().map((book) -> {
+            book.setFiles(fileService.filesWithUrl(book.getFiles()));
+            return book;
+        }).toList();
+    }
+
+    public PageResultDto<Book> getBooksWithPaginate(BookExample example, PageReqDto pageReqDto) {
+        return PaginationHelper.paginate(pageReqDto, (rowBounds, reqDto) -> this.getBooksByExampleWithRowbounds(example, rowBounds), bookMapper.countByExample(example));
     }
 
     @Transactional
-    public Book createBook(BookDto bookDto){
+    public Book createBook(BookDto bookDto) {
 //        保存文件
         List<File> files = bookDto.getFile().stream().map(file -> {
             try {
@@ -66,7 +73,7 @@ public class BookService {
 
         bookMapper.insertSelective(book);
 //        保存图书文件关联
-        files.stream().forEach((file)->{
+        files.stream().forEach((file) -> {
             bookFileMapper.insertSelective(BookFile.builder().fileId(Long.valueOf(file.getId())).bookId(Long.valueOf(book.getId())).build());
         });
 

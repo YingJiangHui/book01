@@ -3,11 +3,12 @@
 <mapper namespace="org.ying.book.mapper.FileMapper">
   <resultMap id="BaseResultMap" type="org.ying.book.pojo.File">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
     <result column="content_type" jdbcType="VARCHAR" property="contentType" />
+    <result column="bucket_name" jdbcType="VARCHAR" property="bucketName" />
+    <result column="object_name" jdbcType="VARCHAR" property="objectName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, url, created_at, updated_at, is_deleted, content_type
+    id, created_at, updated_at, is_deleted, content_type, bucket_name, object_name
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.FileExample" resultMap="BaseResultMap">
     select
@@ -101,17 +102,16 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.File" useGeneratedKeys="true">
-    insert into public.files (url, created_at, updated_at, 
-      is_deleted, content_type)
-    values (#{url,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT}, #{contentType,jdbcType=VARCHAR})
+    insert into public.files (created_at, updated_at, is_deleted, 
+      content_type, bucket_name, object_name
+      )
+    values (#{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
+      #{contentType,jdbcType=VARCHAR}, #{bucketName,jdbcType=VARCHAR}, #{objectName,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.File" useGeneratedKeys="true">
     insert into public.files
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="url != null">
-        url,
-      </if>
       <if test="createdAt != null">
         created_at,
       </if>
@@ -124,11 +124,14 @@
       <if test="contentType != null">
         content_type,
       </if>
+      <if test="bucketName != null">
+        bucket_name,
+      </if>
+      <if test="objectName != null">
+        object_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="url != null">
-        #{url,jdbcType=VARCHAR},
-      </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -140,6 +143,12 @@
       </if>
       <if test="contentType != null">
         #{contentType,jdbcType=VARCHAR},
+      </if>
+      <if test="bucketName != null">
+        #{bucketName,jdbcType=VARCHAR},
+      </if>
+      <if test="objectName != null">
+        #{objectName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -155,9 +164,6 @@
       <if test="row.id != null">
         id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="row.url != null">
-        url = #{row.url,jdbcType=VARCHAR},
-      </if>
       <if test="row.createdAt != null">
         created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -170,6 +176,12 @@
       <if test="row.contentType != null">
         content_type = #{row.contentType,jdbcType=VARCHAR},
       </if>
+      <if test="row.bucketName != null">
+        bucket_name = #{row.bucketName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.objectName != null">
+        object_name = #{row.objectName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -178,11 +190,12 @@
   <update id="updateByExample" parameterType="map">
     update public.files
     set id = #{row.id,jdbcType=INTEGER},
-      url = #{row.url,jdbcType=VARCHAR},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       is_deleted = #{row.deleted,jdbcType=BIT},
-      content_type = #{row.contentType,jdbcType=VARCHAR}
+      content_type = #{row.contentType,jdbcType=VARCHAR},
+      bucket_name = #{row.bucketName,jdbcType=VARCHAR},
+      object_name = #{row.objectName,jdbcType=VARCHAR}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -190,9 +203,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="org.ying.book.pojo.File">
     update public.files
     <set>
-      <if test="url != null">
-        url = #{url,jdbcType=VARCHAR},
-      </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -205,16 +215,23 @@
       <if test="contentType != null">
         content_type = #{contentType,jdbcType=VARCHAR},
       </if>
+      <if test="bucketName != null">
+        bucket_name = #{bucketName,jdbcType=VARCHAR},
+      </if>
+      <if test="objectName != null">
+        object_name = #{objectName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.ying.book.pojo.File">
     update public.files
-    set url = #{url,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
+    set created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       is_deleted = #{deleted,jdbcType=BIT},
-      content_type = #{contentType,jdbcType=VARCHAR}
+      content_type = #{contentType,jdbcType=VARCHAR},
+      bucket_name = #{bucketName,jdbcType=VARCHAR},
+      object_name = #{objectName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.FileExample" resultMap="BaseResultMap">

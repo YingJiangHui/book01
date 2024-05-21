@@ -1,6 +1,7 @@
 package org.ying.book.service;
 
 import jakarta.annotation.Resource;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.category.CategoryDto;
