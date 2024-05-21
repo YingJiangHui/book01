@@ -10,6 +10,7 @@ import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
+import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
@@ -52,8 +53,17 @@ public class UserService {
 
     public PageResultDto<User> getUsersWithTotal(UserQueryParamsDTO userQueryParamsDTO) {
         UserExample example = new UserExample();
+        example.setOrderByClause("created_at DESC");
         UserExample.Criteria criteria = example.createCriteria();
-        criteria.andLibraryIdIn(userQueryParamsDTO.getLibraryIds()).andRoleIn(userQueryParamsDTO.getRoleNames());
+        List<Integer> libraryIds = userQueryParamsDTO.getLibraryIds();
+        List<RoleEnum> roleNames = userQueryParamsDTO.getRoleNames();
+        if(libraryIds!=null && !libraryIds.isEmpty()){
+            criteria.andLibraryIdIn(libraryIds);
+        }
+        if(roleNames != null && !roleNames.isEmpty()){
+            criteria.andRoleIn(roleNames);
+        }
+
         return PaginationHelper.paginate(userQueryParamsDTO, (rowBounds, reqDto) -> userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, rowBounds), userMapper.countByExampleWithRoleAndLibrary(example));
     }
 
