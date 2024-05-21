@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class JwtDTO {
+public class UserJwtDto {
     int id;
     String email;
     List<RoleEnum> roles;

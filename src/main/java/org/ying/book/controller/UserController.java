@@ -5,16 +5,13 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
-import org.ying.book.dto.user.JwtDTO;
+import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.pojo.User;
 import org.ying.book.service.AuthService;
 import org.ying.book.service.UserService;
 import org.ying.book.utils.JwtUtil;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -37,9 +34,9 @@ public class UserController {
 //        return new User();
 //    }
     @GetMapping("/current")
-    public JwtDTO getUserInfo() throws Exception {
+    public UserJwtDto getUserInfo() throws Exception {
         Object token = request.getAttribute("token");
-        return authService.parseJWT(token.toString(), JwtDTO.class);
+        return authService.parseJWT(token.toString(), UserJwtDto.class);
     }
 //获取所有用户，支持分页
     @GetMapping

@@ -8,7 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.ying.book.dto.user.JwtDTO;
+import org.ying.book.Context.UserContext;
+import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.utils.JwtUtil;
 
@@ -26,9 +27,8 @@ public class LibraryAdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object token = request.getAttribute("token");
-        JwtDTO jwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), JwtDTO.class);
-        if (jwtDTO.getRoles().contains(RoleEnum.LIBRARY_ADMIN)) {
+        UserJwtDto userJwtDTO = UserContext.getCurrentUser();
+        if (userJwtDTO.getRoles().contains(RoleEnum.LIBRARY_ADMIN)) {
             return true;
         } else {
             AuthInterceptor.setReturn(response, HttpServletResponse.SC_FORBIDDEN, "账号权限不足");

@@ -2,16 +2,14 @@ package org.ying.book.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.ying.book.pojo.User;
+import org.ying.book.Context.UserContext;
+import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.Result;
 
@@ -50,8 +48,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"认证失效请重新登录");
             return false;
         }
-        request.setAttribute("token", token);
-
+        UserJwtDto userJwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), UserJwtDto.class);
+//        存储用户的信息
+        UserContext.setCurrentUser(userJwtDTO);
         return true;
     }
 
