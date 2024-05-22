@@ -37,6 +37,11 @@ public class BookService {
         return bookMapper.selectByPrimaryKey(id);
     }
 
+    public PageResultDto<Book> getBooks(PageReqDto pageReqDto){
+        BookExample bookExample = new BookExample();
+        return this.getBooksWithPaginate(bookExample, pageReqDto);
+    }
+
     public List<Book> getBooksByExampleWithRowbounds(BookExample example, RowBounds rowBounds) {
         return bookMapper.selectByExampleWithRowbounds(example, rowBounds).stream().map((book) -> {
             book.setFiles(fileService.filesWithUrl(book.getFiles()));
