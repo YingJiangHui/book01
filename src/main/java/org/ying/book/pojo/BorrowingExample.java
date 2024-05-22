@@ -584,6 +584,66 @@ public class BorrowingExample {
             addCriterion("is_deleted not between", value1, value2, "deleted");
             return (Criteria) this;
         }
+
+        public Criteria andExpectedReturnAtIsNull() {
+            addCriterion("expected_return_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtIsNotNull() {
+            addCriterion("expected_return_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtEqualTo(Date value) {
+            addCriterion("expected_return_at =", value, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtNotEqualTo(Date value) {
+            addCriterion("expected_return_at <>", value, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtGreaterThan(Date value) {
+            addCriterion("expected_return_at >", value, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("expected_return_at >=", value, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtLessThan(Date value) {
+            addCriterion("expected_return_at <", value, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtLessThanOrEqualTo(Date value) {
+            addCriterion("expected_return_at <=", value, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtIn(List<Date> values) {
+            addCriterion("expected_return_at in", values, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtNotIn(List<Date> values) {
+            addCriterion("expected_return_at not in", values, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtBetween(Date value1, Date value2) {
+            addCriterion("expected_return_at between", value1, value2, "expectedReturnAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpectedReturnAtNotBetween(Date value1, Date value2) {
+            addCriterion("expected_return_at not between", value1, value2, "expectedReturnAt");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

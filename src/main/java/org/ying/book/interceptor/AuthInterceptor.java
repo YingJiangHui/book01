@@ -54,11 +54,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         return true;
     }
 
-
-
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.debug("afterCompletion");
+        UserContext.clear();
     }
 
     //返回json格式错误信息

@@ -20,11 +20,13 @@ public class Borrowing {
 
     private Date borrowedAt;
 
-    private Date expectedReturnAt;
+    private Date returnedAt;
 
     private Date createdAt;
 
     private Date updatedAt;
 
     private Boolean deleted;
+
+    private Date expectedReturnAt;
 }
