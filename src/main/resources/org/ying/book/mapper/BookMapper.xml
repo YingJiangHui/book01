@@ -320,4 +320,7 @@
   <select id="selectFilesByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.FileMapper.BaseResultMap">
     select * from public.files f join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}
   </select>
+<!--  <select id="selectCategoryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookCategoryMapper.BaseResultMap">-->
+<!--    select * from public.categories c join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}-->
+<!--  </select>-->
 </mapper>

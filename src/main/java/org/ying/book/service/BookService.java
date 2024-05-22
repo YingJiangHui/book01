@@ -37,9 +37,15 @@ public class BookService {
         return bookMapper.selectByPrimaryKey(id);
     }
 
-    public PageResultDto<Book> getBooks(PageReqDto pageReqDto){
+    public PageResultDto<Book> getBooks(PageReqDto pageReqDto) {
         BookExample bookExample = new BookExample();
         return this.getBooksWithPaginate(bookExample, pageReqDto);
+    }
+
+    public List<Book> getBooksByCategoryId(Integer categoryId) {
+        BookExample bookExample = new BookExample();
+        bookExample.createCriteria().andCategoryIdEqualTo(categoryId);
+        return bookMapper.selectByExample(bookExample);
     }
 
     public List<Book> getBooksByExampleWithRowbounds(BookExample example, RowBounds rowBounds) {

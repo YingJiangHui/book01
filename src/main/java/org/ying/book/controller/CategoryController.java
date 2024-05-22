@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ying.book.dto.category.CategoryDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.pojo.Book;
 import org.ying.book.pojo.BookCategory;
 import org.ying.book.service.CategoryService;
 
@@ -30,5 +31,10 @@ public class CategoryController {
     @PostMapping()
     public BookCategory createCategory(@RequestBody CategoryDto categoryDto) {
         return categoryService.createCategory(categoryDto);
+    }
+
+    @GetMapping("/{id}/books")
+    public List<Book> getBooksByCategoryId(@PathVariable Integer id) {
+        return categoryService.getBooksByCategoryId(id);
     }
 }

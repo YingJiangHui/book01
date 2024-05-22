@@ -8,6 +8,7 @@ import org.ying.book.dto.category.CategoryDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.mapper.BookCategoryMapper;
+import org.ying.book.pojo.Book;
 import org.ying.book.pojo.BookCategory;
 import org.ying.book.pojo.BookCategoryExample;
 import org.ying.book.utils.PaginationHelper;
@@ -18,6 +19,9 @@ import java.util.List;
 public class CategoryService {
     @Resource
     private BookCategoryMapper bookCategoryMapper;
+
+    @Resource
+    private BookService bookService;
 
     public List<BookCategory> getAllCategories() {
         return bookCategoryMapper.selectByExample(new BookCategoryExample());
@@ -33,6 +37,10 @@ public class CategoryService {
         BookCategory category = BookCategory.builder().categoryName(categoryDto.getName()).description(categoryDto.getDescription()).build();
         bookCategoryMapper.insertSelective(category);
         return category;
+    }
+
+    public List<Book> getBooksByCategoryId(Integer categoryId){
+        return bookService.getBooksByCategoryId(categoryId);
     }
 
 }
