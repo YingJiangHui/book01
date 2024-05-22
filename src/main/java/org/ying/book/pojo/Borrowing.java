@@ -1,6 +1,7 @@
 package org.ying.book.pojo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Borrowing {
     private Integer id;
 
@@ -18,7 +20,7 @@ public class Borrowing {
 
     private Date borrowedAt;
 
-    private Date returnedAt;
+    private Date expectedReturnAt;
 
     private Date createdAt;
 

@@ -5,11 +5,12 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="book_id" jdbcType="INTEGER" property="bookId" />
-    <result column="reserved_at" jdbcType="TIMESTAMP" property="reservedAt" />
     <result column="fulfilled" jdbcType="BIT" property="fulfilled" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <result column="returned_at" jdbcType="TIMESTAMP" property="returnedAt" />
+    <result column="borrowed_at" jdbcType="TIMESTAMP" property="borrowedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, book_id, reserved_at, fulfilled, created_at, updated_at, is_deleted
+    id, user_id, book_id, fulfilled, created_at, updated_at, is_deleted, returned_at, 
+    borrowed_at
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.ReservationExample" resultMap="BaseResultMap">
     select
@@ -103,12 +105,12 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Reservation" useGeneratedKeys="true">
-    insert into public.reservations (user_id, book_id, reserved_at, 
-      fulfilled, created_at, updated_at, 
-      is_deleted)
-    values (#{userId,jdbcType=INTEGER}, #{bookId,jdbcType=INTEGER}, #{reservedAt,jdbcType=TIMESTAMP}, 
-      #{fulfilled,jdbcType=BIT}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT})
+    insert into public.reservations (user_id, book_id, fulfilled, 
+      created_at, updated_at, is_deleted, 
+      returned_at, borrowed_at)
+    values (#{userId,jdbcType=INTEGER}, #{bookId,jdbcType=INTEGER}, #{fulfilled,jdbcType=BIT}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
+      #{returnedAt,jdbcType=TIMESTAMP}, #{borrowedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Reservation" useGeneratedKeys="true">
     insert into public.reservations
@@ -118,9 +120,6 @@
       </if>
       <if test="bookId != null">
         book_id,
-      </if>
-      <if test="reservedAt != null">
-        reserved_at,
       </if>
       <if test="fulfilled != null">
         fulfilled,
@@ -134,6 +133,12 @@
       <if test="deleted != null">
         is_deleted,
       </if>
+      <if test="returnedAt != null">
+        returned_at,
+      </if>
+      <if test="borrowedAt != null">
+        borrowed_at,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -141,9 +146,6 @@
       </if>
       <if test="bookId != null">
         #{bookId,jdbcType=INTEGER},
-      </if>
-      <if test="reservedAt != null">
-        #{reservedAt,jdbcType=TIMESTAMP},
       </if>
       <if test="fulfilled != null">
         #{fulfilled,jdbcType=BIT},
@@ -156,6 +158,12 @@
       </if>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
+      </if>
+      <if test="returnedAt != null">
+        #{returnedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="borrowedAt != null">
+        #{borrowedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -177,9 +185,6 @@
       <if test="row.bookId != null">
         book_id = #{row.bookId,jdbcType=INTEGER},
       </if>
-      <if test="row.reservedAt != null">
-        reserved_at = #{row.reservedAt,jdbcType=TIMESTAMP},
-      </if>
       <if test="row.fulfilled != null">
         fulfilled = #{row.fulfilled,jdbcType=BIT},
       </if>
@@ -192,6 +197,12 @@
       <if test="row.deleted != null">
         is_deleted = #{row.deleted,jdbcType=BIT},
       </if>
+      <if test="row.returnedAt != null">
+        returned_at = #{row.returnedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.borrowedAt != null">
+        borrowed_at = #{row.borrowedAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -202,11 +213,12 @@
     set id = #{row.id,jdbcType=INTEGER},
       user_id = #{row.userId,jdbcType=INTEGER},
       book_id = #{row.bookId,jdbcType=INTEGER},
-      reserved_at = #{row.reservedAt,jdbcType=TIMESTAMP},
       fulfilled = #{row.fulfilled,jdbcType=BIT},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{row.deleted,jdbcType=BIT}
+      is_deleted = #{row.deleted,jdbcType=BIT},
+      returned_at = #{row.returnedAt,jdbcType=TIMESTAMP},
+      borrowed_at = #{row.borrowedAt,jdbcType=TIMESTAMP}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -220,9 +232,6 @@
       <if test="bookId != null">
         book_id = #{bookId,jdbcType=INTEGER},
       </if>
-      <if test="reservedAt != null">
-        reserved_at = #{reservedAt,jdbcType=TIMESTAMP},
-      </if>
       <if test="fulfilled != null">
         fulfilled = #{fulfilled,jdbcType=BIT},
       </if>
@@ -235,6 +244,12 @@
       <if test="deleted != null">
         is_deleted = #{deleted,jdbcType=BIT},
       </if>
+      <if test="returnedAt != null">
+        returned_at = #{returnedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="borrowedAt != null">
+        borrowed_at = #{borrowedAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -242,11 +257,12 @@
     update public.reservations
     set user_id = #{userId,jdbcType=INTEGER},
       book_id = #{bookId,jdbcType=INTEGER},
-      reserved_at = #{reservedAt,jdbcType=TIMESTAMP},
       fulfilled = #{fulfilled,jdbcType=BIT},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{deleted,jdbcType=BIT}
+      is_deleted = #{deleted,jdbcType=BIT},
+      returned_at = #{returnedAt,jdbcType=TIMESTAMP},
+      borrowed_at = #{borrowedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.ReservationExample" resultMap="BaseResultMap">

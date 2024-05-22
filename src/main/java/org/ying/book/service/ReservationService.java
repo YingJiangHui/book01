@@ -18,13 +18,13 @@ public class ReservationService {
     ReservationMapper reservationMapper;
 
     //获取指定书籍在指定时间段下的借阅记录
-    public List<Reservation> getBorrowingBetweenBorrowTime(Integer bookId, Date borrowedAt, Date returnedAt) {
+    public List<Reservation> getReservationsBetweenBorrowTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt) {
         //        通过判断该书籍在对应时间段是否与其他借阅记录时间区间有冲突，以判断书籍是否可以借阅
         ReservationExample borrowingExample = new ReservationExample();
         ReservationExample.Criteria criteria = borrowingExample.createCriteria();
-//        criteria.andReservedAtBetween(borrowedAt);
-//        criteria.andBorrowedAtLessThan(returnedAt);
-
+        criteria.andBookIdIn(bookIds);
+        criteria.andReturnedAtGreaterThan(borrowedAt);
+        criteria.andBorrowedAtLessThan(returnedAt);
         return reservationMapper.selectByExample(borrowingExample);
     }
 }
