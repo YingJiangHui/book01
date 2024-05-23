@@ -45,7 +45,10 @@ public class BookService {
     public List<Book> getBooksByCategoryId(Integer categoryId) {
         BookExample bookExample = new BookExample();
         bookExample.createCriteria().andCategoryIdEqualTo(categoryId);
-        return bookMapper.selectByExample(bookExample);
+        return bookMapper.selectByExample(bookExample).stream().map((book) -> {
+            book.setFiles(fileService.filesWithUrl(book.getFiles()));
+            return book;
+        }).toList();
     }
 
     public List<Book> getBooksByExampleWithRowbounds(BookExample example, RowBounds rowBounds) {
