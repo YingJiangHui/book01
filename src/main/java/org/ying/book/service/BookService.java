@@ -34,7 +34,9 @@ public class BookService {
     private LibraryBookMapper libraryBookMapper;
 
     public Book getBook(Integer id) {
-        return bookMapper.selectByPrimaryKey(id);
+        Book book = bookMapper.selectByPrimaryKey(id);
+        book.setFiles(fileService.filesWithUrl(book.getFiles()));
+        return book;
     }
 
     public PageResultDto<Book> getBooks(PageReqDto pageReqDto) {

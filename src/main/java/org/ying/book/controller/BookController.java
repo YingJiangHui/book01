@@ -41,4 +41,10 @@ public class BookController {
         return bookService.createBook(bookDto);
     }
 
+    @GetMapping("/{id}")
+    public Book getBook( @PathVariable Integer id){
+        return bookService.getBook(id);
+
+    }
+
 }
