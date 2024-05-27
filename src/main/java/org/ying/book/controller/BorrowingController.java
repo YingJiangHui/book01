@@ -14,6 +14,7 @@ import org.ying.book.pojo.Borrowing;
 import org.ying.book.service.BorrowingService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/books/borrowing")
@@ -24,7 +25,7 @@ public class BorrowingController {
 
     @PostMapping
     public List<Borrowing> borrowBooks(@RequestBody BorrowingDto borrowingDto) {
-        if(UserContext.getCurrentUser().getId() == null){
+        if(UserContext.getCurrentUser() == null || UserContext.getCurrentUser().getId() == null){
             throw new CustomException("用户未登录", HttpStatus.UNAUTHORIZED);
         }
         borrowingDto.setUserId(UserContext.getCurrentUser().getId());

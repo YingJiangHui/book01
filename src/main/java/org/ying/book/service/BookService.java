@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.book.BookDto;
+import org.ying.book.dto.book.BookQueryDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
-import org.ying.book.dto.file.FileDto;
-import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.mapper.BookFileMapper;
 import org.ying.book.mapper.BookMapper;
 import org.ying.book.mapper.LibraryBookMapper;
@@ -39,9 +38,13 @@ public class BookService {
         return book;
     }
 
-    public PageResultDto<Book> getBooks(PageReqDto pageReqDto) {
+    public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
         BookExample bookExample = new BookExample();
-        return this.getBooksWithPaginate(bookExample, pageReqDto);
+        BookExample.Criteria criteria = bookExample.createCriteria();
+        if(bookQueryDto.getIds() != null && !bookQueryDto.getIds().isEmpty()){
+            criteria.andIdIn(bookQueryDto.getIds());
+        }
+        return this.getBooksWithPaginate(bookExample, bookQueryDto);
     }
 
     public List<Book> getBooksByCategoryId(Integer categoryId) {

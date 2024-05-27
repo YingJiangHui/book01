@@ -94,7 +94,7 @@ public class BorrowingService {
                     .bookId(bookId)
                     .userId(userId)
                     .borrowedAt(borrowingDto.getBorrowedAt())
-                    .borrowedAt(borrowingDto.getExpectedReturnAt())
+                    .expectedReturnAt(borrowingDto.getExpectedReturnAt())
                     .build();
             borrowingMapper.insertSelective(borrowing);
             return borrowing;
