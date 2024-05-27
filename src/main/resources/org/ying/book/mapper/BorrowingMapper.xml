@@ -10,6 +10,7 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <result column="expected_return_at" jdbcType="TIMESTAMP" property="expectedReturnAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, book_id, borrowed_at, returned_at, created_at, updated_at, is_deleted
+    id, user_id, book_id, borrowed_at, returned_at, created_at, updated_at, is_deleted, 
+    expected_return_at
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="BaseResultMap">
     select
@@ -105,10 +107,10 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Borrowing" useGeneratedKeys="true">
     insert into public.borrowings (user_id, book_id, borrowed_at, 
       returned_at, created_at, updated_at, 
-      is_deleted)
+      is_deleted, expected_return_at)
     values (#{userId,jdbcType=INTEGER}, #{bookId,jdbcType=INTEGER}, #{borrowedAt,jdbcType=TIMESTAMP}, 
       #{returnedAt,jdbcType=TIMESTAMP}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT})
+      #{deleted,jdbcType=BIT}, #{expectedReturnAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Borrowing" useGeneratedKeys="true">
     insert into public.borrowings
@@ -134,6 +136,9 @@
       <if test="deleted != null">
         is_deleted,
       </if>
+      <if test="expectedReturnAt != null">
+        expected_return_at,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -156,6 +161,9 @@
       </if>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
+      </if>
+      <if test="expectedReturnAt != null">
+        #{expectedReturnAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -192,6 +200,9 @@
       <if test="row.deleted != null">
         is_deleted = #{row.deleted,jdbcType=BIT},
       </if>
+      <if test="row.expectedReturnAt != null">
+        expected_return_at = #{row.expectedReturnAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -206,7 +217,8 @@
       returned_at = #{row.returnedAt,jdbcType=TIMESTAMP},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{row.deleted,jdbcType=BIT}
+      is_deleted = #{row.deleted,jdbcType=BIT},
+      expected_return_at = #{row.expectedReturnAt,jdbcType=TIMESTAMP}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -235,6 +247,9 @@
       <if test="deleted != null">
         is_deleted = #{deleted,jdbcType=BIT},
       </if>
+      <if test="expectedReturnAt != null">
+        expected_return_at = #{expectedReturnAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -246,7 +261,8 @@
       returned_at = #{returnedAt,jdbcType=TIMESTAMP},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{deleted,jdbcType=BIT}
+      is_deleted = #{deleted,jdbcType=BIT},
+      expected_return_at = #{expectedReturnAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="BaseResultMap">

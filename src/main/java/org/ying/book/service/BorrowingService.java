@@ -42,11 +42,11 @@ public class BorrowingService {
                 .andReturnedAtIsNull()
                 .andExpectedReturnAtGreaterThan(borrowedAt)
                 .andBorrowedAtLessThan(returnedAt);
-        borrowingExample.or(criteria);
+        borrowingExample.or(criteria2);
         return borrowingMapper.selectByExample(borrowingExample);
     }
 
-//    续借操作
+    //    续借操作
     @Transactional
     public void renewBooks(RenewDto renewDto) {
         BorrowingExample borrowingExample = new BorrowingExample();
@@ -54,7 +54,7 @@ public class BorrowingService {
         criteria.andIdIn(renewDto.getBorrowingIds());
         List<Borrowing> borrowings = borrowingMapper.selectByExample(borrowingExample);
         borrowings.stream().map(borrowing -> {
-            if(borrowing.getReturnedAt()!=null){
+            if (borrowing.getReturnedAt() != null) {
                 throw new CustomException("该书籍已归还，无法续借", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             borrowing.setExpectedReturnAt(new Date(borrowing.getExpectedReturnAt().getTime() + 1000 * 60 * 60 * 24 * renewDto.getDays()));
@@ -81,11 +81,11 @@ public class BorrowingService {
         List<Integer> bookIds = borrowingDto.getBookIds();
         List<Borrowing> borrowings = this.getBorrowingsBetweenBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
         if (borrowings != null && !borrowings.isEmpty()) {
-            throw new CustomException("该书籍在该时间段内已被借阅", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("书籍在该时间段内已被借阅", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         List<Reservation> reservations = reservationService.getReservationsBetweenBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
         if (reservations != null && !reservations.isEmpty()) {
-            throw new CustomException("该书籍在该时间段内已被预约", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("书籍在该时间段内已被预约", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         Integer userId = UserContext.getCurrentUser().getId();
 
