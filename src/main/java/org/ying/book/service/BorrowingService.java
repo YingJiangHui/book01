@@ -76,23 +76,24 @@ public class BorrowingService {
         }).toList();
     }
 
-    @Transactional
-    public List<Borrowing> borrowBooks(BorrowingDto borrowingDto) {
-        List<Integer> bookIds = borrowingDto.getBookIds();
-        List<Borrowing> borrowings = this.getBorrowingsBetweenBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
+    public void validConflictBorrowTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt){
+        List<Borrowing> borrowings = this.getBorrowingsBetweenBorrowTime(bookIds, borrowedAt, returnedAt);
         if (borrowings != null && !borrowings.isEmpty()) {
             throw new CustomException("书籍在该时间段内已被借阅", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        List<Reservation> reservations = reservationService.getReservationsBetweenBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
-        if (reservations != null && !reservations.isEmpty()) {
-            throw new CustomException("书籍在该时间段内已被预约", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        Integer userId = UserContext.getCurrentUser().getId();
+    }
+
+    @Transactional
+    public List<Borrowing> borrowBooks(BorrowingDto borrowingDto) {
+        List<Integer> bookIds = borrowingDto.getBookIds();
+
+        this.validConflictBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
+        reservationService.validConflictReserveTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
 
         return bookIds.stream().map(bookId -> {
             Borrowing borrowing = Borrowing.builder()
                     .bookId(bookId)
-                    .userId(userId)
+                    .userId(borrowingDto.getUserId())
                     .borrowedAt(borrowingDto.getBorrowedAt())
                     .expectedReturnAt(borrowingDto.getExpectedReturnAt())
                     .build();
