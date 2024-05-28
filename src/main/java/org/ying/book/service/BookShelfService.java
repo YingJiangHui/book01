@@ -5,12 +5,15 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.bookShelf.BookInShelfDto;
+import org.ying.book.dto.bookShelf.BookShelfGroupByLibraryDto;
 import org.ying.book.mapper.BookShelfMapper;
 import org.ying.book.pojo.Book;
 import org.ying.book.pojo.BookShelf;
 import org.ying.book.pojo.BookShelfExample;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookShelfService {
@@ -42,17 +45,30 @@ public class BookShelfService {
         return bookShelf;
     }
 
-    public List<BookInShelfDto> getBookShelfByUserId(Integer userId) {
+    public List<BookShelfGroupByLibraryDto> getBookShelfByUserId(Integer userId) {
         BookShelfExample bookShelfExample = new BookShelfExample();
         bookShelfExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
 
-        return bookShelfMapper.selectByExample(bookShelfExample).stream().map((bookShelf)->{
+        Map<Integer,BookShelfGroupByLibraryDto> hashMap = new HashMap<>();
+
+        bookShelfMapper.selectByExample(bookShelfExample).stream().map((bookShelf)->{
             Book book = bookService.getBook(bookShelf.getBookId());
             BookInShelfDto bookInShelfDto = (BookInShelfDto) book;
             bookInShelfDto.setBookId(bookShelf.getBookId());
             bookInShelfDto.setId(bookShelf.getId());
             return bookInShelfDto;
-        }).toList();
+        }).forEach((bookInShelfDto)->{
+            BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto = (BookShelfGroupByLibraryDto)bookInShelfDto.getLibrary();
+            List<BookInShelfDto> books = bookShelfGroupByLibraryDto.getBooks();
+            if(books != null){
+                books.add(bookInShelfDto);
+            }else{
+                bookShelfGroupByLibraryDto.setBooks(List.of(bookInShelfDto));
+                hashMap.put(bookInShelfDto.getLibrary().getId(), bookShelfGroupByLibraryDto);
+            }
+        });
+
+       return hashMap.entrySet().stream().map((item)-> item.getValue()).toList();
     }
 
     @Transactional

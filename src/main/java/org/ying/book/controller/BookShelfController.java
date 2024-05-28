@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.bookShelf.BookInShelfDto;
+import org.ying.book.dto.bookShelf.BookShelfGroupByLibraryDto;
 import org.ying.book.pojo.BookShelf;
 import org.ying.book.service.BookShelfService;
 
@@ -23,7 +24,7 @@ public class BookShelfController {
     }
 
     @GetMapping
-    public List<BookInShelfDto> getBookShelf() {
+    public List<BookShelfGroupByLibraryDto> getBookShelf() {
         return bookShelfService.getBookShelfByUserId(UserContext.getCurrentUser().getId());
     }
 
