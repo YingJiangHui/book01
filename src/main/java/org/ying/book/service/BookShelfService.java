@@ -14,9 +14,7 @@ import org.ying.book.pojo.Book;
 import org.ying.book.pojo.BookShelf;
 import org.ying.book.pojo.BookShelfExample;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BookShelfService {
@@ -64,13 +62,15 @@ public class BookShelfService {
             bookInShelfDto.setId(bookShelf.getId());
             return bookInShelfDto;
         }).forEach((bookInShelfDto) -> {
-            BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto = new BookShelfGroupByLibraryDto();
-            BeanUtils.copyProperties(bookInShelfDto.getLibrary(), bookShelfGroupByLibraryDto);
-            List<BookInShelfDto> books = bookShelfGroupByLibraryDto.getBooks();
-            if (books != null) {
-                books.add(bookInShelfDto);
+            BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto1 = hashMap.get(bookInShelfDto.getLibrary().getId());
+            if (bookShelfGroupByLibraryDto1 != null) {
+                List<BookInShelfDto> newList = new ArrayList<>(bookShelfGroupByLibraryDto1.getBooks());
+                newList.add(bookInShelfDto);
+                bookShelfGroupByLibraryDto1.setBooks(newList);
             } else {
-                bookShelfGroupByLibraryDto.setBooks(List.of(bookInShelfDto));
+                BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto = new BookShelfGroupByLibraryDto();
+                BeanUtils.copyProperties(bookInShelfDto.getLibrary(), bookShelfGroupByLibraryDto);
+                bookShelfGroupByLibraryDto.setBooks(Arrays.asList(bookInShelfDto));
                 hashMap.put(bookInShelfDto.getLibrary().getId(), bookShelfGroupByLibraryDto);
             }
         });

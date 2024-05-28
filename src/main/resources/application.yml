@@ -54,7 +54,7 @@ logging:
 
 jwt:
   secret: I2ddU/A51ZqBrePymscViPmiGZNIrjSjKcX+YowurDc=
-  expiration: 3600000
+  expiration: 43200000 # 12 hour
 
 
 custom:
