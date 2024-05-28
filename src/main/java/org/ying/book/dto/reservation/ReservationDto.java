@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class ReservationDto {
+    @NotNull
     List<Integer> bookIds;
     Integer userId;
     @NotNull

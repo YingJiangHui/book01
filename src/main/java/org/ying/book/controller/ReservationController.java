@@ -3,6 +3,7 @@ package org.ying.book.controller;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.ying.book.Context.UserContext;
@@ -19,7 +20,7 @@ public class ReservationController {
     @Resource
     private ReservationService reservationService;
     @PostMapping
-    public List<Reservation> reserveBooks(ReservationDto reservationDto) {
+    public List<Reservation> reserveBooks(@RequestBody ReservationDto reservationDto) {
         if(UserContext.getCurrentUser() == null || UserContext.getCurrentUser().getId() == null){
             throw new CustomException("用户未登录", HttpStatus.UNAUTHORIZED);
         }
