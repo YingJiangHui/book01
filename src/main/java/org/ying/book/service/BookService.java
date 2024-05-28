@@ -38,6 +38,19 @@ public class BookService {
         return book;
     }
 
+    public List<Book> getBooksByIds(List<Integer> ids) {
+        BookExample bookExample = new BookExample();
+        BookExample.Criteria criteria = bookExample.createCriteria();
+        if(ids == null || ids.isEmpty()){
+            return List.of();
+        }
+        criteria.andIdIn(ids);
+        return bookMapper.selectByExample(bookExample).stream().map((book) -> {
+            book.setFiles(fileService.filesWithUrl(book.getFiles()));
+            return book;
+        }).toList();
+    }
+
     public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteria = bookExample.createCriteria();

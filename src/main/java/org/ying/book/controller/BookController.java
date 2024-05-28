@@ -45,7 +45,6 @@ public class BookController {
     @GetMapping("/{id}")
     public Book getBook( @PathVariable Integer id){
         return bookService.getBook(id);
-
     }
 
 }

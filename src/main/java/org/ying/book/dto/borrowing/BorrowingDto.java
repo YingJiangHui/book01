@@ -2,6 +2,7 @@ package org.ying.book.dto.borrowing;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.ying.book.enums.ActionSource;
 
 import java.util.Date;
 import java.util.List;
@@ -14,4 +15,6 @@ public class BorrowingDto {
     Date borrowedAt;
     @NotNull
     Date expectedReturnAt;
+
+    ActionSource from = ActionSource.DETAIL;
 }

@@ -30,4 +30,5 @@ public interface BookShelfMapper {
     int updateByPrimaryKeySelective(BookShelf row);
 
     int updateByPrimaryKey(BookShelf row);
+
 }

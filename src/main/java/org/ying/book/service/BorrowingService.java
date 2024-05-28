@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.borrowing.BorrowingDto;
 import org.ying.book.dto.borrowing.RenewDto;
+import org.ying.book.enums.ActionSource;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.BorrowingMapper;
 import org.ying.book.pojo.Borrowing;
@@ -25,6 +26,9 @@ public class BorrowingService {
 
     @Resource
     ReservationService reservationService;
+
+    @Resource
+    BookShelfService bookShelfService;
 
     //获取指定书籍在指定时间段下的借阅记录
     public List<Borrowing> getBorrowingsBetweenBorrowTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt) {
@@ -90,7 +94,7 @@ public class BorrowingService {
         this.validConflictBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
         reservationService.validConflictReserveTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
 
-        return bookIds.stream().map(bookId -> {
+        List<Borrowing> borrowings = bookIds.stream().map(bookId -> {
             Borrowing borrowing = Borrowing.builder()
                     .bookId(bookId)
                     .userId(borrowingDto.getUserId())
@@ -100,6 +104,11 @@ public class BorrowingService {
             borrowingMapper.insertSelective(borrowing);
             return borrowing;
         }).toList();
+
+        if (borrowingDto.getFrom().equals(ActionSource.SHELF)) {
+            bookShelfService.removeBooksFromShelfByUserIdAndBookIds(borrowingDto.getUserId(), bookIds);
+        }
+        return borrowings;
     }
 
 }
