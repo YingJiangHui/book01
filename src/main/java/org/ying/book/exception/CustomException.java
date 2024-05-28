@@ -33,6 +33,12 @@ public class CustomException extends RuntimeException {
         this.code = status.value();
     }
 
+    public CustomException(String message) {
+        super(message);
+        this.status = HttpStatus.INTERNAL_SERVER_ERROR;
+        this.code = status.value();
+    }
+
     public HttpStatus getStatus() {
         return status;
     }

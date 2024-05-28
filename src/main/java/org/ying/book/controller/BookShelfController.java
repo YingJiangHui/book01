@@ -18,7 +18,7 @@ public class BookShelfController {
     private BookShelfService bookShelfService;
 
     @PostMapping
-    public void addBookToShelf(BookShelf bookShelf) {
+    public void addBookToShelf(@RequestBody BookShelf bookShelf) {
         bookShelf.setUserId(UserContext.getCurrentUser().getId());
         bookShelfService.addBookToShelf(bookShelf);
     }
@@ -29,7 +29,7 @@ public class BookShelfController {
     }
 
     @DeleteMapping
-    public List<BookShelf> deleteBookFromShelf(@RequestParam List<Integer> bookShelfIds) {
+    public List<BookShelf> deleteBookFromShelf(@RequestBody List<Integer> bookShelfIds) {
         return bookShelfService.removeBooksFromShelf(bookShelfIds);
     }
 }

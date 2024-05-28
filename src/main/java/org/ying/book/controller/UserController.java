@@ -5,6 +5,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.ying.book.Context.UserContext;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
@@ -35,8 +36,7 @@ public class UserController {
 //    }
     @GetMapping("/current")
     public UserJwtDto getUserInfo() throws Exception {
-        Object token = request.getAttribute("token");
-        return authService.parseJWT(token.toString(), UserJwtDto.class);
+        return UserContext.getCurrentUser();
     }
 //获取所有用户，支持分页
     @GetMapping

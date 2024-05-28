@@ -2,10 +2,13 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.bookShelf.BookInShelfDto;
 import org.ying.book.dto.bookShelf.BookShelfGroupByLibraryDto;
+import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.BookShelfMapper;
 import org.ying.book.pojo.Book;
 import org.ying.book.pojo.BookShelf;
@@ -23,6 +26,7 @@ public class BookShelfService {
 
     @Resource
     BookService bookService;
+
     private List<BookShelf> getBookShelfByUserIdAndBookIds(Integer userId, List<Integer> bookIds) {
         BookShelfExample bookShelfExample = new BookShelfExample();
         bookShelfExample.createCriteria().andUserIdEqualTo(userId).andBookIdIn(bookIds).andDeletedEqualTo(false);
@@ -32,14 +36,15 @@ public class BookShelfService {
     }
 
     private BookShelf getBookShelfByUserIdAndBookId(Integer userId, Integer bookId) {
-        return this.getBookShelfByUserIdAndBookIds(userId, List.of(bookId)).get(0);
+        List<BookShelf> bookShelves = this.getBookShelfByUserIdAndBookIds(userId, List.of(bookId));
+        return bookShelves.isEmpty() ? null : bookShelves.get(0);
     }
 
     @Transactional
     public BookShelf addBookToShelf(BookShelf bookShelf) {
         BookShelf bookShelfInTable = this.getBookShelfByUserIdAndBookId(bookShelf.getUserId(), bookShelf.getBookId());
         if (bookShelfInTable != null) {
-            throw new RuntimeException("书架已存在该书，请勿重复添加");
+            throw new CustomException("图书已加入书架", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         bookShelfMapper.insertSelective(bookShelf);
         return bookShelf;
@@ -49,33 +54,35 @@ public class BookShelfService {
         BookShelfExample bookShelfExample = new BookShelfExample();
         bookShelfExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
 
-        Map<Integer,BookShelfGroupByLibraryDto> hashMap = new HashMap<>();
+        Map<Integer, BookShelfGroupByLibraryDto> hashMap = new HashMap<>();
 
-        bookShelfMapper.selectByExample(bookShelfExample).stream().map((bookShelf)->{
+        bookShelfMapper.selectByExample(bookShelfExample).stream().map((bookShelf) -> {
             Book book = bookService.getBook(bookShelf.getBookId());
-            BookInShelfDto bookInShelfDto = (BookInShelfDto) book;
+            BookInShelfDto bookInShelfDto = new BookInShelfDto();
+            BeanUtils.copyProperties(book, bookInShelfDto);
             bookInShelfDto.setBookId(bookShelf.getBookId());
             bookInShelfDto.setId(bookShelf.getId());
             return bookInShelfDto;
-        }).forEach((bookInShelfDto)->{
-            BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto = (BookShelfGroupByLibraryDto)bookInShelfDto.getLibrary();
+        }).forEach((bookInShelfDto) -> {
+            BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto = new BookShelfGroupByLibraryDto();
+            BeanUtils.copyProperties(bookInShelfDto.getLibrary(), bookShelfGroupByLibraryDto);
             List<BookInShelfDto> books = bookShelfGroupByLibraryDto.getBooks();
-            if(books != null){
+            if (books != null) {
                 books.add(bookInShelfDto);
-            }else{
+            } else {
                 bookShelfGroupByLibraryDto.setBooks(List.of(bookInShelfDto));
                 hashMap.put(bookInShelfDto.getLibrary().getId(), bookShelfGroupByLibraryDto);
             }
         });
 
-       return hashMap.entrySet().stream().map((item)-> item.getValue()).toList();
+        return hashMap.entrySet().stream().map((item) -> item.getValue()).toList();
     }
 
     @Transactional
     public void removeBookFromShelf(Integer bookShelfId) {
         BookShelf bookShelfInTable = bookShelfMapper.selectByPrimaryKey(bookShelfId);
-        if(bookShelfInTable == null){
-            throw new RuntimeException("书架不存在该书，请检查");
+        if (bookShelfInTable == null) {
+            throw new CustomException("书架不存在该书，请检查", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         bookShelfInTable.setDeleted(true);
         bookShelfMapper.updateByPrimaryKey(bookShelfInTable);
@@ -89,8 +96,8 @@ public class BookShelfService {
         bookShelfExample.createCriteria().andIdIn(bookShelfIds).andDeletedEqualTo(false);
 
         List<BookShelf> bookShelves = bookShelfMapper.selectByExample(bookShelfExample);
-        if(bookShelves.size() != bookShelfIds.size()){
-            throw new RuntimeException("存在图书不在书架中");
+        if (bookShelves.size() != bookShelfIds.size()) {
+            throw new CustomException("某图书不在书架中", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         bookShelves.forEach((bookShelf) -> {
             bookShelf.setDeleted(true);
