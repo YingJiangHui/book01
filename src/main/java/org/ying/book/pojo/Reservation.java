@@ -18,8 +18,6 @@ public class Reservation {
 
     private Integer bookId;
 
-    private Boolean fulfilled;
-
     private Date createdAt;
 
     private Date updatedAt;
@@ -30,5 +28,5 @@ public class Reservation {
 
     private Date borrowedAt;
 
-
+    private String status;
 }

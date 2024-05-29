@@ -70,19 +70,19 @@
 <!--            <columnOverride column="is_deleted" property="deleted"/>-->
 <!--        </table>-->
 
-        <table schema="public" tableName="books" domainObjectName="Book">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="title" property="title"/>
-            <columnOverride column="author" property="author"/>
-            <columnOverride column="category_id" property="categoryId"/>
-            <columnOverride column="published_year" property="publishedYear"/>
-            <columnOverride column="publisher" property="publisher"/>
-            <columnOverride column="isbn" property="isbn"/>
-            <columnOverride column="available" property="available"/>
-            <columnOverride column="created_at" property="createdAt"/>
-            <columnOverride column="updated_at" property="updatedAt"/>
-            <columnOverride column="is_deleted" property="deleted"/>
-        </table>
+<!--        <table schema="public" tableName="books" domainObjectName="Book">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="title" property="title"/>-->
+<!--            <columnOverride column="author" property="author"/>-->
+<!--            <columnOverride column="category_id" property="categoryId"/>-->
+<!--            <columnOverride column="published_year" property="publishedYear"/>-->
+<!--            <columnOverride column="publisher" property="publisher"/>-->
+<!--            <columnOverride column="isbn" property="isbn"/>-->
+<!--            <columnOverride column="available" property="available"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
 <!--        <table schema="public" tableName="borrowings" domainObjectName="Borrowing">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
@@ -96,17 +96,18 @@
 <!--            <columnOverride column="is_deleted" property="deleted"/>-->
 <!--        </table>-->
 
-<!--        <table schema="public" tableName="reservations" domainObjectName="Reservation">-->
-<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
-<!--            <columnOverride column="user_id" property="userId"/>-->
-<!--            <columnOverride column="book_id" property="bookId"/>-->
-<!--&lt;!&ndash;            <columnOverride column="reserved_at" property="reservedAt"/>&ndash;&gt;-->
-<!--            <columnOverride column="borrowed_at" property="borrowedAt"/>-->
-<!--            <columnOverride column="returned_at" property="returnedAt"/>-->
-<!--            <columnOverride column="created_at" property="createdAt"/>-->
-<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
-<!--            <columnOverride column="is_deleted" property="deleted"/>-->
-<!--        </table>-->
+        <table schema="public" tableName="reservations" domainObjectName="Reservation">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+            <columnOverride column="user_id" property="userId"/>
+            <columnOverride column="book_id" property="bookId"/>
+            <columnOverride column="status" property="status"/>
+<!--            <columnOverride column="reserved_at" property="reservedAt"/>-->
+            <columnOverride column="borrowed_at" property="borrowedAt"/>
+            <columnOverride column="returned_at" property="returnedAt"/>
+            <columnOverride column="created_at" property="createdAt"/>
+            <columnOverride column="updated_at" property="updatedAt"/>
+            <columnOverride column="is_deleted" property="deleted"/>
+        </table>
 
 <!--        <table schema="public" tableName="libraries" domainObjectName="Library">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
