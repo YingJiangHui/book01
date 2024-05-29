@@ -22,7 +22,9 @@ public class BookDto {
 
     private Integer categoryId;
 
-    private Integer publishedYear;
+    private String publishedYear;
+
+    private String publisher;
 
     private String isbn;
 

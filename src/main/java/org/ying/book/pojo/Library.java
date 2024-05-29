@@ -3,6 +3,7 @@ package org.ying.book.pojo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Setter
@@ -12,9 +13,9 @@ public class Library {
 
     private String name;
 
-    private Integer latitude;
+    private BigDecimal latitude;
 
-    private Integer longitude;
+    private BigDecimal longitude;
 
     private Integer circumference;
 
@@ -23,5 +24,7 @@ public class Library {
     private Date updatedAt;
 
     private Boolean deleted;
+
+    private String address;
 
 }

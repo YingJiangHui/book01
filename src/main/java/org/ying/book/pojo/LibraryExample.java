@@ -1,5 +1,6 @@
 package org.ying.book.pojo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -245,52 +246,52 @@ public class LibraryExample {
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeEqualTo(Integer value) {
+        public Criteria andLatitudeEqualTo(BigDecimal value) {
             addCriterion("latitude =", value, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeNotEqualTo(Integer value) {
+        public Criteria andLatitudeNotEqualTo(BigDecimal value) {
             addCriterion("latitude <>", value, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeGreaterThan(Integer value) {
+        public Criteria andLatitudeGreaterThan(BigDecimal value) {
             addCriterion("latitude >", value, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andLatitudeGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("latitude >=", value, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeLessThan(Integer value) {
+        public Criteria andLatitudeLessThan(BigDecimal value) {
             addCriterion("latitude <", value, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeLessThanOrEqualTo(Integer value) {
+        public Criteria andLatitudeLessThanOrEqualTo(BigDecimal value) {
             addCriterion("latitude <=", value, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeIn(List<Integer> values) {
+        public Criteria andLatitudeIn(List<BigDecimal> values) {
             addCriterion("latitude in", values, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeNotIn(List<Integer> values) {
+        public Criteria andLatitudeNotIn(List<BigDecimal> values) {
             addCriterion("latitude not in", values, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeBetween(Integer value1, Integer value2) {
+        public Criteria andLatitudeBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("latitude between", value1, value2, "latitude");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeNotBetween(Integer value1, Integer value2) {
+        public Criteria andLatitudeNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("latitude not between", value1, value2, "latitude");
             return (Criteria) this;
         }
@@ -305,52 +306,52 @@ public class LibraryExample {
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeEqualTo(Integer value) {
+        public Criteria andLongitudeEqualTo(BigDecimal value) {
             addCriterion("longitude =", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeNotEqualTo(Integer value) {
+        public Criteria andLongitudeNotEqualTo(BigDecimal value) {
             addCriterion("longitude <>", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeGreaterThan(Integer value) {
+        public Criteria andLongitudeGreaterThan(BigDecimal value) {
             addCriterion("longitude >", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andLongitudeGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("longitude >=", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeLessThan(Integer value) {
+        public Criteria andLongitudeLessThan(BigDecimal value) {
             addCriterion("longitude <", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeLessThanOrEqualTo(Integer value) {
+        public Criteria andLongitudeLessThanOrEqualTo(BigDecimal value) {
             addCriterion("longitude <=", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeIn(List<Integer> values) {
+        public Criteria andLongitudeIn(List<BigDecimal> values) {
             addCriterion("longitude in", values, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeNotIn(List<Integer> values) {
+        public Criteria andLongitudeNotIn(List<BigDecimal> values) {
             addCriterion("longitude not in", values, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeBetween(Integer value1, Integer value2) {
+        public Criteria andLongitudeBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("longitude between", value1, value2, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeNotBetween(Integer value1, Integer value2) {
+        public Criteria andLongitudeNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("longitude not between", value1, value2, "longitude");
             return (Criteria) this;
         }
@@ -592,6 +593,76 @@ public class LibraryExample {
 
         public Criteria andDeletedNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_deleted not between", value1, value2, "deleted");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressIsNull() {
+            addCriterion("address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressIsNotNull() {
+            addCriterion("address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressEqualTo(String value) {
+            addCriterion("address =", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotEqualTo(String value) {
+            addCriterion("address <>", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressGreaterThan(String value) {
+            addCriterion("address >", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("address >=", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressLessThan(String value) {
+            addCriterion("address <", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressLessThanOrEqualTo(String value) {
+            addCriterion("address <=", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressLike(String value) {
+            addCriterion("address like", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotLike(String value) {
+            addCriterion("address not like", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressIn(List<String> values) {
+            addCriterion("address in", values, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotIn(List<String> values) {
+            addCriterion("address not in", values, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressBetween(String value1, String value2) {
+            addCriterion("address between", value1, value2, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotBetween(String value1, String value2) {
+            addCriterion("address not between", value1, value2, "address");
             return (Criteria) this;
         }
     }

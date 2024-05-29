@@ -51,7 +51,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Result> handleException(Exception ex) {
-        log.debug("全局捕获的未知异常：" + ex.toString());
+        ex.printStackTrace();
+        log.debug("全局捕获的未知异常：" + ex);
         Result result = Result.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).message("服务器异常：" + ex).build();
         return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
     }

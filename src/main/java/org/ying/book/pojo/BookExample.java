@@ -375,52 +375,62 @@ public class BookExample {
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearEqualTo(Integer value) {
+        public Criteria andPublishedYearEqualTo(String value) {
             addCriterion("published_year =", value, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearNotEqualTo(Integer value) {
+        public Criteria andPublishedYearNotEqualTo(String value) {
             addCriterion("published_year <>", value, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearGreaterThan(Integer value) {
+        public Criteria andPublishedYearGreaterThan(String value) {
             addCriterion("published_year >", value, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearGreaterThanOrEqualTo(Integer value) {
+        public Criteria andPublishedYearGreaterThanOrEqualTo(String value) {
             addCriterion("published_year >=", value, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearLessThan(Integer value) {
+        public Criteria andPublishedYearLessThan(String value) {
             addCriterion("published_year <", value, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearLessThanOrEqualTo(Integer value) {
+        public Criteria andPublishedYearLessThanOrEqualTo(String value) {
             addCriterion("published_year <=", value, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearIn(List<Integer> values) {
+        public Criteria andPublishedYearLike(String value) {
+            addCriterion("published_year like", value, "publishedYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishedYearNotLike(String value) {
+            addCriterion("published_year not like", value, "publishedYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublishedYearIn(List<String> values) {
             addCriterion("published_year in", values, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearNotIn(List<Integer> values) {
+        public Criteria andPublishedYearNotIn(List<String> values) {
             addCriterion("published_year not in", values, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearBetween(Integer value1, Integer value2) {
+        public Criteria andPublishedYearBetween(String value1, String value2) {
             addCriterion("published_year between", value1, value2, "publishedYear");
             return (Criteria) this;
         }
 
-        public Criteria andPublishedYearNotBetween(Integer value1, Integer value2) {
+        public Criteria andPublishedYearNotBetween(String value1, String value2) {
             addCriterion("published_year not between", value1, value2, "publishedYear");
             return (Criteria) this;
         }
@@ -802,6 +812,76 @@ public class BookExample {
 
         public Criteria andDescriptionNotBetween(String value1, String value2) {
             addCriterion("description not between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherIsNull() {
+            addCriterion("publisher is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherIsNotNull() {
+            addCriterion("publisher is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherEqualTo(String value) {
+            addCriterion("publisher =", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherNotEqualTo(String value) {
+            addCriterion("publisher <>", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherGreaterThan(String value) {
+            addCriterion("publisher >", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherGreaterThanOrEqualTo(String value) {
+            addCriterion("publisher >=", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherLessThan(String value) {
+            addCriterion("publisher <", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherLessThanOrEqualTo(String value) {
+            addCriterion("publisher <=", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherLike(String value) {
+            addCriterion("publisher like", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherNotLike(String value) {
+            addCriterion("publisher not like", value, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherIn(List<String> values) {
+            addCriterion("publisher in", values, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherNotIn(List<String> values) {
+            addCriterion("publisher not in", values, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherBetween(String value1, String value2) {
+            addCriterion("publisher between", value1, value2, "publisher");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublisherNotBetween(String value1, String value2) {
+            addCriterion("publisher not between", value1, value2, "publisher");
             return (Criteria) this;
         }
     }

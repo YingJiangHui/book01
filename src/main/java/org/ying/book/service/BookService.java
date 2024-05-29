@@ -98,6 +98,7 @@ public class BookService {
                 .categoryId(bookDto.getCategoryId())
                 .isbn(bookDto.getIsbn())
                 .available(bookDto.getAvailable())
+                .publisher(bookDto.getPublisher())
                 .publishedYear(bookDto.getPublishedYear())
                 .description(bookDto.getDescription())
                 .files(files)

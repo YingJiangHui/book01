@@ -20,7 +20,7 @@ public class Book {
 
     private Integer categoryId;
 
-    private Integer publishedYear;
+    private String publishedYear;
 
     private String isbn;
 
@@ -32,9 +32,12 @@ public class Book {
 
     private Boolean deleted;
 
-    private List<File> files;
+
+    private String publisher;
 
     private String description;
 
     private Library library;
+
+    private List<File> files;
 }

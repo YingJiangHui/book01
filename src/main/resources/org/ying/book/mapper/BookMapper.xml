@@ -6,16 +6,16 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="category_id" jdbcType="INTEGER" property="categoryId" />
-    <result column="published_year" jdbcType="INTEGER" property="publishedYear" />
+    <result column="published_year" jdbcType="VARCHAR" property="publishedYear" />
     <result column="isbn" jdbcType="VARCHAR" property="isbn" />
     <result column="available" jdbcType="BIT" property="available" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
     <association property="library" column="id" javaType="org.ying.book.pojo.Library" select="selectLibraryByBookId"/>
     <collection property="files" column="id" ofType="org.ying.book.pojo.File" select="selectFilesByBookId"/>
-
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, title, author, category_id, published_year, isbn, available, created_at, updated_at, 
-    is_deleted, description
+    is_deleted, description, publisher
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.BookExample" resultMap="BaseResultMap">
     select
@@ -113,11 +113,11 @@
     insert into public.books (title, author, category_id, 
       published_year, isbn, available, 
       created_at, updated_at, is_deleted, 
-      description)
+      description, publisher)
     values (#{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, 
-      #{publishedYear,jdbcType=INTEGER}, #{isbn,jdbcType=VARCHAR}, #{available,jdbcType=BIT}, 
+      #{publishedYear,jdbcType=VARCHAR}, #{isbn,jdbcType=VARCHAR}, #{available,jdbcType=BIT}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
-      #{description,jdbcType=VARCHAR})
+      #{description,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Book" useGeneratedKeys="true">
     insert into public.books
@@ -152,6 +152,9 @@
       <if test="description != null">
         description,
       </if>
+      <if test="publisher != null">
+        publisher,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="title != null">
@@ -164,7 +167,7 @@
         #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="publishedYear != null">
-        #{publishedYear,jdbcType=INTEGER},
+        #{publishedYear,jdbcType=VARCHAR},
       </if>
       <if test="isbn != null">
         #{isbn,jdbcType=VARCHAR},
@@ -183,6 +186,9 @@
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="publisher != null">
+        #{publisher,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -208,7 +214,7 @@
         category_id = #{row.categoryId,jdbcType=INTEGER},
       </if>
       <if test="row.publishedYear != null">
-        published_year = #{row.publishedYear,jdbcType=INTEGER},
+        published_year = #{row.publishedYear,jdbcType=VARCHAR},
       </if>
       <if test="row.isbn != null">
         isbn = #{row.isbn,jdbcType=VARCHAR},
@@ -228,6 +234,9 @@
       <if test="row.description != null">
         description = #{row.description,jdbcType=VARCHAR},
       </if>
+      <if test="row.publisher != null">
+        publisher = #{row.publisher,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -239,13 +248,14 @@
       title = #{row.title,jdbcType=VARCHAR},
       author = #{row.author,jdbcType=VARCHAR},
       category_id = #{row.categoryId,jdbcType=INTEGER},
-      published_year = #{row.publishedYear,jdbcType=INTEGER},
+      published_year = #{row.publishedYear,jdbcType=VARCHAR},
       isbn = #{row.isbn,jdbcType=VARCHAR},
       available = #{row.available,jdbcType=BIT},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       is_deleted = #{row.deleted,jdbcType=BIT},
-      description = #{row.description,jdbcType=VARCHAR}
+      description = #{row.description,jdbcType=VARCHAR},
+      publisher = #{row.publisher,jdbcType=VARCHAR}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -263,7 +273,7 @@
         category_id = #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="publishedYear != null">
-        published_year = #{publishedYear,jdbcType=INTEGER},
+        published_year = #{publishedYear,jdbcType=VARCHAR},
       </if>
       <if test="isbn != null">
         isbn = #{isbn,jdbcType=VARCHAR},
@@ -283,6 +293,9 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="publisher != null">
+        publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -291,13 +304,14 @@
     set title = #{title,jdbcType=VARCHAR},
       author = #{author,jdbcType=VARCHAR},
       category_id = #{categoryId,jdbcType=INTEGER},
-      published_year = #{publishedYear,jdbcType=INTEGER},
+      published_year = #{publishedYear,jdbcType=VARCHAR},
       isbn = #{isbn,jdbcType=VARCHAR},
       available = #{available,jdbcType=BIT},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       is_deleted = #{deleted,jdbcType=BIT},
-      description = #{description,jdbcType=VARCHAR}
+      description = #{description,jdbcType=VARCHAR},
+      publisher = #{publisher,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.BookExample" resultMap="BaseResultMap">
@@ -314,13 +328,14 @@
       order by ${orderByClause}
     </if>
   </select>
+
   <select id="selectLibraryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
     select * from public.libraries l join public.library_books lb on l.id = lb.library_id where lb.book_id = #{bookId}
   </select>
   <select id="selectFilesByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.FileMapper.BaseResultMap">
     select * from public.files f join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}
   </select>
-<!--  <select id="selectCategoryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookCategoryMapper.BaseResultMap">-->
+<!--  &amp;lt;select id="selectCategoryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookCategoryMapper.BaseResultMap"&amp;gt;-->
 <!--    select * from public.categories c join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}-->
-<!--  </select>-->
+<!--  &amp;lt;/select&amp;gt;-->
 </mapper>

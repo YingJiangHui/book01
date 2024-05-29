@@ -4,12 +4,13 @@
   <resultMap id="BaseResultMap" type="org.ying.book.pojo.Library">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="latitude" jdbcType="INTEGER" property="latitude" />
-    <result column="longitude" jdbcType="INTEGER" property="longitude" />
+    <result column="latitude" jdbcType="NUMERIC" property="latitude" />
+    <result column="longitude" jdbcType="NUMERIC" property="longitude" />
     <result column="circumference" jdbcType="INTEGER" property="circumference" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, latitude, longitude, circumference, created_at, updated_at, is_deleted
+    id, name, latitude, longitude, circumference, created_at, updated_at, is_deleted, 
+    address
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
     select
@@ -105,10 +107,10 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Library" useGeneratedKeys="true">
     insert into public.libraries (name, latitude, longitude, 
       circumference, created_at, updated_at, 
-      is_deleted)
-    values (#{name,jdbcType=VARCHAR}, #{latitude,jdbcType=INTEGER}, #{longitude,jdbcType=INTEGER}, 
+      is_deleted, address)
+    values (#{name,jdbcType=VARCHAR}, #{latitude,jdbcType=NUMERIC}, #{longitude,jdbcType=NUMERIC}, 
       #{circumference,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT})
+      #{deleted,jdbcType=BIT}, #{address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Library" useGeneratedKeys="true">
     insert into public.libraries
@@ -134,16 +136,19 @@
       <if test="deleted != null">
         is_deleted,
       </if>
+      <if test="address != null">
+        address,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="latitude != null">
-        #{latitude,jdbcType=INTEGER},
+        #{latitude,jdbcType=NUMERIC},
       </if>
       <if test="longitude != null">
-        #{longitude,jdbcType=INTEGER},
+        #{longitude,jdbcType=NUMERIC},
       </if>
       <if test="circumference != null">
         #{circumference,jdbcType=INTEGER},
@@ -156,6 +161,9 @@
       </if>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -175,10 +183,10 @@
         name = #{row.name,jdbcType=VARCHAR},
       </if>
       <if test="row.latitude != null">
-        latitude = #{row.latitude,jdbcType=INTEGER},
+        latitude = #{row.latitude,jdbcType=NUMERIC},
       </if>
       <if test="row.longitude != null">
-        longitude = #{row.longitude,jdbcType=INTEGER},
+        longitude = #{row.longitude,jdbcType=NUMERIC},
       </if>
       <if test="row.circumference != null">
         circumference = #{row.circumference,jdbcType=INTEGER},
@@ -192,6 +200,9 @@
       <if test="row.deleted != null">
         is_deleted = #{row.deleted,jdbcType=BIT},
       </if>
+      <if test="row.address != null">
+        address = #{row.address,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,12 +212,13 @@
     update public.libraries
     set id = #{row.id,jdbcType=INTEGER},
       name = #{row.name,jdbcType=VARCHAR},
-      latitude = #{row.latitude,jdbcType=INTEGER},
-      longitude = #{row.longitude,jdbcType=INTEGER},
+      latitude = #{row.latitude,jdbcType=NUMERIC},
+      longitude = #{row.longitude,jdbcType=NUMERIC},
       circumference = #{row.circumference,jdbcType=INTEGER},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{row.deleted,jdbcType=BIT}
+      is_deleted = #{row.deleted,jdbcType=BIT},
+      address = #{row.address,jdbcType=VARCHAR}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -218,10 +230,10 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="latitude != null">
-        latitude = #{latitude,jdbcType=INTEGER},
+        latitude = #{latitude,jdbcType=NUMERIC},
       </if>
       <if test="longitude != null">
-        longitude = #{longitude,jdbcType=INTEGER},
+        longitude = #{longitude,jdbcType=NUMERIC},
       </if>
       <if test="circumference != null">
         circumference = #{circumference,jdbcType=INTEGER},
@@ -235,18 +247,22 @@
       <if test="deleted != null">
         is_deleted = #{deleted,jdbcType=BIT},
       </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.ying.book.pojo.Library">
     update public.libraries
     set name = #{name,jdbcType=VARCHAR},
-      latitude = #{latitude,jdbcType=INTEGER},
-      longitude = #{longitude,jdbcType=INTEGER},
+      latitude = #{latitude,jdbcType=NUMERIC},
+      longitude = #{longitude,jdbcType=NUMERIC},
       circumference = #{circumference,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{deleted,jdbcType=BIT}
+      is_deleted = #{deleted,jdbcType=BIT},
+      address = #{address,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
