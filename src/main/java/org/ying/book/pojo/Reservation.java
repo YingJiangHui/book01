@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ying.book.enums.ReservationStatusEnum;
 
 import java.util.Date;
 
@@ -28,5 +29,5 @@ public class Reservation {
 
     private Date borrowedAt;
 
-    private String status;
+    private ReservationStatusEnum status;
 }

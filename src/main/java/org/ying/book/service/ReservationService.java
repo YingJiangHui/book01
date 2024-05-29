@@ -6,10 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.reservation.ReservationDto;
 import org.ying.book.enums.ActionSource;
+import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.ReservationMapper;
-import org.ying.book.pojo.Borrowing;
-import org.ying.book.pojo.BorrowingExample;
 import org.ying.book.pojo.Reservation;
 import org.ying.book.pojo.ReservationExample;
 
@@ -68,6 +67,46 @@ public class ReservationService {
             bookShelfService.removeBooksFromShelfByUserIdAndBookIds(reservationDto.getUserId(), bookIds);
         }
 
+        return reservations;
+    }
+
+    public List<Reservation> getReservationsByIds(List<Integer> ids) {
+        ReservationExample reservationExample = new ReservationExample();
+        ReservationExample.Criteria criteria = reservationExample.createCriteria();
+        criteria.andBookIdIn(ids);
+        List<Reservation> reservations = reservationMapper.selectByExample(reservationExample);
+        return reservations;
+    }
+
+    @Transactional
+    public List<Reservation> cancelReservations(List<Integer> ids) {
+        List<Reservation> reservations = getReservationsByIds(ids);
+        if(reservations.isEmpty()){
+            throw new CustomException("未找到预约记录");
+        }
+        if (ids.size() != reservations.size()) {
+            throw new CustomException("部分书籍未被预约");
+        }
+        reservations.forEach((reservation) -> {
+            reservation.setStatus(ReservationStatusEnum.CANCELLED);
+            reservationMapper.updateByPrimaryKey(reservation);
+        });
+        return reservations;
+    }
+
+    @Transactional
+    public List<Reservation> finishReservations(List<Integer> ids) {
+        List<Reservation> reservations = getReservationsByIds(ids);
+        if(reservations.isEmpty()){
+            throw new CustomException("未找到预约记录");
+        }
+        if (ids.size() != reservations.size()) {
+            throw new CustomException("部分书籍未被预约");
+        }
+        reservations.forEach((reservation) -> {
+            reservation.setStatus(ReservationStatusEnum.FULFILLED);
+            reservationMapper.updateByPrimaryKey(reservation);
+        });
         return reservations;
     }
 }

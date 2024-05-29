@@ -2,10 +2,7 @@ package org.ying.book.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.reservation.ReservationDto;
 import org.ying.book.exception.CustomException;
@@ -27,5 +24,10 @@ public class ReservationController {
         }
         reservationDto.setUserId(UserContext.getCurrentUser().getId());
         return reservationService.reserveBooks(reservationDto);
+    }
+
+    @PostMapping("/cancel")
+    public List<Reservation> cancelReservation(List<Integer> ids) {
+        return reservationService.cancelReservations(ids);
     }
 }
