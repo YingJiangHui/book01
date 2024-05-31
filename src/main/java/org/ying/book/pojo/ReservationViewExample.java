@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReservationExample {
+public class ReservationViewExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ReservationExample() {
+    public ReservationViewExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -285,6 +285,126 @@ public class ReservationExample {
             return (Criteria) this;
         }
 
+        public Criteria andBorrowedAtIsNull() {
+            addCriterion("borrowed_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtIsNotNull() {
+            addCriterion("borrowed_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtEqualTo(Date value) {
+            addCriterion("borrowed_at =", value, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtNotEqualTo(Date value) {
+            addCriterion("borrowed_at <>", value, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtGreaterThan(Date value) {
+            addCriterion("borrowed_at >", value, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("borrowed_at >=", value, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtLessThan(Date value) {
+            addCriterion("borrowed_at <", value, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtLessThanOrEqualTo(Date value) {
+            addCriterion("borrowed_at <=", value, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtIn(List<Date> values) {
+            addCriterion("borrowed_at in", values, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtNotIn(List<Date> values) {
+            addCriterion("borrowed_at not in", values, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtBetween(Date value1, Date value2) {
+            addCriterion("borrowed_at between", value1, value2, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andBorrowedAtNotBetween(Date value1, Date value2) {
+            addCriterion("borrowed_at not between", value1, value2, "borrowedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtIsNull() {
+            addCriterion("returned_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtIsNotNull() {
+            addCriterion("returned_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtEqualTo(Date value) {
+            addCriterion("returned_at =", value, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtNotEqualTo(Date value) {
+            addCriterion("returned_at <>", value, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtGreaterThan(Date value) {
+            addCriterion("returned_at >", value, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("returned_at >=", value, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtLessThan(Date value) {
+            addCriterion("returned_at <", value, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtLessThanOrEqualTo(Date value) {
+            addCriterion("returned_at <=", value, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtIn(List<Date> values) {
+            addCriterion("returned_at in", values, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtNotIn(List<Date> values) {
+            addCriterion("returned_at not in", values, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtBetween(Date value1, Date value2) {
+            addCriterion("returned_at between", value1, value2, "returnedAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnedAtNotBetween(Date value1, Date value2) {
+            addCriterion("returned_at not between", value1, value2, "returnedAt");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedAtIsNull() {
             addCriterion("created_at is null");
             return (Criteria) this;
@@ -465,126 +585,6 @@ public class ReservationExample {
             return (Criteria) this;
         }
 
-        public Criteria andReturnedAtIsNull() {
-            addCriterion("returned_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtIsNotNull() {
-            addCriterion("returned_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtEqualTo(Date value) {
-            addCriterion("returned_at =", value, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtNotEqualTo(Date value) {
-            addCriterion("returned_at <>", value, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtGreaterThan(Date value) {
-            addCriterion("returned_at >", value, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("returned_at >=", value, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtLessThan(Date value) {
-            addCriterion("returned_at <", value, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtLessThanOrEqualTo(Date value) {
-            addCriterion("returned_at <=", value, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtIn(List<Date> values) {
-            addCriterion("returned_at in", values, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtNotIn(List<Date> values) {
-            addCriterion("returned_at not in", values, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtBetween(Date value1, Date value2) {
-            addCriterion("returned_at between", value1, value2, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andReturnedAtNotBetween(Date value1, Date value2) {
-            addCriterion("returned_at not between", value1, value2, "returnedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtIsNull() {
-            addCriterion("borrowed_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtIsNotNull() {
-            addCriterion("borrowed_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtEqualTo(Date value) {
-            addCriterion("borrowed_at =", value, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtNotEqualTo(Date value) {
-            addCriterion("borrowed_at <>", value, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtGreaterThan(Date value) {
-            addCriterion("borrowed_at >", value, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("borrowed_at >=", value, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtLessThan(Date value) {
-            addCriterion("borrowed_at <", value, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtLessThanOrEqualTo(Date value) {
-            addCriterion("borrowed_at <=", value, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtIn(List<Date> values) {
-            addCriterion("borrowed_at in", values, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtNotIn(List<Date> values) {
-            addCriterion("borrowed_at not in", values, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtBetween(Date value1, Date value2) {
-            addCriterion("borrowed_at between", value1, value2, "borrowedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andBorrowedAtNotBetween(Date value1, Date value2) {
-            addCriterion("borrowed_at not between", value1, value2, "borrowedAt");
-            return (Criteria) this;
-        }
-
         public Criteria andBorrowingIdIsNull() {
             addCriterion("borrowing_id is null");
             return (Criteria) this;
@@ -642,6 +642,76 @@ public class ReservationExample {
 
         public Criteria andBorrowingIdNotBetween(Integer value1, Integer value2) {
             addCriterion("borrowing_id not between", value1, value2, "borrowingId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(String value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(String value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(String value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(String value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLike(String value) {
+            addCriterion("status like", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotLike(String value) {
+            addCriterion("status not like", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<String> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<String> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(String value1, String value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(String value1, String value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

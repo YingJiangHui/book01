@@ -118,6 +118,9 @@ public class BorrowingService {
             throw new CustomException("部分书籍未被预约");
         }
         reservations.stream().map(reservation -> {
+            if(reservation.getBorrowingId()!=null){
+                throw new CustomException("书籍已被借阅");
+            }
             Borrowing borrowing = Borrowing.builder()
                     .bookId(reservation.getBookId())
                     .userId(reservation.getUserId())
@@ -125,8 +128,8 @@ public class BorrowingService {
                     .expectedReturnAt(reservation.getReturnedAt())
                     .build();
             borrowingMapper.insertSelective(borrowing);
+            reservation.setBorrowingId(borrowing.getId());
             return reservation;
-        }).toList();
-        reservationService.finishReservations(reservationIds);
+        }).map((reservation)-> reservationService.finishReservations(reservation)).toList();
     }
 }

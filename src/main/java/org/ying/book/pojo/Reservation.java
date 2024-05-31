@@ -29,6 +29,7 @@ public class Reservation {
 
     private Date borrowedAt;
 
+    private Integer borrowingId;
     private ReservationStatusEnum status;
 
     private Book book;

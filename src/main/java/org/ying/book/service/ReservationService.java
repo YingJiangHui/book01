@@ -10,14 +10,19 @@ import org.ying.book.enums.ActionSource;
 import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.ReservationMapper;
+import org.ying.book.mapper.ReservationViewMapper;
 import org.ying.book.pojo.Reservation;
 import org.ying.book.pojo.ReservationExample;
+import org.ying.book.pojo.ReservationView;
+import org.ying.book.pojo.ReservationViewExample;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class ReservationService {
+    @Resource
+    ReservationViewMapper reservationViewMapper;
 
     @Resource
     ReservationMapper reservationMapper;
@@ -99,37 +104,36 @@ public class ReservationService {
     }
 
     @Transactional
-    public List<Reservation> finishReservations(List<Integer> ids) {
-        List<Reservation> reservations = getReservationsByIds(ids);
-        if(reservations.isEmpty()){
-            throw new CustomException("未找到预约记录");
-        }
-        if (ids.size() != reservations.size()) {
-            throw new CustomException("部分书籍未被预约");
-        }
-        reservations.forEach((reservation) -> {
-            reservation.setStatus(ReservationStatusEnum.FULFILLED);
-            reservationMapper.updateByPrimaryKey(reservation);
-        });
-        return reservations;
+    public Reservation finishReservations(Reservation reservation) {
+        reservationMapper.updateByPrimaryKeySelective(reservation);
+        return reservation;
+//        List<Reservation> reservations = getReservationsByIds(ids);
+//        if(reservations.isEmpty()){
+//            throw new CustomException("未找到预约记录");
+//        }
+//        if (ids.size() != reservations.size()) {
+//            throw new CustomException("部分书籍未被预约");
+//        }
+//        reservations.forEach((reservation) -> {
+//            reservation.setStatus(ReservationStatusEnum.FULFILLED);
+//            reservationMapper.updateByPrimaryKey(reservation);
+//        });
+//        return reservations;
     }
 
-    public List<Reservation> getReservations(ReservationQueryDto reservationQueryDto){
-        ReservationExample reservationExample = new ReservationExample();
+    public List<ReservationView> getReservations(ReservationQueryDto reservationQueryDto){
+        ReservationViewExample reservationExample = new ReservationViewExample();
 //        按照创建日期倒序
         reservationExample.setOrderByClause("created_at desc");
-        ReservationExample.Criteria criteria = reservationExample.createCriteria();
+        ReservationViewExample.Criteria criteria = reservationExample.createCriteria();
         if(reservationQueryDto.getUserId() != null){
             criteria.andUserIdEqualTo(reservationQueryDto.getUserId());
         }
         if(reservationQueryDto.getBookId() != null){
             criteria.andBookIdEqualTo(reservationQueryDto.getBookId());
         }
-        if(reservationQueryDto.getStatus() != null){
-            criteria.andStatusEqualTo(reservationQueryDto.getStatus());
-        }
 
-        return reservationMapper.selectByExample(reservationExample).stream().map((item)-> {
+        return reservationViewMapper.selectByExample(reservationExample).stream().map((item)-> {
             item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
             return item;
         }).toList();

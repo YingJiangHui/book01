@@ -10,6 +10,7 @@ import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.Reservation;
+import org.ying.book.pojo.ReservationView;
 import org.ying.book.service.ReservationService;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ReservationController {
     }
 
     @GetMapping
-    public List<Reservation> getReservations(@ModelAttribute ReservationQueryDto reservationQueryDto) {
+    public List<ReservationView> getReservations(@ModelAttribute ReservationQueryDto reservationQueryDto) {
         UserJwtDto userJwtDto = UserContext.getCurrentUser();
 //        如果是用户进行查询
         if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
