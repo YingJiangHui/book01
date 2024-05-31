@@ -111,4 +111,22 @@ public class BorrowingService {
         return borrowings;
     }
 
+    @Transactional
+    public void borrowFromReservations(List<Integer> reservationIds) {
+        List<Reservation> reservations = reservationService.getReservationsByIds(reservationIds);
+        if(reservations.size()!=reservationIds.size()){
+            throw new CustomException("部分书籍未被预约");
+        }
+        reservations.stream().map(reservation -> {
+            Borrowing borrowing = Borrowing.builder()
+                    .bookId(reservation.getBookId())
+                    .userId(reservation.getUserId())
+                    .borrowedAt(reservation.getBorrowedAt())
+                    .expectedReturnAt(reservation.getReturnedAt())
+                    .build();
+            borrowingMapper.insertSelective(borrowing);
+            return reservation;
+        }).toList();
+        reservationService.finishReservations(reservationIds);
+    }
 }

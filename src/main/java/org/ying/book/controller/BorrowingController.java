@@ -42,4 +42,9 @@ public class BorrowingController {
     public void returnBooks(@RequestBody List<Integer> borrowingIds) {
         borrowingService.returnBooks(borrowingIds);
     }
+
+    @PostMapping("/reservations")
+    public void borrowBooksFormReservations(@RequestBody List<Integer> reservationIds) {
+        borrowingService.borrowFromReservations(reservationIds);
+    }
 }

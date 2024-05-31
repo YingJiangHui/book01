@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.reservation.ReservationDto;
+import org.ying.book.dto.reservation.ReservationQueryDto;
 import org.ying.book.enums.ActionSource;
 import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.exception.CustomException;
@@ -26,6 +27,9 @@ public class ReservationService {
 
     @Resource
     BookShelfService bookShelfService;
+
+    @Resource
+    FileService fileService;
 
     //获取指定书籍在指定时间段下的借阅记录
     public List<Reservation> getReservationsBetweenBorrowTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt) {
@@ -73,7 +77,7 @@ public class ReservationService {
     public List<Reservation> getReservationsByIds(List<Integer> ids) {
         ReservationExample reservationExample = new ReservationExample();
         ReservationExample.Criteria criteria = reservationExample.createCriteria();
-        criteria.andBookIdIn(ids);
+        criteria.andIdIn(ids);
         List<Reservation> reservations = reservationMapper.selectByExample(reservationExample);
         return reservations;
     }
@@ -108,5 +112,26 @@ public class ReservationService {
             reservationMapper.updateByPrimaryKey(reservation);
         });
         return reservations;
+    }
+
+    public List<Reservation> getReservations(ReservationQueryDto reservationQueryDto){
+        ReservationExample reservationExample = new ReservationExample();
+//        按照创建日期倒序
+        reservationExample.setOrderByClause("created_at desc");
+        ReservationExample.Criteria criteria = reservationExample.createCriteria();
+        if(reservationQueryDto.getUserId() != null){
+            criteria.andUserIdEqualTo(reservationQueryDto.getUserId());
+        }
+        if(reservationQueryDto.getBookId() != null){
+            criteria.andBookIdEqualTo(reservationQueryDto.getBookId());
+        }
+        if(reservationQueryDto.getStatus() != null){
+            criteria.andStatusEqualTo(reservationQueryDto.getStatus());
+        }
+
+        return reservationMapper.selectByExample(reservationExample).stream().map((item)-> {
+            item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
+            return item;
+        }).toList();
     }
 }

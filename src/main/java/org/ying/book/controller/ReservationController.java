@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.reservation.ReservationDto;
+import org.ying.book.dto.reservation.ReservationQueryDto;
+import org.ying.book.dto.user.UserJwtDto;
+import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.Reservation;
 import org.ying.book.service.ReservationService;
@@ -29,5 +32,15 @@ public class ReservationController {
     @PostMapping("/cancel")
     public List<Reservation> cancelReservation(List<Integer> ids) {
         return reservationService.cancelReservations(ids);
+    }
+
+    @GetMapping
+    public List<Reservation> getReservations(@ModelAttribute ReservationQueryDto reservationQueryDto) {
+        UserJwtDto userJwtDto = UserContext.getCurrentUser();
+//        如果是用户进行查询
+        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
+            reservationQueryDto.setUserId(userJwtDto.getId());
+        }
+        return reservationService.getReservations(reservationQueryDto);
     }
 }

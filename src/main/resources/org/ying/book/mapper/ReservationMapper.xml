@@ -11,7 +11,11 @@
     <result column="returned_at" jdbcType="TIMESTAMP" property="returnedAt" />
     <result column="borrowed_at" jdbcType="TIMESTAMP" property="borrowedAt" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <association property="book" column="book_id" javaType="org.ying.book.pojo.Book" select="selectBookByBookId"/>
   </resultMap>
+  <select id="selectBookByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookMapper.BaseResultMap">
+    select * from public.books where id = #{bookId}
+  </select>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
