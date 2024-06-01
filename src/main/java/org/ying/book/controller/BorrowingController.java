@@ -2,15 +2,17 @@ package org.ying.book.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.borrowing.BorrowingDto;
+import org.ying.book.dto.borrowing.BorrowingQueryDto;
 import org.ying.book.dto.borrowing.RenewDto;
+import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.dto.user.UserJwtDto;
+import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.Borrowing;
+import org.ying.book.pojo.BorrowingView;
 import org.ying.book.service.BorrowingService;
 
 import java.util.List;
@@ -46,5 +48,15 @@ public class BorrowingController {
     @PostMapping("/reservations")
     public void borrowBooksFormReservations(@RequestBody List<Integer> reservationIds) {
         borrowingService.borrowFromReservations(reservationIds);
+    }
+
+    @GetMapping()
+    public PageResultDto<BorrowingView> getBorrowings(@ModelAttribute BorrowingQueryDto borrowingQueryDto) {
+        UserJwtDto userJwtDto = UserContext.getCurrentUser();
+//        如果是用户进行查询
+        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
+            borrowingQueryDto.setUserId(userJwtDto.getId());
+        }
+        return borrowingService.getBorrowingsPaginate(borrowingQueryDto);
     }
 }

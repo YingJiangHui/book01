@@ -65,6 +65,10 @@ custom:
   user-validate:
     code-timeout: 5
     code-length: 6
+  book:
+    borrowing:
+      default-days: 45
+      max-days: 90
 
 springdoc:
   api-docs:
