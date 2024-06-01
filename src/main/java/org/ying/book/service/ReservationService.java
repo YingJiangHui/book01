@@ -16,8 +16,7 @@ import org.ying.book.pojo.ReservationExample;
 import org.ying.book.pojo.ReservationView;
 import org.ying.book.pojo.ReservationViewExample;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ReservationService {
@@ -125,6 +124,9 @@ public class ReservationService {
         ReservationViewExample reservationExample = new ReservationViewExample();
 //        按照创建日期倒序
         reservationExample.setOrderByClause("created_at desc");
+//        将status == BORROWABLE的图书顺序提前
+//        reservationExample.setOrderByClause("status desc");
+
         ReservationViewExample.Criteria criteria = reservationExample.createCriteria();
         if(reservationQueryDto.getUserId() != null){
             criteria.andUserIdEqualTo(reservationQueryDto.getUserId());
@@ -132,10 +134,17 @@ public class ReservationService {
         if(reservationQueryDto.getBookId() != null){
             criteria.andBookIdEqualTo(reservationQueryDto.getBookId());
         }
+        Map<String, Integer> statusOrder = new HashMap<>();
+        statusOrder.put(ReservationStatusEnum.BORROWABLE.name(), 1);
+        statusOrder.put(ReservationStatusEnum.NOT_BORROWABLE.name(), 2);
+        statusOrder.put(ReservationStatusEnum.EXPIRED.name(), 3);
+        statusOrder.put(ReservationStatusEnum.FULFILLED.name(), 4);
+        statusOrder.put(ReservationStatusEnum.CANCELLED.name(), 5);
+
 
         return reservationViewMapper.selectByExample(reservationExample).stream().map((item)-> {
             item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
             return item;
-        }).toList();
+        }).sorted(Comparator.comparing((ReservationView rv) -> statusOrder.get(rv.getStatus()))).toList();
     }
 }

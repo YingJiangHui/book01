@@ -13,8 +13,10 @@ SELECT r.id,
        CASE
            WHEN r.is_deleted THEN 'CANCELED'
            WHEN r.borrowing_id IS NOT NULL THEN 'FULFILLED'
-           WHEN r.borrowed_at +
-        interval '3 days' < now() THEN 'EXPIRED'
+--         r.borrowed_t 的零点加上3天小于当前时间时状态为过期
+        WHEN date_trunc('day', r.borrowed_at) + interval '4 days' < now() THEN 'EXPIRED'
+           /*WHEN r.borrowed_at +
+        interval '3 days' < now() THEN 'EXPIRED'*/
 --             当前时间小于借阅时间时状态为不可借阅
         WHEN r.borrowed_at > now() THEN 'NOT_BORROWABLE'
 --             当前时间大于等于借阅时间时状态为可借阅
