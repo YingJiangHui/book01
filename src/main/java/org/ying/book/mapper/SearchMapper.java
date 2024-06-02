@@ -1,6 +1,8 @@
 package org.ying.book.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.ying.book.pojo.Search;
@@ -30,4 +32,6 @@ public interface SearchMapper {
     int updateByPrimaryKeySelective(Search row);
 
     int updateByPrimaryKey(Search row);
+
+    List<Search> selectByUserIdAndTargetAndKeyword(Map map);
 }
