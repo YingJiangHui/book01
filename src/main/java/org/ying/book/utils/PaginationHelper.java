@@ -1,5 +1,6 @@
 package org.ying.book.utils;
 import org.apache.ibatis.session.RowBounds;
+import org.ying.book.dto.common.IPageReq;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 
@@ -8,7 +9,7 @@ import java.util.function.BiFunction;
 
 public class PaginationHelper {
 
-    public static <T> PageResultDto<T> paginate(PageReqDto pageReqDto, BiFunction<RowBounds, PageReqDto, List<T>> queryFunction, long total) {
+    public static <T> PageResultDto<T> paginate(IPageReq pageReqDto, BiFunction<RowBounds, IPageReq, List<T>> queryFunction, long total) {
         int page = pageReqDto.getCurrent() - 1;
         int offset = page * pageReqDto.getPageSize();
         RowBounds rowBounds = new RowBounds(offset, pageReqDto.getPageSize());

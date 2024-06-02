@@ -38,16 +38,26 @@
         </javaClientGenerator>
 
         <!-- 逆向解析的表 domainObjectName 是生成的 POJO 类类名 -->
-        <table schema="public" tableName="users" domainObjectName="User">
+        <table schema="public" tableName="search" domainObjectName="Search">
             <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="email" property="email"/>
-            <columnOverride column="password" property="password"/>
-            <columnOverride column="default_times" property="defaultTimes"/>
-            <columnOverride column="is_blacklist" property="isBlacklist"/>
+            <columnOverride column="keyword" property="email"/>
+            <columnOverride column="user_id" property="userId"/>
+            <columnOverride column="target" property="target"/>
             <columnOverride column="created_at" property="createdAt"/>
             <columnOverride column="updated_at" property="updatedAt"/>
             <columnOverride column="is_deleted" property="deleted"/>
         </table>
+
+<!--        <table schema="public" tableName="users" domainObjectName="User">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="email" property="email"/>-->
+<!--            <columnOverride column="password" property="password"/>-->
+<!--            <columnOverride column="default_times" property="defaultTimes"/>-->
+<!--            <columnOverride column="is_blacklist" property="isBlacklist"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
 
 <!--        <table schema="public" tableName="roles" domainObjectName="Role">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->

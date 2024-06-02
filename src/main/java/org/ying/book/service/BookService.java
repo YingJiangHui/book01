@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.book.BookDto;
 import org.ying.book.dto.book.BookQueryDto;
+import org.ying.book.dto.book.BookSearchDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.mapper.BookFileMapper;
@@ -41,7 +42,7 @@ public class BookService {
     public List<Book> getBooksByIds(List<Integer> ids) {
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteria = bookExample.createCriteria();
-        if(ids == null || ids.isEmpty()){
+        if (ids == null || ids.isEmpty()) {
             return List.of();
         }
         criteria.andIdIn(ids);
@@ -54,7 +55,7 @@ public class BookService {
     public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteria = bookExample.createCriteria();
-        if(bookQueryDto.getIds() != null && !bookQueryDto.getIds().isEmpty()){
+        if (bookQueryDto.getIds() != null && !bookQueryDto.getIds().isEmpty()) {
             criteria.andIdIn(bookQueryDto.getIds());
         }
         return this.getBooksWithPaginate(bookExample, bookQueryDto);
@@ -116,4 +117,57 @@ public class BookService {
         return book;
     }
 
+    private void searchWith(BookExample.Criteria criteria, BookSearchDto book) {
+        if (book.getIds() != null && !book.getIds().isEmpty()) {
+            criteria.andIdIn(book.getIds());
+        }
+        if (book.getPublishedYear() != null) {
+            criteria.andPublishedYearLike(book.getPublishedYear());
+        }
+        if (book.getCategoryId() != null) {
+            criteria.andCategoryIdEqualTo(book.getCategoryId());
+        }
+        if (book.getAvailable() != null) {
+            criteria.andAvailableEqualTo(book.getAvailable());
+        }
+        if (book.getDescription() != null) {
+            criteria.andDescriptionLike(book.getDescription());
+        }
+    }
+
+    public PageResultDto<Book> searchBook(BookSearchDto bookSearchDto) {
+
+        if (bookSearchDto.getLibraryId() != null) {
+            LibraryBookExample libraryBookExample = new LibraryBookExample();
+            libraryBookExample.createCriteria().andLibraryIdEqualTo(bookSearchDto.getLibraryId());
+            List<Integer> bookIdList = libraryBookMapper.selectByExample(libraryBookExample).stream().map(LibraryBook::getBookId).toList();
+            if (bookIdList != null && !bookIdList.isEmpty()) {
+                bookSearchDto.setIds(bookIdList);
+            }
+        }
+
+        BookExample bookExample = new BookExample();
+        BookExample.Criteria criteriaTitle = bookExample.createCriteria();
+        criteriaTitle.andTitleLike("%" + bookSearchDto.getKeywords() + "%");
+        searchWith(criteriaTitle, bookSearchDto);
+
+        BookExample.Criteria criteriaAuthor = bookExample.createCriteria();
+        criteriaAuthor.andAuthorLike("%" + bookSearchDto.getKeywords() + "%");
+        searchWith(criteriaAuthor, bookSearchDto);
+//
+        BookExample.Criteria criteriaPublisher = bookExample.createCriteria();
+        criteriaPublisher.andPublisherLike("%" + bookSearchDto.getKeywords() + "%");
+        searchWith(criteriaPublisher, bookSearchDto);
+
+        BookExample.Criteria criteriaIsbn = bookExample.createCriteria();
+        criteriaIsbn.andIsbnEqualTo("%" + bookSearchDto.getKeywords() + "%");
+        searchWith(criteriaIsbn, bookSearchDto);
+
+//        bookExample.setDistinct(true);
+        bookExample.or(criteriaTitle);
+        bookExample.or(criteriaAuthor);
+        bookExample.or(criteriaPublisher);
+        bookExample.or(criteriaIsbn);
+        return PaginationHelper.paginate(bookSearchDto, (rowBounds, reqDto) -> this.getBooksByExampleWithRowbounds(bookExample, rowBounds), bookMapper.countByExample(bookExample));
+    }
 }

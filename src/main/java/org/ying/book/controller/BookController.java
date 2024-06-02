@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.ying.book.dto.book.BookDto;
 import org.ying.book.dto.book.BookQueryDto;
+import org.ying.book.dto.book.BookSearchDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.pojo.Book;
@@ -46,5 +47,11 @@ public class BookController {
     public Book getBook( @PathVariable Integer id){
         return bookService.getBook(id);
     }
+    @GetMapping("/search")
+    public PageResultDto<Book> searchBooks(BookSearchDto bookSearchDto){
+        return bookService.searchBook(bookSearchDto);
+    }
+
+
 
 }

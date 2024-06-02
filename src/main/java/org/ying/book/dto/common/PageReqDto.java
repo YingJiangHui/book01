@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class PageReqDto {
+public class PageReqDto implements IPageReq{
     private Integer pageSize;
     private Integer current;
     public PageReqDto() {
