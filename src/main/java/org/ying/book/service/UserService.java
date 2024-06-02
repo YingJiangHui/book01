@@ -128,4 +128,15 @@ public class UserService {
         criteria.andLibraryIdIn(userQueryParamsDTO.getLibraryIds()).andRoleIn(userQueryParamsDTO.getRoleNames());
         return userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, new RowBounds());
     }
+
+
+
+    public void defaultTimesAddOne(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        user.setDefaultTimes(user.getDefaultTimes() + 1);
+        if(user.getDefaultTimes()>3){
+            user.setIsBlacklist(true);
+        }
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }

@@ -83,6 +83,8 @@ public class AuthController {
         UserJwtDto userJwtDTO = UserJwtDto.builder()
                 .roles(userDetails.getRoles().stream().map((role) -> role.getRoleName()).toList())
                 .email(userDetails.getEmail())
+                .isBlacklist(userDetails.getIsBlacklist())
+                .defaultTimes(userDetails.getDefaultTimes())
                 .createdAt(userDetails.getCreatedAt())
                 .id(userDetails.getId()).build();
         Object JWT = jwtUtil.createJWT("user_auth", userJwtDTO);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.ying.book.mapper.UserMapper">
-
   <resultMap id="BaseResultMap" type="org.ying.book.pojo.User">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
@@ -10,11 +9,70 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
+    <result column="default_times" jdbcType="INTEGER" property="defaultTimes" />
+    <result column="is_blacklist" jdbcType="BIT" property="isBlacklist" />
+
     <collection property="roles" ofType="org.ying.book.pojo.Role"
                 select="selectRoleByUserId" column="id" />
     <collection property="libraries" ofType="org.ying.book.pojo.Library"
                 select="selectLibrariesByUserId" column="id" />
   </resultMap>
+
+  <select id="selectUserByEmail" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM public.users WHERE email = #{email}
+  </select>
+
+  <!--  &lt;resultMap id="ResultMapWithRoles" extends="BaseResultMap" type="org.ying.book.pojo.User"&gt;-->
+  <!--    &lt;collection property="roles" ofType="org.ying.book.pojo.Role"-->
+  <!--                select="selectRoleByUserId" column="id" /&gt;-->
+  <!--  &lt;/resultMap&gt;-->
+  <select id="selectLibrariesByUserId" resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
+    SELECT * FROM public.libraries l
+                    JOIN public.library_users lu ON l.id = lu.library_id
+    WHERE lu.user_id = #{userId}
+  </select>
+
+  <select id="selectRoleByUserId" resultMap="org.ying.book.mapper.RoleMapper.BaseResultMap">
+    SELECT * FROM public.roles r
+                    JOIN public.user_roles ur ON r.id = ur.role_id
+    WHERE ur.user_id = #{userId}
+  </select>
+
+  <sql id="Base_Column_List_2">
+    u.id as id, username, password, email, u.created_at, u.updated_at, u.is_deleted
+  </sql>
+  <select id="selectByExampleWithRoleNameAndLibraryAndRowbounds" parameterType="org.ying.book.pojo.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List_2" />
+    from public.users u
+    left join public.user_roles ur on u.id = ur.user_id
+    left join public.roles r on ur.role_id = r.id
+    left join public.library_users ul on u.id = ul.user_id
+    left join public.libraries l on ul.library_id = l.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+
+  </select>
+
+  <select id="countByExampleWithRoleAndLibrary" parameterType="org.ying.book.pojo.UserExample" resultType="java.lang.Long">
+    select count(*)    from public.users u
+    left join public.user_roles ur on u.id = ur.user_id
+    left join public.roles r on ur.role_id = r.id
+    left join public.library_users ul on u.id = ul.user_id
+    left join public.libraries l on ul.library_id = l.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -74,7 +132,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, email, created_at, updated_at, is_deleted
+    id, username, password, email, created_at, updated_at, is_deleted, default_times, 
+    is_blacklist
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.UserExample" resultMap="BaseResultMap">
     select
@@ -108,11 +167,11 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.User" useGeneratedKeys="true">
     insert into public.users (username, password, email, 
-      created_at, updated_at, is_deleted
-      )
+      created_at, updated_at, is_deleted, 
+      default_times, is_blacklist)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
-      )
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
+      #{defaultTimes,jdbcType=INTEGER}, #{isBlacklist,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.User" useGeneratedKeys="true">
     insert into public.users
@@ -135,6 +194,12 @@
       <if test="deleted != null">
         is_deleted,
       </if>
+      <if test="defaultTimes != null">
+        default_times,
+      </if>
+      <if test="isBlacklist != null">
+        is_blacklist,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="username != null">
@@ -154,6 +219,12 @@
       </if>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
+      </if>
+      <if test="defaultTimes != null">
+        #{defaultTimes,jdbcType=INTEGER},
+      </if>
+      <if test="isBlacklist != null">
+        #{isBlacklist,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -187,6 +258,12 @@
       <if test="row.deleted != null">
         is_deleted = #{row.deleted,jdbcType=BIT},
       </if>
+      <if test="row.defaultTimes != null">
+        default_times = #{row.defaultTimes,jdbcType=INTEGER},
+      </if>
+      <if test="row.isBlacklist != null">
+        is_blacklist = #{row.isBlacklist,jdbcType=BIT},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -200,7 +277,9 @@
       email = #{row.email,jdbcType=VARCHAR},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{row.deleted,jdbcType=BIT}
+      is_deleted = #{row.deleted,jdbcType=BIT},
+      default_times = #{row.defaultTimes,jdbcType=INTEGER},
+      is_blacklist = #{row.isBlacklist,jdbcType=BIT}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -226,6 +305,12 @@
       <if test="deleted != null">
         is_deleted = #{deleted,jdbcType=BIT},
       </if>
+      <if test="defaultTimes != null">
+        default_times = #{defaultTimes,jdbcType=INTEGER},
+      </if>
+      <if test="isBlacklist != null">
+        is_blacklist = #{isBlacklist,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -236,7 +321,9 @@
       email = #{email,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{deleted,jdbcType=BIT}
+      is_deleted = #{deleted,jdbcType=BIT},
+      default_times = #{defaultTimes,jdbcType=INTEGER},
+      is_blacklist = #{isBlacklist,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.UserExample" resultMap="BaseResultMap">
@@ -254,59 +341,4 @@
     </if>
   </select>
 
-  <select id="selectUserByEmail" resultMap="BaseResultMap">
-    SELECT
-        <include refid="Base_Column_List" />
-    FROM public.users WHERE email = #{email}
-  </select>
-
-<!--  <resultMap id="ResultMapWithRoles" extends="BaseResultMap" type="org.ying.book.pojo.User">-->
-<!--    <collection property="roles" ofType="org.ying.book.pojo.Role"-->
-<!--                select="selectRoleByUserId" column="id" />-->
-<!--  </resultMap>-->
-  <select id="selectLibrariesByUserId"  resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
-    SELECT * FROM public.libraries l
-                    JOIN public.library_users lu ON l.id = lu.library_id
-    WHERE lu.user_id = #{userId}
-  </select>
-
-  <select id="selectRoleByUserId"  resultMap="org.ying.book.mapper.RoleMapper.BaseResultMap">
-    SELECT * FROM public.roles r
-                               JOIN public.user_roles ur ON r.id = ur.role_id
-    WHERE ur.user_id = #{userId}
-  </select>
-
-  <sql id="Base_Column_List_2">
-    u.id as id, username, password, email, u.created_at, u.updated_at, u.is_deleted
-  </sql>
-  <select id="selectByExampleWithRoleNameAndLibraryAndRowbounds" parameterType="org.ying.book.pojo.UserExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List_2" />
-    from public.users u
-    left join public.user_roles ur on u.id = ur.user_id
-    left join public.roles r on ur.role_id = r.id
-    left join public.library_users ul on u.id = ul.user_id
-    left join public.libraries l on ul.library_id = l.id
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-
-  </select>
-
-  <select id="countByExampleWithRoleAndLibrary" parameterType="org.ying.book.pojo.UserExample" resultType="java.lang.Long">
-    select count(*)    from public.users u
-    left join public.user_roles ur on u.id = ur.user_id
-    left join public.roles r on ur.role_id = r.id
-    left join public.library_users ul on u.id = ul.user_id
-    left join public.libraries l on ul.library_id = l.id
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
 </mapper>

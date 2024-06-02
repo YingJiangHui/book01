@@ -2,6 +2,7 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import org.apache.ibatis.plugin.Intercepts;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,8 @@ public class BorrowingService {
 
     @Resource
     BookShelfService bookShelfService;
+    @Autowired
+    private UserService userService;
 
     public boolean borrowDaysValidate(Date startDate, Date endDate, Integer additionDays){
         long days = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
@@ -105,6 +108,9 @@ public class BorrowingService {
         criteria.andIdIn(borrowingIds);
         List<Borrowing> borrowings = borrowingMapper.selectByExample(borrowingExample);
         borrowings.stream().map(borrowing -> {
+            if(borrowing.getExpectedReturnAt().getTime()<new Date().getTime()){
+                userService.defaultTimesAddOne(borrowing.getUserId());
+            }
             borrowing.setReturnedAt(new Date());
             borrowingMapper.updateByPrimaryKeySelective(borrowing);
             return borrowing;

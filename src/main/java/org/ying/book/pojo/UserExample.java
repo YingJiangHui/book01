@@ -1,18 +1,11 @@
 package org.ying.book.pojo;
-
-import lombok.Getter;
-import lombok.Setter;
 import org.ying.book.enums.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Setter
-@Getter
 public class UserExample {
-//    private List<RoleEnum> roleNames;
-//    private List<Integer> libraryIds;
     protected String orderByClause;
 
     protected boolean distinct;
@@ -570,6 +563,126 @@ public class UserExample {
 
         public Criteria andDeletedNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_deleted not between", value1, value2, "deleted");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesIsNull() {
+            addCriterion("default_times is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesIsNotNull() {
+            addCriterion("default_times is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesEqualTo(Integer value) {
+            addCriterion("default_times =", value, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesNotEqualTo(Integer value) {
+            addCriterion("default_times <>", value, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesGreaterThan(Integer value) {
+            addCriterion("default_times >", value, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("default_times >=", value, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesLessThan(Integer value) {
+            addCriterion("default_times <", value, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesLessThanOrEqualTo(Integer value) {
+            addCriterion("default_times <=", value, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesIn(List<Integer> values) {
+            addCriterion("default_times in", values, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesNotIn(List<Integer> values) {
+            addCriterion("default_times not in", values, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesBetween(Integer value1, Integer value2) {
+            addCriterion("default_times between", value1, value2, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultTimesNotBetween(Integer value1, Integer value2) {
+            addCriterion("default_times not between", value1, value2, "defaultTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistIsNull() {
+            addCriterion("is_blacklist is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistIsNotNull() {
+            addCriterion("is_blacklist is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistEqualTo(Boolean value) {
+            addCriterion("is_blacklist =", value, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistNotEqualTo(Boolean value) {
+            addCriterion("is_blacklist <>", value, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistGreaterThan(Boolean value) {
+            addCriterion("is_blacklist >", value, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_blacklist >=", value, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistLessThan(Boolean value) {
+            addCriterion("is_blacklist <", value, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_blacklist <=", value, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistIn(List<Boolean> values) {
+            addCriterion("is_blacklist in", values, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistNotIn(List<Boolean> values) {
+            addCriterion("is_blacklist not in", values, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_blacklist between", value1, value2, "isBlacklist");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBlacklistNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_blacklist not between", value1, value2, "isBlacklist");
             return (Criteria) this;
         }
     }

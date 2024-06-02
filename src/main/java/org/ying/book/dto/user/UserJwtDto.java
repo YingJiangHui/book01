@@ -12,6 +12,8 @@ import java.util.List;
 public class UserJwtDto {
     Integer id;
     String email;
+    boolean isBlacklist;
+    Integer defaultTimes;
     List<RoleEnum> roles;
     private Date createdAt;
 }

@@ -28,6 +28,11 @@ public class User {
 
     private Boolean deleted;
 
+    private Integer defaultTimes;
+
+    private Boolean isBlacklist;
+
+
     List<Role> roles;
     List<Library> libraries;
 }
