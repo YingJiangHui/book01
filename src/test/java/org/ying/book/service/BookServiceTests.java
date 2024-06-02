@@ -16,7 +16,7 @@ public class BookServiceTests {
     @Test
     public void test() {
         BookSearchDto bookSearchDto = new BookSearchDto();
-        bookSearchDto.setKeywords("杰克");
+        bookSearchDto.setKeyword("杰克");
         bookSearchDto.setLibraryId(1);
         PageResultDto books1 = bookService.searchBook(bookSearchDto);
         log.info("books1: {}", books1);

@@ -148,19 +148,19 @@ public class BookService {
 
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteriaTitle = bookExample.createCriteria();
-        criteriaTitle.andTitleLike("%" + bookSearchDto.getKeywords() + "%");
+        criteriaTitle.andTitleLike("%" + bookSearchDto.getKeyword() + "%");
         searchWith(criteriaTitle, bookSearchDto);
 
         BookExample.Criteria criteriaAuthor = bookExample.createCriteria();
-        criteriaAuthor.andAuthorLike("%" + bookSearchDto.getKeywords() + "%");
+        criteriaAuthor.andAuthorLike("%" + bookSearchDto.getKeyword() + "%");
         searchWith(criteriaAuthor, bookSearchDto);
 //
         BookExample.Criteria criteriaPublisher = bookExample.createCriteria();
-        criteriaPublisher.andPublisherLike("%" + bookSearchDto.getKeywords() + "%");
+        criteriaPublisher.andPublisherLike("%" + bookSearchDto.getKeyword() + "%");
         searchWith(criteriaPublisher, bookSearchDto);
 
         BookExample.Criteria criteriaIsbn = bookExample.createCriteria();
-        criteriaIsbn.andIsbnEqualTo("%" + bookSearchDto.getKeywords() + "%");
+        criteriaIsbn.andIsbnEqualTo("%" + bookSearchDto.getKeyword() + "%");
         searchWith(criteriaIsbn, bookSearchDto);
 
 //        bookExample.setDistinct(true);

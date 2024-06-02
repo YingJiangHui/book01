@@ -3,16 +3,21 @@ package org.ying.book.controller;
 import jakarta.annotation.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.ying.book.Context.UserContext;
 import org.ying.book.dto.book.BookDto;
 import org.ying.book.dto.book.BookQueryDto;
 import org.ying.book.dto.book.BookSearchDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.dto.user.UserJwtDto;
+import org.ying.book.enums.SearchTargetEnum;
 import org.ying.book.pojo.Book;
 import org.ying.book.service.BookService;
 import org.ying.book.service.FileService;
+import org.ying.book.service.SearchHistoryService;
 
 import java.io.InputStream;
 import java.net.URLConnection;
@@ -25,6 +30,9 @@ public class BookController {
     private BookService bookService;
     @Resource
     private FileService fileService;
+
+    @Resource
+    private SearchHistoryService searchHistoryService;
 
     @GetMapping
     public PageResultDto<Book> getBooksPagination(@ModelAttribute BookQueryDto bookQueryDto) {
@@ -44,14 +52,19 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book getBook( @PathVariable Integer id){
+    public Book getBook(@PathVariable Integer id) {
         return bookService.getBook(id);
     }
-    @GetMapping("/search")
-    public PageResultDto<Book> searchBooks(BookSearchDto bookSearchDto){
-        return bookService.searchBook(bookSearchDto);
-    }
 
+    @GetMapping("/search")
+    public PageResultDto<Book> searchBooks(BookSearchDto bookSearchDto) {
+        PageResultDto<Book> bookPageResultDto = bookService.searchBook(bookSearchDto);
+        UserJwtDto currentUser = UserContext.getCurrentUser();
+        if (bookPageResultDto.getTotal() != 0 && currentUser != null) {
+            searchHistoryService.saveSearchHistory(currentUser.getId(), bookSearchDto.getKeyword(), SearchTargetEnum.BOOK);
+        }
+        return bookPageResultDto;
+    }
 
 
 }

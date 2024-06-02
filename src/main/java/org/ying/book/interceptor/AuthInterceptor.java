@@ -48,16 +48,12 @@ public class AuthInterceptor implements HandlerInterceptor {
             setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"认证失效请重新登录");
             return false;
         }
-        UserJwtDto userJwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), UserJwtDto.class);
-//        存储用户的信息
-        UserContext.setCurrentUser(userJwtDTO);
         return true;
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.debug("afterCompletion");
-        UserContext.clear();
     }
 
     //返回json格式错误信息

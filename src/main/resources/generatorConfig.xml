@@ -40,7 +40,7 @@
         <!-- 逆向解析的表 domainObjectName 是生成的 POJO 类类名 -->
         <table schema="public" tableName="search" domainObjectName="Search">
             <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="keyword" property="email"/>
+            <columnOverride column="keyword" property="keyword"/>
             <columnOverride column="user_id" property="userId"/>
             <columnOverride column="target" property="target"/>
             <columnOverride column="created_at" property="createdAt"/>

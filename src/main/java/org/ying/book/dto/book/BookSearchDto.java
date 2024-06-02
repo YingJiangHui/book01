@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class BookSearchDto extends Book implements IPageReq {
-    String keywords;
+    String keyword;
     Integer libraryId;
     List<Integer> ids;
     private Integer pageSize = 10;
