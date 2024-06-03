@@ -105,7 +105,7 @@
     insert into public.search (user_id, keyword, created_at, 
       updated_at, is_deleted, target
       )
-    values (#{userId,jdbcType=INTEGER}, #{keyword,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
+    values (#{userId,jdbcType=INTEGER}, #{keyword,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP},
       #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, #{target,jdbcType=VARCHAR}
       )
   </insert>
