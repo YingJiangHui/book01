@@ -2,6 +2,7 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,13 +11,16 @@ import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
+import org.ying.book.dto.user.UserUpdateDto;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.enums.SystemSettingsEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
+import org.ying.book.mapper.UserRoleMapper;
 import org.ying.book.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.ying.book.pojo.UserExample;
+import org.ying.book.pojo.UserRole;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.PaginationHelper;
 
@@ -50,6 +54,8 @@ public class UserService {
 
     @Resource
     private SystemSettingsService systemSettingsService;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     public List<User> getUsers(UserExample example, RowBounds rowBounds) {
         return userMapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -57,6 +63,7 @@ public class UserService {
 
     public PageResultDto<User> getUsersWithTotal(UserQueryParamsDTO userQueryParamsDTO) {
         UserExample example = new UserExample();
+        example.setDistinct(true);
         example.setOrderByClause("created_at DESC");
         UserExample.Criteria criteria = example.createCriteria();
         List<Integer> libraryIds = userQueryParamsDTO.getLibraryIds();
@@ -143,5 +150,20 @@ public class UserService {
             user.setIsBlacklist(true);
         }
         userMapper.updateByPrimaryKeySelective(user);
+    }
+    @Transactional
+    public User updateUser(Integer userId, UserUpdateDto userUpdateDto ){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if(user==null){
+            throw new RuntimeException("用户不存在");
+        }
+        if(userUpdateDto.getIsBlacklist()!=null){
+            user.setIsBlacklist(userUpdateDto.getIsBlacklist());
+        }
+        roleService.userRelativeRoles(userId, userUpdateDto.getRoles());
+        userMapper.updateByPrimaryKeySelective(user);
+        //      Bind library
+        libraryService.userRelativeLibraries(user.getId(), userUpdateDto.getLibraryIds());
+        return user;
     }
 }

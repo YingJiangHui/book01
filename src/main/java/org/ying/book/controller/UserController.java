@@ -9,6 +9,7 @@ import org.ying.book.Context.UserContext;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
+import org.ying.book.dto.user.UserUpdateDto;
 import org.ying.book.pojo.User;
 import org.ying.book.service.AuthService;
 import org.ying.book.service.UserService;
@@ -48,5 +49,9 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @PatchMapping("/{id}")
+    public User updateUser(@PathVariable("id") Integer id, @RequestBody UserUpdateDto userUpdateDto) {
+        return userService.updateUser(id, userUpdateDto);
+    }
 
 }

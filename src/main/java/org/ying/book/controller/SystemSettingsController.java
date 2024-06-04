@@ -2,7 +2,6 @@ package org.ying.book.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import org.ying.book.dto.systemSettings.SystemSettingDto;
 import org.ying.book.pojo.SystemSetting;
 import org.ying.book.service.SystemSettingsService;
 

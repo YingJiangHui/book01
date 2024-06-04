@@ -54,6 +54,11 @@ public class LibraryService {
             if(ids.stream().map(libraryId-> libraryMapper.selectByPrimaryKey(libraryId)).anyMatch(Objects::isNull)){
                 throw new RuntimeException("图书馆不存在");
             }
+            ids.forEach(roleName -> {
+                LibraryUserExample libraryUserExample = new LibraryUserExample();
+                libraryUserExample.createCriteria().andUserIdEqualTo(userId);
+                libraryUserMapper.deleteByExample(libraryUserExample);
+            });
             ids.stream()
                     .map(libraryId -> LibraryUser.builder().userId(userId).libraryId(libraryId).build())
                     .forEach(userRole -> libraryUserMapper.insertSelective(userRole));

@@ -13,6 +13,7 @@ import org.ying.book.mapper.UserRoleMapper;
 import org.ying.book.pojo.Role;
 import org.ying.book.pojo.RoleExample;
 import org.ying.book.pojo.UserRole;
+import org.ying.book.pojo.UserRoleExample;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,13 @@ public class RoleService {
             if (ids.stream().map(roleName -> roleMapper.selectByRoleName(roleName)).anyMatch(Objects::isNull)) {
                 throw new CustomException("角色不存在", HttpStatus.BAD_REQUEST);
             }
+
+            ids.forEach(roleName -> {
+                UserRoleExample userRoleExample = new UserRoleExample();
+                userRoleExample.createCriteria().andUserIdEqualTo(userId);
+                userRoleMapper.deleteByExample(userRoleExample);
+            });
+
             ids.stream()
                     .map(roleName -> UserRole.builder().userId(userId).roleId(roleMapper.selectByRoleName(roleName).getId()).build())
                     .forEach(userRole -> userRoleMapper.insertSelective(userRole));
