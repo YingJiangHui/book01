@@ -27,4 +27,9 @@ public class Library {
 
     private String address;
 
+    private Integer maxBorrowDays;
+
+    private Integer defaultBorrowDays;
+
+    private Boolean closed;
 }

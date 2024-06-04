@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.ying.book.mapper.LibraryMapper">
-  <resultMap id="BaseResultMap" type="org.ying.book.pojo.Library">
+<mapper namespace="org.ying.book.mapper.SystemSettingMapper">
+  <resultMap id="BaseResultMap" type="org.ying.book.pojo.SystemSetting">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="latitude" jdbcType="NUMERIC" property="latitude" />
-    <result column="longitude" jdbcType="NUMERIC" property="longitude" />
-    <result column="circumference" jdbcType="INTEGER" property="circumference" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="max_borrow_days" jdbcType="INTEGER" property="maxBorrowDays" />
-    <result column="default_borrow_days" jdbcType="INTEGER" property="defaultBorrowDays" />
-    <result column="closed" jdbcType="BIT" property="closed" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,16 +69,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, latitude, longitude, circumference, created_at, updated_at, is_deleted, 
-    address, max_borrow_days, default_borrow_days, closed
+    id, name, value, description, created_at, updated_at, is_deleted
   </sql>
-  <select id="selectByExample" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.ying.book.pojo.SystemSettingExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from public.libraries
+    from public.system_settings
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,43 +88,38 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from public.libraries
+    from public.system_settings
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from public.libraries
+    delete from public.system_settings
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="org.ying.book.pojo.LibraryExample">
-    delete from public.libraries
+  <delete id="deleteByExample" parameterType="org.ying.book.pojo.SystemSettingExample">
+    delete from public.system_settings
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Library" useGeneratedKeys="true">
-    insert into public.libraries (name, latitude, longitude, 
-      circumference, created_at, updated_at, 
-      is_deleted, address, max_borrow_days, 
-      default_borrow_days, closed)
-    values (#{name,jdbcType=VARCHAR}, #{latitude,jdbcType=NUMERIC}, #{longitude,jdbcType=NUMERIC}, 
-      #{circumference,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT}, #{address,jdbcType=VARCHAR}, #{maxBorrowDays,jdbcType=INTEGER}, 
-      #{defaultBorrowDays,jdbcType=INTEGER}, #{closed,jdbcType=BIT})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.SystemSetting" useGeneratedKeys="true">
+    insert into public.system_settings (name, value, description, 
+      created_at, updated_at, is_deleted
+      )
+    values (#{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Library" useGeneratedKeys="true">
-    insert into public.libraries
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.SystemSetting" useGeneratedKeys="true">
+    insert into public.system_settings
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
         name,
       </if>
-      <if test="latitude != null">
-        latitude,
+      <if test="value != null">
+        value,
       </if>
-      <if test="longitude != null">
-        longitude,
-      </if>
-      <if test="circumference != null">
-        circumference,
+      <if test="description != null">
+        description,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -141,31 +130,16 @@
       <if test="deleted != null">
         is_deleted,
       </if>
-      <if test="address != null">
-        address,
-      </if>
-      <if test="maxBorrowDays != null">
-        max_borrow_days,
-      </if>
-      <if test="defaultBorrowDays != null">
-        default_borrow_days,
-      </if>
-      <if test="closed != null">
-        closed,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="latitude != null">
-        #{latitude,jdbcType=NUMERIC},
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
       </if>
-      <if test="longitude != null">
-        #{longitude,jdbcType=NUMERIC},
-      </if>
-      <if test="circumference != null">
-        #{circumference,jdbcType=INTEGER},
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -176,28 +150,16 @@
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
       </if>
-      <if test="address != null">
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="maxBorrowDays != null">
-        #{maxBorrowDays,jdbcType=INTEGER},
-      </if>
-      <if test="defaultBorrowDays != null">
-        #{defaultBorrowDays,jdbcType=INTEGER},
-      </if>
-      <if test="closed != null">
-        #{closed,jdbcType=BIT},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="org.ying.book.pojo.LibraryExample" resultType="java.lang.Long">
-    select count(*) from public.libraries
+  <select id="countByExample" parameterType="org.ying.book.pojo.SystemSettingExample" resultType="java.lang.Long">
+    select count(*) from public.system_settings
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update public.libraries
+    update public.system_settings
     <set>
       <if test="row.id != null">
         id = #{row.id,jdbcType=INTEGER},
@@ -205,14 +167,11 @@
       <if test="row.name != null">
         name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="row.latitude != null">
-        latitude = #{row.latitude,jdbcType=NUMERIC},
+      <if test="row.value != null">
+        value = #{row.value,jdbcType=VARCHAR},
       </if>
-      <if test="row.longitude != null">
-        longitude = #{row.longitude,jdbcType=NUMERIC},
-      </if>
-      <if test="row.circumference != null">
-        circumference = #{row.circumference,jdbcType=INTEGER},
+      <if test="row.description != null">
+        description = #{row.description,jdbcType=VARCHAR},
       </if>
       <if test="row.createdAt != null">
         created_at = #{row.createdAt,jdbcType=TIMESTAMP},
@@ -223,55 +182,35 @@
       <if test="row.deleted != null">
         is_deleted = #{row.deleted,jdbcType=BIT},
       </if>
-      <if test="row.address != null">
-        address = #{row.address,jdbcType=VARCHAR},
-      </if>
-      <if test="row.maxBorrowDays != null">
-        max_borrow_days = #{row.maxBorrowDays,jdbcType=INTEGER},
-      </if>
-      <if test="row.defaultBorrowDays != null">
-        default_borrow_days = #{row.defaultBorrowDays,jdbcType=INTEGER},
-      </if>
-      <if test="row.closed != null">
-        closed = #{row.closed,jdbcType=BIT},
-      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update public.libraries
+    update public.system_settings
     set id = #{row.id,jdbcType=INTEGER},
       name = #{row.name,jdbcType=VARCHAR},
-      latitude = #{row.latitude,jdbcType=NUMERIC},
-      longitude = #{row.longitude,jdbcType=NUMERIC},
-      circumference = #{row.circumference,jdbcType=INTEGER},
+      value = #{row.value,jdbcType=VARCHAR},
+      description = #{row.description,jdbcType=VARCHAR},
       created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{row.deleted,jdbcType=BIT},
-      address = #{row.address,jdbcType=VARCHAR},
-      max_borrow_days = #{row.maxBorrowDays,jdbcType=INTEGER},
-      default_borrow_days = #{row.defaultBorrowDays,jdbcType=INTEGER},
-      closed = #{row.closed,jdbcType=BIT}
+      is_deleted = #{row.deleted,jdbcType=BIT}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="org.ying.book.pojo.Library">
-    update public.libraries
+  <update id="updateByPrimaryKeySelective" parameterType="org.ying.book.pojo.SystemSetting">
+    update public.system_settings
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="latitude != null">
-        latitude = #{latitude,jdbcType=NUMERIC},
+      <if test="value != null">
+        value = #{value,jdbcType=VARCHAR},
       </if>
-      <if test="longitude != null">
-        longitude = #{longitude,jdbcType=NUMERIC},
-      </if>
-      <if test="circumference != null">
-        circumference = #{circumference,jdbcType=INTEGER},
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -282,43 +221,26 @@
       <if test="deleted != null">
         is_deleted = #{deleted,jdbcType=BIT},
       </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="maxBorrowDays != null">
-        max_borrow_days = #{maxBorrowDays,jdbcType=INTEGER},
-      </if>
-      <if test="defaultBorrowDays != null">
-        default_borrow_days = #{defaultBorrowDays,jdbcType=INTEGER},
-      </if>
-      <if test="closed != null">
-        closed = #{closed,jdbcType=BIT},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.ying.book.pojo.Library">
-    update public.libraries
+  <update id="updateByPrimaryKey" parameterType="org.ying.book.pojo.SystemSetting">
+    update public.system_settings
     set name = #{name,jdbcType=VARCHAR},
-      latitude = #{latitude,jdbcType=NUMERIC},
-      longitude = #{longitude,jdbcType=NUMERIC},
-      circumference = #{circumference,jdbcType=INTEGER},
+      value = #{value,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      is_deleted = #{deleted,jdbcType=BIT},
-      address = #{address,jdbcType=VARCHAR},
-      max_borrow_days = #{maxBorrowDays,jdbcType=INTEGER},
-      default_borrow_days = #{defaultBorrowDays,jdbcType=INTEGER},
-      closed = #{closed,jdbcType=BIT}
+      is_deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.SystemSettingExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from public.libraries
+    from public.system_settings
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

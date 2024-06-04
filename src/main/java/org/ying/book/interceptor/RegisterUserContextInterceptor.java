@@ -24,10 +24,14 @@ public class RegisterUserContextInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String authorizationHeader = request.getHeader("Authorization");//        如果token为空
-        String token = authorizationHeader.substring(7); // 去掉 "Bearer " 前缀
-        UserJwtDto userJwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), UserJwtDto.class);
-        UserContext.setCurrentUser(userJwtDTO);
+        try {
+            String authorizationHeader = request.getHeader("Authorization");//        如果token为空
+            String token = authorizationHeader.substring(7); // 去掉 "Bearer " 前缀
+            UserJwtDto userJwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), UserJwtDto.class);
+            UserContext.setCurrentUser(userJwtDTO);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return true;
     }
 

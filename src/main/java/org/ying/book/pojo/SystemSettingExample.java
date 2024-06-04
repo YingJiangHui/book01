@@ -1,18 +1,17 @@
 package org.ying.book.pojo;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LibraryExample {
+public class SystemSettingExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public LibraryExample() {
+    public SystemSettingExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -236,183 +235,143 @@ public class LibraryExample {
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeIsNull() {
-            addCriterion("latitude is null");
+        public Criteria andValueIsNull() {
+            addCriterion("value is null");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeIsNotNull() {
-            addCriterion("latitude is not null");
+        public Criteria andValueIsNotNull() {
+            addCriterion("value is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeEqualTo(BigDecimal value) {
-            addCriterion("latitude =", value, "latitude");
+        public Criteria andValueEqualTo(String value) {
+            addCriterion("value =", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeNotEqualTo(BigDecimal value) {
-            addCriterion("latitude <>", value, "latitude");
+        public Criteria andValueNotEqualTo(String value) {
+            addCriterion("value <>", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeGreaterThan(BigDecimal value) {
-            addCriterion("latitude >", value, "latitude");
+        public Criteria andValueGreaterThan(String value) {
+            addCriterion("value >", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("latitude >=", value, "latitude");
+        public Criteria andValueGreaterThanOrEqualTo(String value) {
+            addCriterion("value >=", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeLessThan(BigDecimal value) {
-            addCriterion("latitude <", value, "latitude");
+        public Criteria andValueLessThan(String value) {
+            addCriterion("value <", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("latitude <=", value, "latitude");
+        public Criteria andValueLessThanOrEqualTo(String value) {
+            addCriterion("value <=", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeIn(List<BigDecimal> values) {
-            addCriterion("latitude in", values, "latitude");
+        public Criteria andValueLike(String value) {
+            addCriterion("value like", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeNotIn(List<BigDecimal> values) {
-            addCriterion("latitude not in", values, "latitude");
+        public Criteria andValueNotLike(String value) {
+            addCriterion("value not like", value, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("latitude between", value1, value2, "latitude");
+        public Criteria andValueIn(List<String> values) {
+            addCriterion("value in", values, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLatitudeNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("latitude not between", value1, value2, "latitude");
+        public Criteria andValueNotIn(List<String> values) {
+            addCriterion("value not in", values, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeIsNull() {
-            addCriterion("longitude is null");
+        public Criteria andValueBetween(String value1, String value2) {
+            addCriterion("value between", value1, value2, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeIsNotNull() {
-            addCriterion("longitude is not null");
+        public Criteria andValueNotBetween(String value1, String value2) {
+            addCriterion("value not between", value1, value2, "value");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeEqualTo(BigDecimal value) {
-            addCriterion("longitude =", value, "longitude");
+        public Criteria andDescriptionIsNull() {
+            addCriterion("description is null");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeNotEqualTo(BigDecimal value) {
-            addCriterion("longitude <>", value, "longitude");
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("description is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeGreaterThan(BigDecimal value) {
-            addCriterion("longitude >", value, "longitude");
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("description =", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("longitude >=", value, "longitude");
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("description <>", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeLessThan(BigDecimal value) {
-            addCriterion("longitude <", value, "longitude");
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("description >", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("longitude <=", value, "longitude");
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("description >=", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeIn(List<BigDecimal> values) {
-            addCriterion("longitude in", values, "longitude");
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("description <", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeNotIn(List<BigDecimal> values) {
-            addCriterion("longitude not in", values, "longitude");
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("description <=", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("longitude between", value1, value2, "longitude");
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("description like", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andLongitudeNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("longitude not between", value1, value2, "longitude");
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("description not like", value, "description");
             return (Criteria) this;
         }
 
-        public Criteria andCircumferenceIsNull() {
-            addCriterion("circumference is null");
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("description in", values, "description");
             return (Criteria) this;
         }
 
-        public Criteria andCircumferenceIsNotNull() {
-            addCriterion("circumference is not null");
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("description not in", values, "description");
             return (Criteria) this;
         }
 
-        public Criteria andCircumferenceEqualTo(Integer value) {
-            addCriterion("circumference =", value, "circumference");
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("description between", value1, value2, "description");
             return (Criteria) this;
         }
 
-        public Criteria andCircumferenceNotEqualTo(Integer value) {
-            addCriterion("circumference <>", value, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceGreaterThan(Integer value) {
-            addCriterion("circumference >", value, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceGreaterThanOrEqualTo(Integer value) {
-            addCriterion("circumference >=", value, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceLessThan(Integer value) {
-            addCriterion("circumference <", value, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceLessThanOrEqualTo(Integer value) {
-            addCriterion("circumference <=", value, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceIn(List<Integer> values) {
-            addCriterion("circumference in", values, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceNotIn(List<Integer> values) {
-            addCriterion("circumference not in", values, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceBetween(Integer value1, Integer value2) {
-            addCriterion("circumference between", value1, value2, "circumference");
-            return (Criteria) this;
-        }
-
-        public Criteria andCircumferenceNotBetween(Integer value1, Integer value2) {
-            addCriterion("circumference not between", value1, value2, "circumference");
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("description not between", value1, value2, "description");
             return (Criteria) this;
         }
 
@@ -593,256 +552,6 @@ public class LibraryExample {
 
         public Criteria andDeletedNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_deleted not between", value1, value2, "deleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressIsNull() {
-            addCriterion("address is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressIsNotNull() {
-            addCriterion("address is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressEqualTo(String value) {
-            addCriterion("address =", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressNotEqualTo(String value) {
-            addCriterion("address <>", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressGreaterThan(String value) {
-            addCriterion("address >", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressGreaterThanOrEqualTo(String value) {
-            addCriterion("address >=", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressLessThan(String value) {
-            addCriterion("address <", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressLessThanOrEqualTo(String value) {
-            addCriterion("address <=", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressLike(String value) {
-            addCriterion("address like", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressNotLike(String value) {
-            addCriterion("address not like", value, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressIn(List<String> values) {
-            addCriterion("address in", values, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressNotIn(List<String> values) {
-            addCriterion("address not in", values, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressBetween(String value1, String value2) {
-            addCriterion("address between", value1, value2, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andAddressNotBetween(String value1, String value2) {
-            addCriterion("address not between", value1, value2, "address");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysIsNull() {
-            addCriterion("max_borrow_days is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysIsNotNull() {
-            addCriterion("max_borrow_days is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysEqualTo(Integer value) {
-            addCriterion("max_borrow_days =", value, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysNotEqualTo(Integer value) {
-            addCriterion("max_borrow_days <>", value, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysGreaterThan(Integer value) {
-            addCriterion("max_borrow_days >", value, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysGreaterThanOrEqualTo(Integer value) {
-            addCriterion("max_borrow_days >=", value, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysLessThan(Integer value) {
-            addCriterion("max_borrow_days <", value, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysLessThanOrEqualTo(Integer value) {
-            addCriterion("max_borrow_days <=", value, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysIn(List<Integer> values) {
-            addCriterion("max_borrow_days in", values, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysNotIn(List<Integer> values) {
-            addCriterion("max_borrow_days not in", values, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysBetween(Integer value1, Integer value2) {
-            addCriterion("max_borrow_days between", value1, value2, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaxBorrowDaysNotBetween(Integer value1, Integer value2) {
-            addCriterion("max_borrow_days not between", value1, value2, "maxBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysIsNull() {
-            addCriterion("default_borrow_days is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysIsNotNull() {
-            addCriterion("default_borrow_days is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysEqualTo(Integer value) {
-            addCriterion("default_borrow_days =", value, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysNotEqualTo(Integer value) {
-            addCriterion("default_borrow_days <>", value, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysGreaterThan(Integer value) {
-            addCriterion("default_borrow_days >", value, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysGreaterThanOrEqualTo(Integer value) {
-            addCriterion("default_borrow_days >=", value, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysLessThan(Integer value) {
-            addCriterion("default_borrow_days <", value, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysLessThanOrEqualTo(Integer value) {
-            addCriterion("default_borrow_days <=", value, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysIn(List<Integer> values) {
-            addCriterion("default_borrow_days in", values, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysNotIn(List<Integer> values) {
-            addCriterion("default_borrow_days not in", values, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysBetween(Integer value1, Integer value2) {
-            addCriterion("default_borrow_days between", value1, value2, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andDefaultBorrowDaysNotBetween(Integer value1, Integer value2) {
-            addCriterion("default_borrow_days not between", value1, value2, "defaultBorrowDays");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedIsNull() {
-            addCriterion("closed is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedIsNotNull() {
-            addCriterion("closed is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedEqualTo(Boolean value) {
-            addCriterion("closed =", value, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedNotEqualTo(Boolean value) {
-            addCriterion("closed <>", value, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedGreaterThan(Boolean value) {
-            addCriterion("closed >", value, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("closed >=", value, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedLessThan(Boolean value) {
-            addCriterion("closed <", value, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedLessThanOrEqualTo(Boolean value) {
-            addCriterion("closed <=", value, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedIn(List<Boolean> values) {
-            addCriterion("closed in", values, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedNotIn(List<Boolean> values) {
-            addCriterion("closed not in", values, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedBetween(Boolean value1, Boolean value2) {
-            addCriterion("closed between", value1, value2, "closed");
-            return (Criteria) this;
-        }
-
-        public Criteria andClosedNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("closed not between", value1, value2, "closed");
             return (Criteria) this;
         }
     }

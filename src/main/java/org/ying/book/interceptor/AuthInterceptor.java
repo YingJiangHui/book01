@@ -45,7 +45,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         // 在这里可以对token进行进一步处理，比如解析JWT令牌，验证令牌的有效性等
         // 如果需要，你可以将token存储在request的attribute中，以便后续处理程序使用
         if(jwtUtil.isTokenExpired(token)){
-            setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"认证失效请重新登录");
+            setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"用户认证过期请重新登录");
             return false;
         }
         return true;
