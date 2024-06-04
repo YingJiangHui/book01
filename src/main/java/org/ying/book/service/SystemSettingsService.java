@@ -10,7 +10,6 @@ import org.ying.book.mapper.SystemSettingMapper;
 import org.ying.book.pojo.SystemSetting;
 import org.ying.book.pojo.SystemSettingExample;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +18,6 @@ import java.util.Map;
 public class SystemSettingsService {
     @Resource
     private SystemSettingMapper systemSettingMapper;
-
-
-    public List<SystemSetting> objectToMap(SystemSettingDto systemSettingDto) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        Map<String, String> properties = BeanUtils.describe(systemSettingDto);
-
-        return  properties.entrySet().stream().map(entry -> {
-            SystemSetting systemSetting = new SystemSetting();
-            systemSetting.setName(entry.getKey());
-            systemSetting.setValue(entry.getValue());
-            return systemSetting;
-        }).toList();
-    }
 
     @Transactional
     public void saveSystemSettings(List<SystemSetting> systemSettingList) {

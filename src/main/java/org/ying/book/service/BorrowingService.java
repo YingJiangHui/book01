@@ -117,6 +117,7 @@ public class BorrowingService {
         List<Borrowing> borrowings = borrowingMapper.selectByExample(borrowingExample);
         borrowings.stream().map(borrowing -> {
             if (borrowing.getExpectedReturnAt().getTime() < new Date().getTime()) {
+//              违约归还
                 userService.defaultTimesAddOne(borrowing.getUserId());
             }
             borrowing.setReturnedAt(new Date());
