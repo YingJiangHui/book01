@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class BorrowingDto {
+    @NotNull
     List<Integer> bookIds;
     Integer userId;
     @NotNull

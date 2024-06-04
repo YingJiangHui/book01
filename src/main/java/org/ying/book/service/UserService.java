@@ -11,6 +11,7 @@ import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.enums.RoleEnum;
+import org.ying.book.enums.SystemSettingsEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.UserMapper;
 import org.ying.book.pojo.User;
@@ -46,6 +47,9 @@ public class UserService {
 
     @Resource
     JwtUtil jwtUtil;
+
+    @Resource
+    private SystemSettingsService systemSettingsService;
 
     public List<User> getUsers(UserExample example, RowBounds rowBounds) {
         return userMapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -132,9 +136,10 @@ public class UserService {
 
 
     public void defaultTimesAddOne(Integer userId) {
+        Integer maxDefaultTimes = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.MAX_OVERDUE_TIMES).toString());
         User user = userMapper.selectByPrimaryKey(userId);
         user.setDefaultTimes(user.getDefaultTimes() + 1);
-        if(user.getDefaultTimes()>3){
+        if(user.getDefaultTimes()>maxDefaultTimes){
             user.setIsBlacklist(true);
         }
         userMapper.updateByPrimaryKeySelective(user);

@@ -13,6 +13,7 @@ import org.thymeleaf.context.Context;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
 import org.ying.book.enums.RoleEnum;
+import org.ying.book.enums.SystemSettingsEnum;
 import org.ying.book.pojo.Role;
 import org.ying.book.pojo.User;
 import org.ying.book.utils.GeneratorCode;
@@ -21,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
@@ -62,6 +64,8 @@ public class EmailService {
     @Value("${custom.invite-register.register-link}")
     String inviteRegisterLink;
 
+    @Resource
+    private SystemSettingsService systemSettingsService;
 
     public void sendVerificationCode(String to, String verificationCode) throws MessagingException, MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -101,6 +105,7 @@ public class EmailService {
 //            emailValidationDto.setRoleIds(user.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
         }
 
+        Integer validateCodeTimeout = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.CAPTCHA_EXPIRE_TIME).toString());
         redisService.setKey(to, emailValidationDto, validateCodeTimeout);
         Context context = new Context();
         context.setVariable("verificationCode", validateCode);
@@ -110,12 +115,14 @@ public class EmailService {
     }
 
     public String sendInvitationEmail(EmailValidationDto emailValidationDto) throws MessagingException {
+        Map<String,Object> map = systemSettingsService.getSystemSettingAllMap();
         String to = emailValidationDto.getEmail();
         userService.validateRegister(UserDto.builder().email(to).build());
         String inviteCode = GeneratorCode.generator(validateCodeLength);
         emailValidationDto.setCode(inviteCode);
 //        可以存一些待注册管理员的权限信息
-        redisService.setKey(to, emailValidationDto, inviteCodeTimeout);
+        Integer inviteCodeTimeout = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.INVITATION_EXPIRE_TIME).toString());
+        String inviteRegisterLink = systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.INVITATION_URL).toString();
         String link = String.format("%s?inviteCode=%s&email=%s", inviteRegisterLink,inviteCode,to);
         Context context = new Context();
         context.setVariable("link", link);

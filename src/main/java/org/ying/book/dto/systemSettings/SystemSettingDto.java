@@ -11,4 +11,10 @@ public class SystemSettingDto {
     Integer DEFAULT_BORROW_DAYS;
     //    最大借阅天数
     Integer MAX_BORROW_DAYS;
+    //    验证码有效时间
+    Integer CAPTCHA_EXPIRE_TIME;
+    //    邀请码有效时间
+    Integer INVITATION_EXPIRE_TIME;
+    //    邀请注册地址
+    String INVITATION_URL;
 }

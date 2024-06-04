@@ -13,12 +13,15 @@ import org.ying.book.dto.borrowing.BorrowingQueryDto;
 import org.ying.book.dto.borrowing.RenewDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.enums.ActionSource;
+import org.ying.book.enums.BorrowingStatusEnum;
+import org.ying.book.enums.SystemSettingsEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.BorrowingMapper;
 import org.ying.book.mapper.BorrowingViewMapper;
 import org.ying.book.pojo.*;
 import org.ying.book.utils.PaginationHelper;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -48,13 +51,17 @@ public class BorrowingService {
     @Autowired
     private UserService userService;
 
-    public boolean borrowDaysValidate(Date startDate, Date endDate, Integer additionDays){
+    @Resource
+    SystemSettingsService systemSettingsService;
+
+    public boolean borrowDaysValidate(Date startDate, Date endDate, Integer additionDays) {
+        Integer maxDays = this.getMaxDays();
         long days = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
         return days >= 1 && days <= (maxDays - additionDays);
     }
 
-    public boolean borrowDaysValidate(Date startDate, Date endDate){
-        return this.borrowDaysValidate(startDate,endDate,0);
+    public boolean borrowDaysValidate(Date startDate, Date endDate) {
+        return this.borrowDaysValidate(startDate, endDate, 0);
     }
 
     //获取指定书籍在指定时间段下的借阅记录
@@ -91,8 +98,9 @@ public class BorrowingService {
                 throw new CustomException("该书籍已归还，无法续借", HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            if(!this.borrowDaysValidate(borrowing.getBorrowedAt(), renewDto.getExpectedReturnAt())){
-                throw new CustomException(String.format("超过了最大借阅天数$d天",maxDays));
+            if (!this.borrowDaysValidate(borrowing.getBorrowedAt(), renewDto.getExpectedReturnAt())) {
+                Integer maxDays = this.getMaxDays();
+                throw new CustomException(String.format("超过了最大借阅天数$d天", maxDays));
             }
 
             borrowing.setExpectedReturnAt(renewDto.getExpectedReturnAt());
@@ -108,7 +116,7 @@ public class BorrowingService {
         criteria.andIdIn(borrowingIds);
         List<Borrowing> borrowings = borrowingMapper.selectByExample(borrowingExample);
         borrowings.stream().map(borrowing -> {
-            if(borrowing.getExpectedReturnAt().getTime()<new Date().getTime()){
+            if (borrowing.getExpectedReturnAt().getTime() < new Date().getTime()) {
                 userService.defaultTimesAddOne(borrowing.getUserId());
             }
             borrowing.setReturnedAt(new Date());
@@ -127,7 +135,14 @@ public class BorrowingService {
     @Transactional
     public List<Borrowing> borrowBooks(BorrowingDto borrowingDto) {
         List<Integer> bookIds = borrowingDto.getBookIds();
-
+        int maxBorrowSize = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.MAX_BORROW_SIZE).toString());
+        if (bookIds.size() > maxBorrowSize) {
+            throw new CustomException("在借书籍+本次借阅不能超过" + maxBorrowSize + "本书籍");
+        }
+        Long total = borrowingViewMapper.countByExample(createExample(BorrowingQueryDto.builder().userId(borrowingDto.getUserId()).status(Arrays.asList(BorrowingStatusEnum.NOT_RETURNED, BorrowingStatusEnum.OVERDUE_NOT_RETURNED)).build()));
+        if (bookIds.size() + total > maxBorrowSize) {
+            throw new CustomException("在借书籍+本次借阅不能超过" + maxBorrowSize + "本书籍");
+        }
         this.validConflictBorrowTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
         reservationService.validConflictReserveTime(bookIds, borrowingDto.getBorrowedAt(), borrowingDto.getExpectedReturnAt());
 
@@ -170,7 +185,11 @@ public class BorrowingService {
         }).map((reservation) -> reservationService.finishReservations(reservation)).toList();
     }
 
-    public PageResultDto<BorrowingView> getBorrowingsPaginate(BorrowingQueryDto borrowingQueryDto) {
+    private Integer getMaxDays() {
+        return Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.MAX_BORROW_DAYS).toString());
+    }
+
+    public BorrowingViewExample createExample(BorrowingQueryDto borrowingQueryDto) {
         BorrowingViewExample borrowingViewExample = new BorrowingViewExample();
         BorrowingViewExample.Criteria criteria = borrowingViewExample.createCriteria();
         if (borrowingQueryDto.getUserId() != null) {
@@ -182,7 +201,13 @@ public class BorrowingService {
         }
 
         borrowingViewExample.setOrderByClause("expected_return_at asc");
-        return PaginationHelper.paginate(borrowingQueryDto, (rowBounds, reqDto) -> borrowingViewMapper.selectByExampleWithRowbounds(borrowingViewExample, rowBounds).stream().map((borrowingView)->{
+        return borrowingViewExample;
+    }
+
+    public PageResultDto<BorrowingView> getBorrowingsPaginate(BorrowingQueryDto borrowingQueryDto) {
+        BorrowingViewExample borrowingViewExample = createExample(borrowingQueryDto);
+        Integer maxDays = this.getMaxDays();
+        return PaginationHelper.paginate(borrowingQueryDto, (rowBounds, reqDto) -> borrowingViewMapper.selectByExampleWithRowbounds(borrowingViewExample, rowBounds).stream().map((borrowingView) -> {
             borrowingView.getBook().setFiles(fileService.filesWithUrl(borrowingView.getBook().getFiles()));
             borrowingView.setLatestReturnAt(new Date(borrowingView.getBorrowedAt().getTime() + 1000 * 60 * 60 * 24 * maxDays));
             return borrowingView;

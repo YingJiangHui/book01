@@ -4,8 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.ying.book.enums.SystemSettingsEnum;
+import org.ying.book.pojo.SystemSetting;
+import org.ying.book.service.SystemSettingsService;
 
 import java.util.Base64;
 
@@ -24,6 +28,11 @@ public class JwtUtil {
 
     @Resource
     ObjectMapper objectMapper;
+
+    @Resource
+    private SystemSettingsService SystemSettingsService;
+    @Autowired
+    private SystemSettingsService systemSettingsService;
 
     public SecretKeySpec generalKey(){
 
@@ -53,7 +62,8 @@ public class JwtUtil {
     }
 
     public String createJWT(String id, Object subject) throws JsonProcessingException {
-        return this.createJWT(id, subject, expiration);
+        Integer expiration = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.TOKEN_EXPIRATION).toString());
+        return this.createJWT(id, subject, expiration * 60 * 60 * 1000);
     }
 
     public Claims parseJWT(String jwt) throws Exception {
