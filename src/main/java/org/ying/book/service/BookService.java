@@ -2,6 +2,7 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +12,15 @@ import org.ying.book.dto.book.BookSearchDto;
 import org.ying.book.dto.common.IPageReq;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
-import org.ying.book.mapper.BookFileMapper;
-import org.ying.book.mapper.BookMapper;
-import org.ying.book.mapper.LibraryBookMapper;
+import org.ying.book.enums.ReservationStatusEnum;
+import org.ying.book.exception.CustomException;
+import org.ying.book.mapper.*;
 import org.ying.book.pojo.*;
 import org.ying.book.utils.PaginationHelper;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookService {
@@ -33,6 +36,14 @@ public class BookService {
 
     @Autowired
     private LibraryBookMapper libraryBookMapper;
+
+    @Resource
+    private ReservationService reservationService;
+
+    @Resource
+    private BorrowingService borrowingService;
+    @Autowired
+    private ReservationViewMapper reservationViewMapper;
 
     public Book getBook(Integer id) {
         Book book = bookMapper.selectByPrimaryKey(id);
@@ -118,6 +129,40 @@ public class BookService {
         return book;
     }
 
+    @Transactional
+    public void updateBook(Integer id, BookDto bookDto) {
+        Book book = bookMapper.selectByPrimaryKey(id);
+        if (book == null) {
+            throw new CustomException("图书不存在");
+        }
+
+        if (!Objects.equals(bookDto.getLibraryId(), book.getLibrary().getId())) {
+            LibraryBookExample libraryBookExample = new LibraryBookExample();
+            libraryBookExample.createCriteria().andBookIdEqualTo(id).andLibraryIdEqualTo(book.getLibrary().getId());
+            libraryBookMapper.deleteByExample(libraryBookExample);
+            libraryBookMapper.insertSelective(LibraryBook.builder().libraryId(bookDto.getLibraryId()).bookId(book.getId()).build());
+        }
+        if (bookDto.getFile() != null) {
+            BookFileExample bookFileExample = new BookFileExample();
+            bookFileExample.createCriteria().andBookIdEqualTo(Long.valueOf(id));
+            bookFileMapper.deleteByExample(bookFileExample);
+            List<File> files = bookDto.getFile().stream().map(file -> {
+                try {
+                    return fileService.uploadFile(file);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }).toList();
+            files.stream().forEach((file) -> {
+                bookFileMapper.insertSelective(BookFile.builder().fileId(Long.valueOf(file.getId())).bookId(Long.valueOf(book.getId())).build());
+            });
+        }
+
+        BeanUtils.copyProperties(bookDto, book);
+        bookMapper.updateByPrimaryKeySelective(book);
+    }
+
     private void searchWith(BookExample.Criteria criteria, BookSearchDto book) {
         if (book.getIds() != null && !book.getIds().isEmpty()) {
             criteria.andIdIn(book.getIds());
@@ -170,5 +215,33 @@ public class BookService {
         bookExample.or(criteriaPublisher);
         bookExample.or(criteriaIsbn);
         return PaginationHelper.paginate(bookSearchDto, (rowBounds, reqDto) -> this.getBooksByExampleWithRowbounds(bookExample, rowBounds), bookMapper.countByExample(bookExample));
+    }
+
+    // 下架图书
+    @Transactional
+    public void deleteBook(Integer id) {
+
+        List<BorrowingView> borrowingViewList = borrowingService.getCurrentBorrowedBook(id);
+        if (borrowingViewList != null && !borrowingViewList.isEmpty()) {
+            throw new CustomException("书籍已被借阅，无法下架");
+        }
+        List<ReservationView> reservationViewList = reservationService.getCurrentReservedBook(id);
+        if (reservationViewList != null && !reservationViewList.isEmpty()) {
+            throw new CustomException("书籍已被预约，无法下架");
+        }
+
+        Book book = bookMapper.selectByPrimaryKey(id);
+        book.setAvailable(false);
+        bookMapper.updateByPrimaryKeySelective(book);
+    }
+
+    @Transactional
+    public void recoverBook(Integer id) {
+        Book book = bookMapper.selectByPrimaryKey(id);
+        if (book.getAvailable()) {
+            throw new CustomException("书籍已上架");
+        }
+        book.setAvailable(true);
+        bookMapper.updateByPrimaryKeySelective(book);
     }
 }

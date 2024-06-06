@@ -147,4 +147,10 @@ public class ReservationService {
             return item;
         }).sorted(Comparator.comparing((ReservationView rv) -> statusOrder.get(rv.getStatus()))).toList();
     }
+
+    public List<ReservationView> getCurrentReservedBook(Integer bookId){
+        ReservationViewExample reservationViewExample = new ReservationViewExample();
+        reservationViewExample.createCriteria().andBookIdEqualTo(bookId).andStatusIn(Arrays.asList(ReservationStatusEnum.NOT_BORROWABLE.name(), ReservationStatusEnum.BORROWABLE.name()));
+        return reservationViewMapper.selectByExample(reservationViewExample);
+    }
 }

@@ -14,6 +14,7 @@ import org.ying.book.dto.borrowing.RenewDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.enums.ActionSource;
 import org.ying.book.enums.BorrowingStatusEnum;
+import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.enums.SystemSettingsEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.BorrowingMapper;
@@ -213,5 +214,11 @@ public class BorrowingService {
             borrowingView.setLatestReturnAt(new Date(borrowingView.getBorrowedAt().getTime() + 1000 * 60 * 60 * 24 * maxDays));
             return borrowingView;
         }).toList(), borrowingViewMapper.countByExample(borrowingViewExample));
+    }
+
+    public List<BorrowingView> getCurrentBorrowedBook(Integer bookId){
+        BorrowingViewExample borrowingViewExample = new BorrowingViewExample();
+        borrowingViewExample.createCriteria().andBookIdEqualTo(bookId).andStatusIn(Arrays.asList(BorrowingStatusEnum.NOT_RETURNED.name(), BorrowingStatusEnum.OVERDUE_NOT_RETURNED.name()));
+        return borrowingViewMapper.selectByExample(borrowingViewExample);
     }
 }

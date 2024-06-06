@@ -15,7 +15,10 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="publisher" jdbcType="VARCHAR" property="publisher" />
     <association property="library" column="id" javaType="org.ying.book.pojo.Library" select="selectLibraryByBookId"/>
+    <association property="reservation" column="id" javaType="org.ying.book.pojo.ReservationView" select="selectReservationByBookId"/>
+    <association property="borrowing" column="id" javaType="org.ying.book.pojo.BorrowingView" select="selectBorrowingByBookId"/>
     <collection property="files" column="id" ofType="org.ying.book.pojo.File" select="selectFilesByBookId"/>
+<!--    通过borrowingView聚合出一个状态说明该图书当选是否被借阅-->
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -334,6 +337,12 @@
   </select>
   <select id="selectFilesByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.FileMapper.BaseResultMap">
     select * from public.files f join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}
+  </select>
+  <select id="selectBorrowingByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BorrowingViewMapper.BaseResultMap">
+    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'OVERDUE_NOT_RETURNED' and bv.status = 'NOT_RETURNED'
+  </select>
+  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationMapper.BaseResultMap">
+    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'NOT_BORROWABLE' and bv.status = 'BORROWABLE'
   </select>
 <!--  &amp;lt;select id="selectCategoryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookCategoryMapper.BaseResultMap"&amp;gt;-->
 <!--    select * from public.categories c join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}-->

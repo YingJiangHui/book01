@@ -40,4 +40,8 @@ public class Book {
     private Library library;
 
     private List<File> files;
+
+    private BorrowingView borrowing;
+
+    private ReservationView reservation;
 }

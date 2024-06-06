@@ -66,5 +66,17 @@ public class BookController {
         return bookPageResultDto;
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable("id") Integer id) {
+        bookService.deleteBook(id);
+    }
+    @PostMapping("/{id}")
+    public void recoverBook(@PathVariable("id") Integer id) {
+        bookService.recoverBook(id);
+    }
 
+    @PatchMapping(value ="/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void updateBook(@PathVariable("id") Integer id, @ModelAttribute BookDto bookDto) {
+        bookService.updateBook(id, bookDto);
+    }
 }

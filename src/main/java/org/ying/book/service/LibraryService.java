@@ -67,7 +67,7 @@ public class LibraryService {
         if (libraryDto.getName() != null) {
             criteria.andNameEqualTo(libraryDto.getName());
         }
-        criteria.andDeletedEqualTo(false);
+        criteria.andDeletedNotEqualTo(true);
 
         return PaginationHelper.paginate(new PageReqDto(), (rowBounds1, pageDto) -> libraryMapper.selectByExampleWithRowbounds(example, rowBounds1), libraryMapper.countByExample(example));
     }
@@ -107,6 +107,7 @@ public class LibraryService {
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteria = bookExample.createCriteria();
         criteria.andIdIn(bookIdList);
+        bookExample.setOrderByClause("created_at desc");
 
         return bookService.getBooksWithPaginate(bookExample, booksInLibraryDto);
     }
