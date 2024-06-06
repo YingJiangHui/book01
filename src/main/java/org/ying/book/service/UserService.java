@@ -68,11 +68,19 @@ public class UserService {
         UserExample.Criteria criteria = example.createCriteria();
         List<Integer> libraryIds = userQueryParamsDTO.getLibraryIds();
         List<RoleEnum> roleNames = userQueryParamsDTO.getRoleNames();
+        String email = userQueryParamsDTO.getEmail();
+        Boolean isBlacklist = userQueryParamsDTO.getIsBlacklist();
         if(libraryIds!=null && !libraryIds.isEmpty()){
             criteria.andLibraryIdIn(libraryIds);
         }
         if(roleNames != null && !roleNames.isEmpty()){
             criteria.andRoleIn(roleNames);
+        }
+        if(isBlacklist != null){
+            criteria.andIsBlacklistEqualTo(isBlacklist);
+        }
+        if(email!=null){
+            criteria.andEmailEqualTo(email.trim());
         }
 
         return PaginationHelper.paginate(userQueryParamsDTO, (rowBounds, reqDto) -> userMapper.selectByExampleWithRoleNameAndLibraryAndRowbounds(example, rowBounds), userMapper.countByExampleWithRoleAndLibrary(example));

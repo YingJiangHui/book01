@@ -267,4 +267,16 @@
       ) as subquery
     GROUP BY subquery.user_id, subquery.keyword, subquery.target order by count desc
   </select>
+
+  <select id="selectByUserIdAndTargetAndKeywordWithRowbounds" parameterType="org.ying.book.pojo.SearchExample" resultMap="BaseResultMap2">
+    select subquery.user_id, subquery.keyword, subquery.target, COUNT(*) as count
+    from (
+    select user_id, keyword, target
+    from public.search
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    ) as subquery
+    GROUP BY subquery.user_id, subquery.keyword, subquery.target order by count desc
+  </select>
 </mapper>

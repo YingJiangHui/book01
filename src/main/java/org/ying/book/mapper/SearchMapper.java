@@ -34,4 +34,6 @@ public interface SearchMapper {
     int updateByPrimaryKey(Search row);
 
     List<Search> selectByUserIdAndTargetAndKeyword(SearchExample example);
+
+    List<Search> selectByUserIdAndTargetAndKeywordWithRowbounds(SearchExample example, RowBounds rowBounds);
 }

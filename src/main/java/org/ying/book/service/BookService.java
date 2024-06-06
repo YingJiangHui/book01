@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.book.BookDto;
 import org.ying.book.dto.book.BookQueryDto;
 import org.ying.book.dto.book.BookSearchDto;
+import org.ying.book.dto.common.IPageReq;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.mapper.BookFileMapper;
@@ -77,7 +78,7 @@ public class BookService {
         }).toList();
     }
 
-    public PageResultDto<Book> getBooksWithPaginate(BookExample example, PageReqDto pageReqDto) {
+    public PageResultDto<Book> getBooksWithPaginate(BookExample example, IPageReq pageReqDto) {
         return PaginationHelper.paginate(pageReqDto, (rowBounds, reqDto) -> this.getBooksByExampleWithRowbounds(example, rowBounds), bookMapper.countByExample(example));
     }
 

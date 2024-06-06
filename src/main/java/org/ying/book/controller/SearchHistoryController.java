@@ -3,6 +3,7 @@ package org.ying.book.controller;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
+import org.ying.book.dto.search.SearchDto;
 import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.enums.SearchTargetEnum;
 import org.ying.book.pojo.Search;
@@ -20,17 +21,22 @@ public class SearchHistoryController {
     private SearchHistoryService searchHistoryService;
 
     @GetMapping
-    public List<Search> getSearchHistory(@ModelAttribute Search search) {
+    public List<Search> getSearchHistory(@ModelAttribute SearchDto search) {
         UserJwtDto userJwtDto = UserContext.getCurrentUser();
         search.setUserId(userJwtDto.getId());
         return searchHistoryService.getSearchHistory(search);
     }
 
     @GetMapping("/all")
-    public List<Search> getSearchHistoryAll(@ModelAttribute Search search) {
+    public List<Search> getSearchHistoryAll(@ModelAttribute SearchDto search) {
         if(Objects.equals(search.getKeyword(), "")){
             return Arrays.asList();
         }
         return searchHistoryService.getSearchHistory(search);
+    }
+
+    @GetMapping("/hot")
+    public List<Search> getHotSearchHistory(@ModelAttribute SearchDto searchDto) {
+        return searchHistoryService.getSearchHistory(searchDto);
     }
 }

@@ -37,4 +37,9 @@ public class CategoryController {
     public List<Book> getBooksByCategoryId(@PathVariable Integer id) {
         return categoryService.getBooksByCategoryId(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteCategory(@PathVariable Integer id) {
+        categoryService.deleteCategory(id);
+    }
 }

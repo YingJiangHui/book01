@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.dto.library.BooksInLibraryDto;
+import org.ying.book.dto.library.LibraryDto;
 import org.ying.book.mapper.LibraryBookMapper;
 import org.ying.book.mapper.LibraryMapper;
 import org.ying.book.mapper.LibraryUserMapper;
@@ -34,18 +36,46 @@ public class LibraryService {
     private BookService bookService;
 
     @Transactional
-    public void insertLibrary(Library library) {
+    public Library insertLibrary(Library library) {
         libraryMapper.insertSelective(library);
+        return library;
     }
+
+    @Transactional
+    public Library updateLibrary(Library library) {
+        libraryMapper.updateByPrimaryKeySelective(library);
+        return library;
+    }
+
 
     public Library getLibraryById(int id) {
         return libraryMapper.selectByPrimaryKey(id);
     }
 
-    public List<Library> getLibraries() {
+    public PageResultDto<Library> getLibraries(LibraryDto libraryDto) {
         LibraryExample example = new LibraryExample();
-        RowBounds rowBounds = new RowBounds(0, 100);
-        return libraryMapper.selectByExampleWithRowbounds(example,rowBounds);
+        LibraryExample.Criteria criteria = example.createCriteria();
+        if (libraryDto.getId() != null) {
+            criteria.andIdEqualTo(libraryDto.getId());
+        }
+        if (libraryDto.getName() != null) {
+            criteria.andNameEqualTo(libraryDto.getName());
+        }
+        if (libraryDto.getAddress() != null) {
+            criteria.andAddressLike("%"+libraryDto.getAddress()+"%");
+        }
+        if (libraryDto.getName() != null) {
+            criteria.andNameEqualTo(libraryDto.getName());
+        }
+        criteria.andDeletedEqualTo(false);
+
+        return PaginationHelper.paginate(new PageReqDto(), (rowBounds1, pageDto) -> libraryMapper.selectByExampleWithRowbounds(example, rowBounds1), libraryMapper.countByExample(example));
+    }
+
+    public List<Library> getLibrariesAll(){
+        LibraryExample example = new LibraryExample();
+        example.createCriteria().andDeletedEqualTo(false);
+        return libraryMapper.selectByExample(example);
     }
 
     @Transactional
@@ -66,7 +96,7 @@ public class LibraryService {
 
     }
 
-    public PageResultDto<Book> getAllBooksInLibrary(Integer libraryId, PageReqDto pageReqDto){
+    public PageResultDto<Book> getAllBooksInLibrary(Integer libraryId, BooksInLibraryDto booksInLibraryDto){
         LibraryBookExample libraryBookExample = new LibraryBookExample();
         libraryBookExample.createCriteria().andLibraryIdEqualTo(libraryId);
         List<Integer> bookIdList = libraryBookMapper.selectByExample(libraryBookExample).stream().map(LibraryBook::getBookId).toList();
@@ -78,6 +108,6 @@ public class LibraryService {
         BookExample.Criteria criteria = bookExample.createCriteria();
         criteria.andIdIn(bookIdList);
 
-        return bookService.getBooksWithPaginate(bookExample, pageReqDto);
+        return bookService.getBooksWithPaginate(bookExample, booksInLibraryDto);
     }
 }

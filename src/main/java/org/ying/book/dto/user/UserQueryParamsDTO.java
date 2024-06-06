@@ -12,6 +12,8 @@ import java.util.List;
 @Data
 @Builder
 public class UserQueryParamsDTO extends PageReqDto {
+    String email;
     List<RoleEnum> roleNames;
     List<Integer> libraryIds;
+    Boolean isBlacklist;
 }

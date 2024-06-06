@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.library.BooksInLibraryDto;
+import org.ying.book.dto.library.LibraryDto;
 import org.ying.book.pojo.Book;
 import org.ying.book.pojo.Library;
 import org.ying.book.service.LibraryService;
@@ -17,8 +18,13 @@ public class LibraryController {
     private LibraryService libraryService;
 
     @PostMapping()
-    public void createLibrary(@RequestBody Library library) {
-        libraryService.insertLibrary(library);
+    public Library createLibrary(@RequestBody Library library) {
+        return libraryService.insertLibrary(library);
+    }
+
+    @PatchMapping()
+    public Library updateLibrary(@RequestBody Library library) {
+        return libraryService.updateLibrary(library);
     }
 
     @GetMapping("{libraryId}")
@@ -27,9 +33,15 @@ public class LibraryController {
     }
 
     @GetMapping()
-    public List<Library> getLibraries() {
-        return libraryService.getLibraries();
+    public PageResultDto<Library> getLibraries(LibraryDto libraryDto) {
+        return libraryService.getLibraries(libraryDto);
     }
+
+    @GetMapping("/all")
+    public List<Library> getLibrariesAll() {
+        return libraryService.getLibrariesAll();
+    }
+
     @GetMapping("{libraryId}/books")
     public PageResultDto<Book> getBooksInLibrary(@PathVariable("libraryId") int libraryId,@ModelAttribute BooksInLibraryDto booksInLibraryDto){
         return libraryService.getAllBooksInLibrary(libraryId,booksInLibraryDto);
