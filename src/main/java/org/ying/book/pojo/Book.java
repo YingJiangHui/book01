@@ -1,16 +1,8 @@
 package org.ying.book.pojo;
 
-import lombok.*;
-import org.ying.book.dto.file.FileDto;
-
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Book {
     private Integer id;
 
@@ -32,10 +24,13 @@ public class Book {
 
     private Boolean deleted;
 
+    private String description;
 
     private String publisher;
 
-    private String description;
+    private Boolean isRecommend;
+
+    private Boolean isBanner;
 
     private Library library;
 

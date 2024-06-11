@@ -884,6 +884,126 @@ public class BookExample {
             addCriterion("publisher not between", value1, value2, "publisher");
             return (Criteria) this;
         }
+
+        public Criteria andIsRecommendIsNull() {
+            addCriterion("is_recommend is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendIsNotNull() {
+            addCriterion("is_recommend is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendEqualTo(Boolean value) {
+            addCriterion("is_recommend =", value, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendNotEqualTo(Boolean value) {
+            addCriterion("is_recommend <>", value, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendGreaterThan(Boolean value) {
+            addCriterion("is_recommend >", value, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_recommend >=", value, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendLessThan(Boolean value) {
+            addCriterion("is_recommend <", value, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_recommend <=", value, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendIn(List<Boolean> values) {
+            addCriterion("is_recommend in", values, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendNotIn(List<Boolean> values) {
+            addCriterion("is_recommend not in", values, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_recommend between", value1, value2, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRecommendNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_recommend not between", value1, value2, "isRecommend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerIsNull() {
+            addCriterion("is_banner is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerIsNotNull() {
+            addCriterion("is_banner is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerEqualTo(Boolean value) {
+            addCriterion("is_banner =", value, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerNotEqualTo(Boolean value) {
+            addCriterion("is_banner <>", value, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerGreaterThan(Boolean value) {
+            addCriterion("is_banner >", value, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_banner >=", value, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerLessThan(Boolean value) {
+            addCriterion("is_banner <", value, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_banner <=", value, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerIn(List<Boolean> values) {
+            addCriterion("is_banner in", values, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerNotIn(List<Boolean> values) {
+            addCriterion("is_banner not in", values, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_banner between", value1, value2, "isBanner");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBannerNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_banner not between", value1, value2, "isBanner");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

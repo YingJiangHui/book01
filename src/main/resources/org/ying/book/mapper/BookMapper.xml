@@ -14,12 +14,25 @@
     <result column="is_deleted" jdbcType="BIT" property="deleted" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="is_recommend" jdbcType="BIT" property="isRecommend" />
+    <result column="is_banner" jdbcType="BIT" property="isBanner" />
     <association property="library" column="id" javaType="org.ying.book.pojo.Library" select="selectLibraryByBookId"/>
     <association property="reservation" column="id" javaType="org.ying.book.pojo.ReservationView" select="selectReservationByBookId"/>
     <association property="borrowing" column="id" javaType="org.ying.book.pojo.BorrowingView" select="selectBorrowingByBookId"/>
     <collection property="files" column="id" ofType="org.ying.book.pojo.File" select="selectFilesByBookId"/>
-<!--    通过borrowingView聚合出一个状态说明该图书当选是否被借阅-->
   </resultMap>
+  <select id="selectLibraryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
+    select * from public.libraries l join public.library_books lb on l.id = lb.library_id where lb.book_id = #{bookId}
+  </select>
+  <select id="selectFilesByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.FileMapper.BaseResultMap">
+    select * from public.files f join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}
+  </select>
+  <select id="selectBorrowingByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BorrowingViewMapper.BaseResultMap">
+    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'OVERDUE_NOT_RETURNED' and bv.status = 'NOT_RETURNED'
+  </select>
+  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationMapper.BaseResultMap">
+    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'NOT_BORROWABLE' and bv.status = 'BORROWABLE'
+  </select>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -80,7 +93,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, title, author, category_id, published_year, isbn, available, created_at, updated_at, 
-    is_deleted, description, publisher
+    is_deleted, description, publisher, is_recommend, is_banner
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.BookExample" resultMap="BaseResultMap">
     select
@@ -116,11 +129,13 @@
     insert into public.books (title, author, category_id, 
       published_year, isbn, available, 
       created_at, updated_at, is_deleted, 
-      description, publisher)
+      description, publisher, is_recommend, 
+      is_banner)
     values (#{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, 
       #{publishedYear,jdbcType=VARCHAR}, #{isbn,jdbcType=VARCHAR}, #{available,jdbcType=BIT}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
-      #{description,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR})
+      #{description,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR}, #{isRecommend,jdbcType=BIT}, 
+      #{isBanner,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Book" useGeneratedKeys="true">
     insert into public.books
@@ -158,6 +173,12 @@
       <if test="publisher != null">
         publisher,
       </if>
+      <if test="isRecommend != null">
+        is_recommend,
+      </if>
+      <if test="isBanner != null">
+        is_banner,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="title != null">
@@ -192,6 +213,12 @@
       </if>
       <if test="publisher != null">
         #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="isRecommend != null">
+        #{isRecommend,jdbcType=BIT},
+      </if>
+      <if test="isBanner != null">
+        #{isBanner,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -240,6 +267,12 @@
       <if test="row.publisher != null">
         publisher = #{row.publisher,jdbcType=VARCHAR},
       </if>
+      <if test="row.isRecommend != null">
+        is_recommend = #{row.isRecommend,jdbcType=BIT},
+      </if>
+      <if test="row.isBanner != null">
+        is_banner = #{row.isBanner,jdbcType=BIT},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -258,7 +291,9 @@
       updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       is_deleted = #{row.deleted,jdbcType=BIT},
       description = #{row.description,jdbcType=VARCHAR},
-      publisher = #{row.publisher,jdbcType=VARCHAR}
+      publisher = #{row.publisher,jdbcType=VARCHAR},
+      is_recommend = #{row.isRecommend,jdbcType=BIT},
+      is_banner = #{row.isBanner,jdbcType=BIT}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -299,6 +334,12 @@
       <if test="publisher != null">
         publisher = #{publisher,jdbcType=VARCHAR},
       </if>
+      <if test="isRecommend != null">
+        is_recommend = #{isRecommend,jdbcType=BIT},
+      </if>
+      <if test="isBanner != null">
+        is_banner = #{isBanner,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -314,7 +355,9 @@
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       is_deleted = #{deleted,jdbcType=BIT},
       description = #{description,jdbcType=VARCHAR},
-      publisher = #{publisher,jdbcType=VARCHAR}
+      publisher = #{publisher,jdbcType=VARCHAR},
+      is_recommend = #{isRecommend,jdbcType=BIT},
+      is_banner = #{isBanner,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.BookExample" resultMap="BaseResultMap">
@@ -331,20 +374,4 @@
       order by ${orderByClause}
     </if>
   </select>
-
-  <select id="selectLibraryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
-    select * from public.libraries l join public.library_books lb on l.id = lb.library_id where lb.book_id = #{bookId}
-  </select>
-  <select id="selectFilesByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.FileMapper.BaseResultMap">
-    select * from public.files f join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}
-  </select>
-  <select id="selectBorrowingByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BorrowingViewMapper.BaseResultMap">
-    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'OVERDUE_NOT_RETURNED' and bv.status = 'NOT_RETURNED'
-  </select>
-  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationMapper.BaseResultMap">
-    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'NOT_BORROWABLE' and bv.status = 'BORROWABLE'
-  </select>
-<!--  &amp;lt;select id="selectCategoryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookCategoryMapper.BaseResultMap"&amp;gt;-->
-<!--    select * from public.categories c join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}-->
-<!--  &amp;lt;/select&amp;gt;-->
 </mapper>
