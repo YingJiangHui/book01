@@ -8,4 +8,5 @@ import java.util.List;
 @Data
 public class BookQueryDto extends PageReqDto {
     List<Integer> ids;
+    Integer firstLibraryId;
 }

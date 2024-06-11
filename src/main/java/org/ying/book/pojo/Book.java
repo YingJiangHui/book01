@@ -1,8 +1,14 @@
 package org.ying.book.pojo;
 
+import lombok.*;
+
 import java.util.Date;
 import java.util.List;
-
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
     private Integer id;
 

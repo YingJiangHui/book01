@@ -68,14 +68,32 @@ public class BookService {
     public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteria = bookExample.createCriteria();
+        if (bookQueryDto.getFirstLibraryId() != null) {
+            bookExample.setOrderByClause(String.format("CASE \n" +
+                    "        WHEN l.id = %d THEN 0\n" +
+                    "        ELSE 1\n" +
+                    "    END", bookQueryDto.getFirstLibraryId()));
+        }
         if (bookQueryDto.getIds() != null && !bookQueryDto.getIds().isEmpty()) {
             criteria.andIdIn(bookQueryDto.getIds());
         }
+
+
         return this.getBooksWithPaginate(bookExample, bookQueryDto);
     }
 
     public List<Book> getBooksByCategoryId(Integer categoryId) {
+        return this.getBooksByCategoryId(categoryId,null);
+    }
+
+    public List<Book> getBooksByCategoryId(Integer categoryId,Integer firstLibraryId) {
         BookExample bookExample = new BookExample();
+        if (firstLibraryId != null) {
+            bookExample.setOrderByClause(String.format("CASE \n" +
+                    "        WHEN l.id = %d THEN 0\n" +
+                    "        ELSE 1\n" +
+                    "    END", firstLibraryId));
+        }
         bookExample.createCriteria().andCategoryIdEqualTo(categoryId);
         return bookMapper.selectByExample(bookExample).stream().map((book) -> {
             book.setFiles(fileService.filesWithUrl(book.getFiles()));
@@ -107,16 +125,10 @@ public class BookService {
         }).toList();
 //        创建图书类
         Book book = Book.builder()
-                .title(bookDto.getTitle())
-                .author(bookDto.getAuthor())
-                .categoryId(bookDto.getCategoryId())
-                .isbn(bookDto.getIsbn())
-                .available(bookDto.getAvailable())
-                .publisher(bookDto.getPublisher())
-                .publishedYear(bookDto.getPublishedYear())
-                .description(bookDto.getDescription())
-                .files(files)
                 .build();
+
+        BeanUtils.copyProperties(bookDto, book);
+
 
         bookMapper.insertSelective(book);
 //        保存图书文件关联

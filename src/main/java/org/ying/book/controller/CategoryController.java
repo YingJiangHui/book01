@@ -34,8 +34,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    public List<Book> getBooksByCategoryId(@PathVariable Integer id) {
-        return categoryService.getBooksByCategoryId(id);
+    public List<Book> getBooksByCategoryId(@PathVariable("id") Integer id, @RequestParam("firstLibraryId") Integer firstLibraryId) {
+        return categoryService.getBooksByCategoryId(id,firstLibraryId);
     }
 
     @DeleteMapping("/{id}")

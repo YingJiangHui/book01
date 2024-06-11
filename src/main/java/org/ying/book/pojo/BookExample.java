@@ -105,6 +105,11 @@ public class BookExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andLibraryClosedIs(Boolean bool){
+            addCriterion("l.closed =", bool, "library closed");
+            return (Criteria) this;
+        }
+
         public Criteria andIdIsNull() {
             addCriterion("id is null");
             return (Criteria) this;

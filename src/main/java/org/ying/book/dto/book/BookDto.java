@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import org.ying.book.pojo.Book;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
+public class BookDto extends Book {
     private List<MultipartFile> file;
     private Integer id;
 
@@ -35,4 +36,8 @@ public class BookDto {
     private Integer libraryId;
 
     private List<Integer> oldFileIds;
+
+    private Boolean isRecommend;
+
+    private Boolean isBanner;
 }
