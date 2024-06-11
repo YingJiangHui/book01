@@ -95,6 +95,10 @@
     id, title, author, category_id, published_year, isbn, available, created_at, updated_at, 
     is_deleted, description, publisher, is_recommend, is_banner
   </sql>
+  <sql id="Base_Column_List_2">
+    b.id as id, title, author, category_id, published_year, isbn, available, b.created_at as created_at, b.updated_at as updated_at,
+    b.is_deleted as is_deleted, description, publisher, is_recommend, is_banner
+  </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.BookExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -223,7 +227,9 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="org.ying.book.pojo.BookExample" resultType="java.lang.Long">
-    select count(*) from public.books
+    select count(*) from public.books b
+    left join public.library_books lb on lb.book_id = b.id
+    left join public.libraries l on l.id = lb.library_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -365,7 +371,7 @@
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List_2" />
     from public.books b
     left join public.library_books lb on lb.book_id = b.id
     left join public.libraries l on l.id = lb.library_id

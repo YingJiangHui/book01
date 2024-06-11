@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto extends Book {
+public class BookDto {
     private List<MultipartFile> file;
     private Integer id;
 

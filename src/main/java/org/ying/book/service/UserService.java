@@ -79,7 +79,7 @@ public class UserService {
         if(isBlacklist != null){
             criteria.andIsBlacklistEqualTo(isBlacklist);
         }
-        if(email!=null){
+        if(email!=null && !email.isEmpty()){
             criteria.andEmailEqualTo(email.trim());
         }
 

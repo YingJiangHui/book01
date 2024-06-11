@@ -74,11 +74,36 @@ public class BookService {
                     "        ELSE 1\n" +
                     "    END", bookQueryDto.getFirstLibraryId()));
         }
+
+        if (bookQueryDto.getIsBanner()!=null){
+            criteria.andIsBannerEqualTo(bookQueryDto.getIsBanner());
+        }
+
+        if(bookQueryDto.getIsRecommend()!=null){
+            criteria.andIsRecommendEqualTo(bookQueryDto.getIsRecommend());
+        }
+
         if (bookQueryDto.getIds() != null && !bookQueryDto.getIds().isEmpty()) {
             criteria.andIdIn(bookQueryDto.getIds());
         }
-
-
+        if (bookQueryDto.getCategoryId() != null) {
+            criteria.andCategoryIdEqualTo(bookQueryDto.getCategoryId());
+        }
+        if (bookQueryDto.getAvailable() != null) {
+            criteria.andAvailableEqualTo(bookQueryDto.getAvailable());
+        }
+        if (bookQueryDto.getAuthor() != null&& !bookQueryDto.getAuthor().isEmpty()) {
+            criteria.andAuthorLike("%"+bookQueryDto.getAuthor()+"%");
+        }
+        if (bookQueryDto.getPublisher() != null&& !bookQueryDto.getPublisher().isEmpty()) {
+            criteria.andPublisherLike("%"+bookQueryDto.getPublisher()+"%");
+        }
+        if (bookQueryDto.getIsbn() != null&& !bookQueryDto.getIsbn().isEmpty()) {
+            criteria.andIsbnEqualTo(bookQueryDto.getIsbn());
+        }
+        if(bookQueryDto.getPublishedYear()!=null && !bookQueryDto.getPublishedYear().isEmpty()){
+            criteria.andPublishedYearLike("%"+bookQueryDto.getPublishedYear()+"%");
+        }
         return this.getBooksWithPaginate(bookExample, bookQueryDto);
     }
 

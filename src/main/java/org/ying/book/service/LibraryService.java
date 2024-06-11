@@ -54,18 +54,19 @@ public class LibraryService {
 
     public PageResultDto<Library> getLibraries(LibraryDto libraryDto) {
         LibraryExample example = new LibraryExample();
+        example.setOrderByClause("created_at desc");
         LibraryExample.Criteria criteria = example.createCriteria();
         if (libraryDto.getId() != null) {
             criteria.andIdEqualTo(libraryDto.getId());
         }
-        if (libraryDto.getName() != null) {
-            criteria.andNameEqualTo(libraryDto.getName());
-        }
-        if (libraryDto.getAddress() != null) {
+        if (libraryDto.getAddress() != null && !libraryDto.getAddress().isEmpty()) {
             criteria.andAddressLike("%"+libraryDto.getAddress()+"%");
         }
-        if (libraryDto.getName() != null) {
-            criteria.andNameEqualTo(libraryDto.getName());
+        if (libraryDto.getName() != null && !libraryDto.getName().isEmpty()) {
+            criteria.andNameLike("%"+libraryDto.getName().trim()+"%");
+        }
+        if (libraryDto.getClosed() != null ) {
+            criteria.andClosedEqualTo(libraryDto.getClosed());
         }
         criteria.andDeletedNotEqualTo(true);
 
@@ -109,6 +110,6 @@ public class LibraryService {
         criteria.andIdIn(bookIdList);
         bookExample.setOrderByClause("created_at desc");
 
-        return bookService.getBooksWithPaginate(bookExample, booksInLibraryDto);
+        return bookService.getBooksPagination(booksInLibraryDto);
     }
 }
