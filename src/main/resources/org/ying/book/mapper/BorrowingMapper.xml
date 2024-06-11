@@ -279,4 +279,36 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <resultMap id="RankBaseResultMap" type="org.ying.book.pojo.HotRankStatisticsEntity">
+    <result column="item_id" jdbcType="INTEGER" property="id" />
+    <result column="item_count" jdbcType="INTEGER" property="count" />
+    <result column="item_name" jdbcType="INTEGER" property="name" />
+  </resultMap>
+
+  <select id="selectHotBorrowedBooks" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
+    select book_id as item_id, b.title as item_name, count(book_id) as item_count from public.borrowings join public.books b
+    <if test="_parameter != null">
+
+      <include refid="Example_Where_Clause" />
+    </if>
+                                                     group by book_id order by item_count desc
+  </select>
+
+  <select id="selectHotBorrowedCategories" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
+    select bc.id as item_id, bc.category_name as item_name,count(bc.id) as item_count from public.borrowings bw join
+    public.books b on bw.book_id = b.id join public.book_categories bc on b.category_id = bc.id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+    group by bc.id order by item_count desc
+  </select>
+
+  <select id="selectHotBorrowedLibraries" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
+    select  l.id as item_id, l.name as item_name,count(l.id) as item_count from borrowings bw join books b on bw.book_id = b.id join library_books lb on b.id = lb.book_id join libraries l on lb.library_id = l.id
+      <if test="_parameter != null">
+        <include refid="Example_Where_Clause"/>
+      </if>
+    group by l.id order by item_count desc
+  </select>
 </mapper>

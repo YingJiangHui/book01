@@ -21,6 +21,7 @@ import org.ying.book.utils.PaginationHelper;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -142,10 +143,18 @@ public class BookService {
             libraryBookMapper.deleteByExample(libraryBookExample);
             libraryBookMapper.insertSelective(LibraryBook.builder().libraryId(bookDto.getLibraryId()).bookId(book.getId()).build());
         }
+
+//        删除所有未匹配的旧file文件
+        BookFileExample bookFileExample = new BookFileExample();
+        BookFileExample.Criteria criteria = bookFileExample.createCriteria();
+        criteria.andBookIdEqualTo(Long.valueOf(id));
+        Optional.ofNullable(bookDto.getOldFileIds()).ifPresent(ids -> {
+            criteria.andFileIdNotIn(ids.stream().map(Long::valueOf).toList());
+        });
+        bookFileMapper.deleteByExample(bookFileExample);
+
+
         if (bookDto.getFile() != null) {
-            BookFileExample bookFileExample = new BookFileExample();
-            bookFileExample.createCriteria().andBookIdEqualTo(Long.valueOf(id));
-            bookFileMapper.deleteByExample(bookFileExample);
             List<File> files = bookDto.getFile().stream().map(file -> {
                 try {
                     return fileService.uploadFile(file);

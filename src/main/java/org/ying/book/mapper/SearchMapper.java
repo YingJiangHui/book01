@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import org.ying.book.pojo.HotRankStatisticsEntity;
 import org.ying.book.pojo.Search;
 import org.ying.book.pojo.SearchExample;
 
@@ -36,4 +37,5 @@ public interface SearchMapper {
     List<Search> selectByUserIdAndTargetAndKeyword(SearchExample example);
 
     List<Search> selectByUserIdAndTargetAndKeywordWithRowbounds(SearchExample example, RowBounds rowBounds);
+    List<HotRankStatisticsEntity> selectHotSearchText(SearchExample example, RowBounds rowBounds);
 }

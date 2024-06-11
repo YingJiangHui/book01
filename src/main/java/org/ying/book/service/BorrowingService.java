@@ -12,6 +12,8 @@ import org.ying.book.dto.borrowing.BorrowingDto;
 import org.ying.book.dto.borrowing.BorrowingQueryDto;
 import org.ying.book.dto.borrowing.RenewDto;
 import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.dto.statistics.IStatisticsQueryDto;
+import org.ying.book.dto.statistics.StatisticsQueryDto;
 import org.ying.book.enums.ActionSource;
 import org.ying.book.enums.BorrowingStatusEnum;
 import org.ying.book.enums.ReservationStatusEnum;
@@ -25,6 +27,7 @@ import org.ying.book.utils.PaginationHelper;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BorrowingService {

@@ -33,4 +33,6 @@ public class BookDto {
     private String description;
 
     private Integer libraryId;
+
+    private List<Integer> oldFileIds;
 }

@@ -3,8 +3,7 @@ package org.ying.book.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
-import org.ying.book.pojo.Borrowing;
-import org.ying.book.pojo.BorrowingExample;
+import org.ying.book.pojo.*;
 
 public interface BorrowingMapper {
     long countByExample(BorrowingExample example);
@@ -30,4 +29,8 @@ public interface BorrowingMapper {
     int updateByPrimaryKeySelective(Borrowing row);
 
     int updateByPrimaryKey(Borrowing row);
+
+    List<HotRankStatisticsEntity> selectHotBorrowedBooks(BorrowingExample example, RowBounds rowBounds);
+    List<HotRankStatisticsEntity> selectHotBorrowedCategories(BorrowingExample example, RowBounds rowBounds);
+    List<HotRankStatisticsEntity> selectHotBorrowedLibraries(BorrowingExample example, RowBounds rowBounds);
 }
