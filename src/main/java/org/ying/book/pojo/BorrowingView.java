@@ -27,6 +27,8 @@ public class BorrowingView {
     private String status;
 
     private Book book;
+
+    private User user;
 //    最迟可能归还的时间
     private Date latestReturnAt;
 }

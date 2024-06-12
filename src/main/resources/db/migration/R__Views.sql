@@ -31,22 +31,26 @@ FROM reservations r;
 /*创建一个基于borrowings表的 borrowing_view视图*/
 DROP VIEW IF EXISTS borrowings_view;
 CREATE VIEW borrowings_view AS
-SELECT b.id,
-       b.user_id,
-       b.book_id,
-       b.borrowed_at,
-       b.returned_at,
-       b.expected_return_at,
-       b.created_at,
-       b.updated_at,
-       b.is_deleted,
+SELECT bw.id,
+       bw.user_id,
+       bw.book_id,
+       bw.borrowed_at,
+       bw.returned_at,
+       bw.expected_return_at,
+       bw.created_at,
+       bw.updated_at,
+       bw.is_deleted,
+       l.id as library_id,
+       b.title as title,
        CASE
 --           如果归还时间大于预期归还时间，则为逾期已归还
-           WHEN b.returned_at IS NOT NULL AND b.expected_return_at < b.returned_at THEN 'OVERDUE_RETURNED'
-           WHEN b.returned_at IS NOT NULL THEN 'RETURNED'
+           WHEN bw.returned_at IS NOT NULL AND bw.expected_return_at < bw.returned_at THEN 'OVERDUE_RETURNED'
+           WHEN bw.returned_at IS NOT NULL THEN 'RETURNED'
 --            如果当前时间大于预期归还时间，则状态为逾期未归还
-           WHEN b.expected_return_at < now() THEN 'OVERDUE_NOT_RETURNED'
-           WHEN b.expected_return_at >= now() THEN 'NOT_RETURNED'
+           WHEN bw.expected_return_at < now() THEN 'OVERDUE_NOT_RETURNED'
+           WHEN bw.expected_return_at >= now() THEN 'NOT_RETURNED'
            END
-AS status
-FROM borrowings b;
+           AS status
+FROM borrowings bw left join public.books b on b.id = bw.book_id
+                   left join public.library_books lb on lb.book_id =  b.id
+                   left join public.libraries l on l.id = lb.library_id;

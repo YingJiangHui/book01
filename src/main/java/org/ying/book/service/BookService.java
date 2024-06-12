@@ -68,6 +68,10 @@ public class BookService {
     public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
         BookExample bookExample = new BookExample();
         BookExample.Criteria criteria = bookExample.createCriteria();
+
+        if(bookQueryDto.getId() != null){
+            criteria.andIdEqualTo(bookQueryDto.getId());
+        }
         if (bookQueryDto.getFirstLibraryId() != null) {
             bookExample.setOrderByClause(String.format("CASE \n" +
                     "        WHEN l.id = %d THEN 0\n" +

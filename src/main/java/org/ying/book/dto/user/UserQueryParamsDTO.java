@@ -16,4 +16,5 @@ public class UserQueryParamsDTO extends PageReqDto {
     List<RoleEnum> roleNames;
     List<Integer> libraryIds;
     Boolean isBlacklist;
+    Integer id;
 }

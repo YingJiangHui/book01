@@ -201,6 +201,18 @@ public class BorrowingService {
             criteria.andUserIdEqualTo(borrowingQueryDto.getUserId());
         }
 
+        if(borrowingQueryDto.getTitle() != null){
+            criteria.andTitleLike("%" + borrowingQueryDto.getTitle() + "%");
+        }
+
+        if(borrowingQueryDto.getBookId() != null){
+            criteria.andBookIdEqualTo(borrowingQueryDto.getBookId());
+        }
+
+        if (borrowingQueryDto.getLibraryId() != null) {
+            criteria.andLibraryIdEqualTo(borrowingQueryDto.getLibraryId());
+        }
+
         if (borrowingQueryDto.getStatus() != null && !borrowingQueryDto.getStatus().isEmpty()) {
             criteria.andStatusIn(borrowingQueryDto.getStatus().stream().map(Enum::name).toList());
         }

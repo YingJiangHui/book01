@@ -12,4 +12,7 @@ import java.util.List;
 public class BorrowingQueryDto extends PageReqDto {
     List<BorrowingStatusEnum> status;
     Integer userId;
+    Integer libraryId;
+    Integer bookId;
+    String title;
 }

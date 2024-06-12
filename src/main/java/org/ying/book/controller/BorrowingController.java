@@ -59,4 +59,9 @@ public class BorrowingController {
         }
         return borrowingService.getBorrowingsPaginate(borrowingQueryDto);
     }
+
+    @GetMapping("/all")
+    public PageResultDto<BorrowingView> getBorrowingsAll(@ModelAttribute BorrowingQueryDto borrowingQueryDto) {
+        return borrowingService.getBorrowingsPaginate(borrowingQueryDto);
+    }
 }

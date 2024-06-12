@@ -28,8 +28,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(authInterceptor).addPathPatterns("/search-history").addPathPatterns("/books/borrowing").addPathPatterns("/book-shelf").addPathPatterns("/books/reservation").addPathPatterns("/users/**");
         registry.addInterceptor(registerUserContextInterceptor);
-        registry.addInterceptor(systemAdminInterceptor).addPathPatterns("/users");
+//        registry.addInterceptor(systemAdminInterceptor).addPathPatterns("/users");
 //        registry.addInterceptor(libraryAdminInterceptor).addPathPatterns("/books");
-//        registry.addInterceptor(readerInterceptor).addPathPatterns("/books/**");
+//        registry.addInterceptor(readerInterceptor).excludePathPatterns("/users");
     }
 }

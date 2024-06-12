@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ying.book.Context.UserContext;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
+import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.dto.user.UserUpdateDto;
 import org.ying.book.enums.RoleEnum;
@@ -24,10 +26,7 @@ import org.ying.book.pojo.UserRole;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.PaginationHelper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -70,6 +69,9 @@ public class UserService {
         List<RoleEnum> roleNames = userQueryParamsDTO.getRoleNames();
         String email = userQueryParamsDTO.getEmail();
         Boolean isBlacklist = userQueryParamsDTO.getIsBlacklist();
+        if(userQueryParamsDTO.getId()!=null){
+            criteria.andIdEqualTo(userQueryParamsDTO.getId());
+        }
         if(libraryIds!=null && !libraryIds.isEmpty()){
             criteria.andLibraryIdIn(libraryIds);
         }
@@ -174,4 +176,5 @@ public class UserService {
         libraryService.userRelativeLibraries(user.getId(), userUpdateDto.getLibraryIds());
         return user;
     }
+
 }

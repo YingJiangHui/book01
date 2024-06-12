@@ -117,7 +117,7 @@ public class UserExample {
         }
 
         public Criteria andIdEqualTo(Integer value) {
-            addCriterion("id =", value, "id");
+            addCriterion("u.id =", value, "id");
             return (Criteria) this;
         }
 

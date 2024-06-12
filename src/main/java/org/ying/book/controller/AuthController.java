@@ -86,7 +86,7 @@ public class AuthController {
                 .isBlacklist(userDetails.getIsBlacklist())
                 .defaultTimes(userDetails.getDefaultTimes())
                 .createdAt(userDetails.getCreatedAt())
-                .id(userDetails.getId()).build();
+                .id(userDetails.getId()).managedLibraries(userDetails.getLibraries()).build();
         Object JWT = jwtUtil.createJWT("user_auth", userJwtDTO);
         return Result.builder().build().success("登录成功", JWT);
     }

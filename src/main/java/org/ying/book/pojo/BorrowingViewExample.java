@@ -165,6 +165,11 @@ public class BorrowingViewExample {
             return (Criteria) this;
         }
 
+        public Criteria andTitleLike(String value) {
+            addCriterion("title like", value, "book title");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;
@@ -177,6 +182,11 @@ public class BorrowingViewExample {
 
         public Criteria andUserIdEqualTo(Integer value) {
             addCriterion("user_id =", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLibraryIdEqualTo(Integer value) {
+            addCriterion("library_id =", value, "library id");
             return (Criteria) this;
         }
 
