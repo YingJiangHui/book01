@@ -105,6 +105,16 @@ public class ReservationViewExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andTitleLike(String value) {
+            addCriterion("title like", value, "book title");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailEqualTo(String value) {
+            addCriterion("email =", value, "book title");
+            return (Criteria) this;
+        }
+
         public Criteria andIdIsNull() {
             addCriterion("id is null");
             return (Criteria) this;

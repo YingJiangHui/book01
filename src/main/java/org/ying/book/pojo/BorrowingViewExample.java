@@ -170,6 +170,11 @@ public class BorrowingViewExample {
             return (Criteria) this;
         }
 
+        public Criteria andEmailEqualTo(String value) {
+            addCriterion("email =", value, "user email");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;

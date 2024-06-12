@@ -24,7 +24,10 @@ SELECT r.id,
         WHEN r.borrowed_at <= now() THEN 'BORROWABLE'
 END
 AS status
-FROM reservations r;
+FROM reservations r left join public.books b on b.id = r.book_id
+                   left join public.library_books lb on lb.book_id =  b.id
+                   left join public.libraries l on l.id = lb.library_id
+                    left join public.users u on u.id = r.user_id;
 
 
 
@@ -53,4 +56,5 @@ SELECT bw.id,
            AS status
 FROM borrowings bw left join public.books b on b.id = bw.book_id
                    left join public.library_books lb on lb.book_id =  b.id
-                   left join public.libraries l on l.id = lb.library_id;
+                   left join public.libraries l on l.id = lb.library_id
+                   left join public.users u on u.id = bw.user_id;

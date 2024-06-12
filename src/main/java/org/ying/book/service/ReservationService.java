@@ -4,8 +4,10 @@ import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.reservation.ReservationDto;
 import org.ying.book.dto.reservation.ReservationQueryDto;
+import org.ying.book.dto.reservation.ReservationQueryWithPageDto;
 import org.ying.book.enums.ActionSource;
 import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.exception.CustomException;
@@ -15,6 +17,7 @@ import org.ying.book.pojo.Reservation;
 import org.ying.book.pojo.ReservationExample;
 import org.ying.book.pojo.ReservationView;
 import org.ying.book.pojo.ReservationViewExample;
+import org.ying.book.utils.PaginationHelper;
 
 import java.util.*;
 
@@ -146,6 +149,31 @@ public class ReservationService {
             item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
             return item;
         }).sorted(Comparator.comparing((ReservationView rv) -> statusOrder.get(rv.getStatus()))).toList();
+    }
+
+    public PageResultDto<ReservationView> getReservationPagination(ReservationQueryWithPageDto reservationQueryDto){
+        ReservationViewExample reservationExample = new ReservationViewExample();
+//        按照创建日期倒序
+        reservationExample.setOrderByClause("created_at desc");
+//        将status == BORROWABLE的图书顺序提前
+//        reservationExample.setOrderByClause("status desc");
+
+        ReservationViewExample.Criteria criteria = reservationExample.createCriteria();
+        if(reservationQueryDto.getTitle() != null){
+            criteria.andTitleLike("%"+reservationQueryDto.getTitle()+"%");
+        }
+        if(reservationQueryDto.getEmail() != null){
+            criteria.andEmailEqualTo(reservationQueryDto.getEmail());
+        }
+        if(reservationQueryDto.getId() != null){
+            criteria.andIdEqualTo(reservationQueryDto.getId());
+        }
+        if(reservationQueryDto.getBookId() != null){
+            criteria.andBookIdEqualTo(reservationQueryDto.getBookId());
+        }
+
+
+        return PaginationHelper.paginate(reservationQueryDto, (rowBounds, reqDto) -> reservationViewMapper.selectByExampleWithRowbounds(reservationExample, rowBounds), reservationViewMapper.countByExample(reservationExample));
     }
 
     public List<ReservationView> getCurrentReservedBook(Integer bookId){

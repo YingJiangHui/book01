@@ -4,8 +4,10 @@ import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
+import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.reservation.ReservationDto;
 import org.ying.book.dto.reservation.ReservationQueryDto;
+import org.ying.book.dto.reservation.ReservationQueryWithPageDto;
 import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
@@ -31,7 +33,7 @@ public class ReservationController {
     }
 
     @PostMapping("/cancel")
-    public List<Reservation> cancelReservation(List<Integer> ids) {
+    public List<Reservation> cancelReservation(@RequestBody List<Integer> ids) {
         return reservationService.cancelReservations(ids);
     }
 
@@ -43,5 +45,15 @@ public class ReservationController {
             reservationQueryDto.setUserId(userJwtDto.getId());
         }
         return reservationService.getReservations(reservationQueryDto);
+    }
+
+    @GetMapping("/all")
+    public PageResultDto<ReservationView> getReservationAll(@ModelAttribute ReservationQueryWithPageDto reservationQueryDto) {
+        UserJwtDto userJwtDto = UserContext.getCurrentUser();
+//        如果是用户进行查询
+        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
+            reservationQueryDto.setUserId(userJwtDto.getId());
+        }
+        return reservationService.getReservationPagination(reservationQueryDto);
     }
 }

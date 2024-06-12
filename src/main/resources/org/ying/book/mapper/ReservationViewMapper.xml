@@ -13,7 +13,12 @@
     <result column="borrowing_id" jdbcType="INTEGER" property="borrowingId" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <association property="book" column="book_id" javaType="org.ying.book.pojo.Book" select="selectBookByBookId"/>
+    <association property="user" column="user_id" javaType="org.ying.book.pojo.User" select="selectUserByUserId"/>
+
   </resultMap>
+  <select id="selectUserByUserId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.UserMapper.BaseResultMap">
+    select * from public.users where id = #{userId}
+  </select>
   <select id="selectBookByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BookMapper.BaseResultMap">
     select * from public.books where id = #{bookId}
   </select>

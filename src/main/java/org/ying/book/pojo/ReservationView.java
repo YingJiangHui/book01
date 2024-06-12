@@ -27,4 +27,6 @@ public class ReservationView {
     private String status;
 
     private Book book;
+
+    private User user;
 }

@@ -15,4 +15,5 @@ public class BorrowingQueryDto extends PageReqDto {
     Integer libraryId;
     Integer bookId;
     String title;
+    String email;
 }

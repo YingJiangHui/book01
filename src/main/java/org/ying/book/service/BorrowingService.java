@@ -205,6 +205,10 @@ public class BorrowingService {
             criteria.andTitleLike("%" + borrowingQueryDto.getTitle() + "%");
         }
 
+        if(borrowingQueryDto.getEmail() != null){
+            criteria.andEmailEqualTo("%" + borrowingQueryDto.getEmail() + "%");
+        }
+
         if(borrowingQueryDto.getBookId() != null){
             criteria.andBookIdEqualTo(borrowingQueryDto.getBookId());
         }
