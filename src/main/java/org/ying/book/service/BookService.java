@@ -65,10 +65,7 @@ public class BookService {
         }).toList();
     }
 
-    public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
-        BookExample bookExample = new BookExample();
-        BookExample.Criteria criteria = bookExample.createCriteria();
-
+    public void withCriteria(BookExample bookExample,BookExample.Criteria criteria,BookQueryDto bookQueryDto){
         if(bookQueryDto.getId() != null){
             criteria.andIdEqualTo(bookQueryDto.getId());
         }
@@ -108,6 +105,12 @@ public class BookService {
         if(bookQueryDto.getPublishedYear()!=null && !bookQueryDto.getPublishedYear().isEmpty()){
             criteria.andPublishedYearLike("%"+bookQueryDto.getPublishedYear()+"%");
         }
+    }
+
+    public PageResultDto<Book> getBooksPagination(BookQueryDto bookQueryDto) {
+        BookExample bookExample = new BookExample();
+        BookExample.Criteria criteria = bookExample.createCriteria();
+        withCriteria(bookExample,criteria,bookQueryDto);
         return this.getBooksWithPaginate(bookExample, bookQueryDto);
     }
 

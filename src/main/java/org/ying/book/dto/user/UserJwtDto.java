@@ -3,7 +3,6 @@ package org.ying.book.dto.user;
 import lombok.Builder;
 import lombok.Data;
 import org.ying.book.enums.RoleEnum;
-import org.ying.book.pojo.Library;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +16,7 @@ public class UserJwtDto {
     Integer defaultTimes;
     List<RoleEnum> roles;
     private Date createdAt;
-    List<Integer> managedLibraries;
+    List<Integer> managedLibraryIds;
 
 
     public boolean isSystemAdmin() {

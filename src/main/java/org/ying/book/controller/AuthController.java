@@ -91,7 +91,7 @@ public class AuthController {
                 .defaultTimes(userDetails.getDefaultTimes())
                 .createdAt(userDetails.getCreatedAt())
                 .id(userDetails.getId())
-                .managedLibraries(userDetails.getLibraries().stream().map(item->item.getId()).toList())
+                .managedLibraryIds(userDetails.getLibraries().stream().map(item->item.getId()).toList())
                 .build();
         Object JWT = jwtUtil.createJWT("user_auth", userJwtDTO);
         return Result.builder().build().success("登录成功", JWT);

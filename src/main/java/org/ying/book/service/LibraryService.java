@@ -109,7 +109,7 @@ public class LibraryService {
         BookExample.Criteria criteria = bookExample.createCriteria();
         criteria.andIdIn(bookIdList);
         bookExample.setOrderByClause("created_at desc");
-
-        return bookService.getBooksPagination(booksInLibraryDto);
+        bookService.withCriteria(bookExample,criteria,booksInLibraryDto);
+        return bookService.getBooksWithPaginate(bookExample,booksInLibraryDto);
     }
 }

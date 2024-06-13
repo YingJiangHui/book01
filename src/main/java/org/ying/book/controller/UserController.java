@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.common.PageResultDto;
+import org.ying.book.dto.user.ContextUserDto;
 import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserQueryParamsDTO;
 import org.ying.book.dto.user.UserUpdateDto;
@@ -14,10 +15,12 @@ import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.User;
 import org.ying.book.service.AuthService;
+import org.ying.book.service.LibraryService;
 import org.ying.book.service.UserService;
 import org.ying.book.utils.JwtUtil;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -34,6 +37,9 @@ public class UserController {
     @Resource
     AuthService authService;
 
+    @Resource
+    private LibraryService libraryService;
+
     //    @RequestMapping(method = RequestMethod.GET)
 //    public User getUsers(@RequestParam("id") Integer id) throws Exception {
 ////        throw new Exception("错误");
@@ -42,8 +48,13 @@ public class UserController {
 //        return new User();
 //    }
     @GetMapping("/current")
-    public UserJwtDto getUserInfo() throws Exception {
-        return UserContext.getCurrentUser();
+    public ContextUserDto getUserInfo() {
+        UserJwtDto user = UserContext.getCurrentUser();
+        ContextUserDto contextUserDto = new ContextUserDto(user.getId(), user.getEmail(), user.isBlacklist(), user.getDefaultTimes(), user.getRoles(), user.getCreatedAt(), user.getManagedLibraryIds());
+        Optional.ofNullable(user.getManagedLibraryIds()).ifPresent(ids -> {
+            contextUserDto.setManagedLibraries(ids.stream().map(id -> libraryService.getLibraryById(id)).toList());
+        });
+        return contextUserDto;
     }
 
     //获取所有用户，支持分页
@@ -61,10 +72,10 @@ public class UserController {
             userQueryParamsDTO.getLibraryIds().forEach(id -> {
                 set.add(id);
             });
-            user.getManagedLibraries().forEach(id -> {
+            user.getManagedLibraryIds().forEach(id -> {
                 set.add(id);
             });
-            if (set.size() != user.getManagedLibraries().size()) {
+            if (set.size() != user.getManagedLibraryIds().size()) {
                 throw new CustomException("无权限");
             }
         }
