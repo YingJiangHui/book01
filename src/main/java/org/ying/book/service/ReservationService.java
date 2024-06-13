@@ -1,6 +1,7 @@
 package org.ying.book.service;
 
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,6 +86,7 @@ public class ReservationService {
         ReservationExample reservationExample = new ReservationExample();
         ReservationExample.Criteria criteria = reservationExample.createCriteria();
         criteria.andIdIn(ids);
+        criteria.andDeletedNotEqualTo(true);
         List<Reservation> reservations = reservationMapper.selectByExample(reservationExample);
         return reservations;
     }
@@ -98,15 +100,22 @@ public class ReservationService {
         if (ids.size() != reservations.size()) {
             throw new CustomException("部分书籍未被预约");
         }
+
         reservations.forEach((reservation) -> {
-            reservation.setStatus(ReservationStatusEnum.CANCELLED);
-            reservationMapper.updateByPrimaryKey(reservation);
+            if (reservation.getBorrowingId() != null) {
+                throw new CustomException("书籍已被借阅");
+            }
+        });
+        reservations.forEach((reservationView) -> {
+            Reservation reservation = Reservation.builder().id(reservationView.getId()).deleted(true).build();
+            reservationMapper.updateByPrimaryKeySelective(reservation);
         });
         return reservations;
     }
 
     @Transactional
-    public Reservation finishReservations(Reservation reservation) {
+    public Reservation finishReservations(Reservation reservation, Integer borrowingId) {
+        reservation.setBorrowingId(borrowingId);
         reservationMapper.updateByPrimaryKeySelective(reservation);
         return reservation;
 //        List<Reservation> reservations = getReservationsByIds(ids);
@@ -162,8 +171,8 @@ public class ReservationService {
         if(reservationQueryDto.getTitle() != null){
             criteria.andTitleLike("%"+reservationQueryDto.getTitle()+"%");
         }
-        if(reservationQueryDto.getEmail() != null){
-            criteria.andEmailEqualTo(reservationQueryDto.getEmail());
+        if(reservationQueryDto.getEmail() != null && !reservationQueryDto.getEmail().isEmpty()){
+            criteria.andEmailEqualTo(reservationQueryDto.getEmail().trim());
         }
         if(reservationQueryDto.getId() != null){
             criteria.andIdEqualTo(reservationQueryDto.getId());
@@ -171,7 +180,9 @@ public class ReservationService {
         if(reservationQueryDto.getBookId() != null){
             criteria.andBookIdEqualTo(reservationQueryDto.getBookId());
         }
-
+        if(reservationQueryDto.getStatus() != null && !reservationQueryDto.getStatus().isEmpty()){
+            criteria.andStatusEqualTo(reservationQueryDto.getStatus());
+        }
 
         return PaginationHelper.paginate(reservationQueryDto, (rowBounds, reqDto) -> reservationViewMapper.selectByExampleWithRowbounds(reservationExample, rowBounds), reservationViewMapper.countByExample(reservationExample));
     }

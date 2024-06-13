@@ -49,11 +49,6 @@ public class ReservationController {
 
     @GetMapping("/all")
     public PageResultDto<ReservationView> getReservationAll(@ModelAttribute ReservationQueryWithPageDto reservationQueryDto) {
-        UserJwtDto userJwtDto = UserContext.getCurrentUser();
-//        如果是用户进行查询
-        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
-            reservationQueryDto.setUserId(userJwtDto.getId());
-        }
         return reservationService.getReservationPagination(reservationQueryDto);
     }
 }

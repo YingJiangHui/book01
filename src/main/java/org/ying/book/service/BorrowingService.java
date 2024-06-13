@@ -2,6 +2,8 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import org.apache.ibatis.plugin.Intercepts;
+import org.apache.logging.log4j.util.PropertiesUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -172,12 +174,16 @@ public class BorrowingService {
     public void borrowFromReservations(List<Integer> reservationIds) {
         List<Reservation> reservations = reservationService.getReservationsByIds(reservationIds);
         if (reservations.size() != reservationIds.size()) {
-            throw new CustomException("部分书籍未被预约");
+            throw new CustomException("部分书籍未被预约，或已取消");
         }
-        reservations.stream().map(reservation -> {
+
+        reservations.forEach((reservation) -> {
             if (reservation.getBorrowingId() != null) {
                 throw new CustomException("书籍已被借阅");
             }
+        });
+
+        reservations.stream().forEach(reservation -> {
             Borrowing borrowing = Borrowing.builder()
                     .bookId(reservation.getBookId())
                     .userId(reservation.getUserId())
@@ -185,9 +191,8 @@ public class BorrowingService {
                     .expectedReturnAt(reservation.getReturnedAt())
                     .build();
             borrowingMapper.insertSelective(borrowing);
-            reservation.setBorrowingId(borrowing.getId());
-            return reservation;
-        }).map((reservation) -> reservationService.finishReservations(reservation)).toList();
+            reservationService.finishReservations(reservation, borrowing.getId());
+        });
     }
 
     private Integer getMaxDays() {
@@ -205,8 +210,8 @@ public class BorrowingService {
             criteria.andTitleLike("%" + borrowingQueryDto.getTitle() + "%");
         }
 
-        if(borrowingQueryDto.getEmail() != null){
-            criteria.andEmailEqualTo("%" + borrowingQueryDto.getEmail() + "%");
+        if(borrowingQueryDto.getEmail() != null && !borrowingQueryDto.getEmail().isEmpty()){
+            criteria.andEmailEqualTo(borrowingQueryDto.getEmail().trim());
         }
 
         if(borrowingQueryDto.getBookId() != null){

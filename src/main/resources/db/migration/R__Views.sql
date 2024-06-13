@@ -10,6 +10,8 @@ SELECT r.id,
        r.updated_at,
        r.is_deleted,
        r.borrowing_id,
+       b.title as title,
+       u.email as email,
        CASE
            WHEN r.is_deleted THEN 'CANCELED'
            WHEN r.borrowing_id IS NOT NULL THEN 'FULFILLED'
@@ -45,6 +47,7 @@ SELECT bw.id,
        bw.is_deleted,
        l.id as library_id,
        b.title as title,
+       u.email as email,
        CASE
 --           如果归还时间大于预期归还时间，则为逾期已归还
            WHEN bw.returned_at IS NOT NULL AND bw.expected_return_at < bw.returned_at THEN 'OVERDUE_RETURNED'
