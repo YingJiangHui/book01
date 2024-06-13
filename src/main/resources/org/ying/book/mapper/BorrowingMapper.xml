@@ -287,12 +287,12 @@
   </resultMap>
 
   <select id="selectHotBorrowedBooks" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
-    select book_id as item_id, b.title as item_name, count(book_id) as item_count from public.borrowings join public.books b
+    select b.id as item_id, b.title as item_name, count(book_id) as item_count from public.borrowings join public.books b on book_id = b.id
     <if test="_parameter != null">
 
       <include refid="Example_Where_Clause" />
     </if>
-                                                     group by book_id order by item_count desc
+    group by b.id order by item_count desc
   </select>
 
   <select id="selectHotBorrowedCategories" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
@@ -305,7 +305,7 @@
   </select>
 
   <select id="selectHotBorrowedLibraries" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
-    select  l.id as item_id, l.name as item_name,count(l.id) as item_count from borrowings bw join books b on bw.book_id = b.id join library_books lb on b.id = lb.book_id join libraries l on lb.library_id = l.id
+    select  l.id as item_id, l.name as item_name,count(l.id) as item_count from borrowings bw left join books b on bw.book_id = b.id left  join library_books lb on b.id = lb.book_id left join libraries l on lb.library_id = l.id
       <if test="_parameter != null">
         <include refid="Example_Where_Clause"/>
       </if>

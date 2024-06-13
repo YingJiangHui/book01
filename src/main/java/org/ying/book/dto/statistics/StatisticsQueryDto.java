@@ -9,6 +9,6 @@ import java.util.Date;
 @Data
 @Builder
 public class StatisticsQueryDto extends PageReqDto implements IStatisticsQueryDto{
-    Date StartTime = null;
-    Date EndTime= null;
+    Date startTime = null;
+    Date endTime = null;
 }

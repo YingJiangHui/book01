@@ -281,7 +281,7 @@
   </select>
 
   <select id="selectHotSearchText" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="org.ying.book.mapper.BorrowingMapper.RankBaseResultMap">
-    select l.keyword as name,COUNT(l.keyword) as item_count from public.search l
+    select l.keyword as item_name,COUNT(l.keyword) as item_count from public.search l
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>

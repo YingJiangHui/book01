@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.ying.book.dto.statistics.StatisticsQueryDto;
-import org.ying.book.pojo.BorrowingHot;
-import org.ying.book.pojo.CategoryHot;
 import org.ying.book.pojo.HotRankStatisticsEntity;
 
 import java.util.Date;
@@ -26,19 +24,19 @@ public class StatisticsServiceTests {
 
     @Test
     public void testHotBorrowedCategory() {
-        List<HotRankStatisticsEntity> categoryHots = statisticsService.getHotBorrowedCategories(StatisticsQueryDto.builder().StartTime(new Date()).EndTime(new Date()).build());
+        List<HotRankStatisticsEntity> categoryHots = statisticsService.getHotBorrowedCategories(StatisticsQueryDto.builder().startTime(new Date()).endTime(new Date()).build());
         log.info(String.valueOf(categoryHots.size()));
     }
 
     @Test
     public void testHotBorrowedLibraries() {
-        List<HotRankStatisticsEntity> libraryHots = statisticsService.getHotBorrowedLibraries(StatisticsQueryDto.builder().StartTime(new Date()).EndTime(new Date()).build());
+        List<HotRankStatisticsEntity> libraryHots = statisticsService.getHotBorrowedLibraries(StatisticsQueryDto.builder().startTime(new Date()).endTime(new Date()).build());
         log.info(String.valueOf(libraryHots.size()));
     }
 
     @Test
     public void testHotSearchText() {
-        StatisticsQueryDto  statisticsQueryDto= StatisticsQueryDto.builder().StartTime(new Date()).EndTime(new Date()).build();
+        StatisticsQueryDto  statisticsQueryDto= StatisticsQueryDto.builder().startTime(new Date()).endTime(new Date()).build();
         statisticsQueryDto.setCurrent(0);
         statisticsQueryDto.setPageSize(2);
         List<HotRankStatisticsEntity> hotSearchText = statisticsService.selectHotSearchText(statisticsQueryDto);
