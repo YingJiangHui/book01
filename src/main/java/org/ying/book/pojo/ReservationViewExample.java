@@ -104,7 +104,10 @@ public class ReservationViewExample {
             }
             criteria.add(new Criterion(condition, value1, value2));
         }
-
+        public Criteria andLibraryIdEqualTo(Integer value) {
+            addCriterion("library_id =", value, "library id");
+            return (Criteria) this;
+        }
         public Criteria andTitleLike(String value) {
             addCriterion("title like", value, "book title");
             return (Criteria) this;

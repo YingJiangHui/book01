@@ -171,6 +171,9 @@ public class ReservationService {
         if(reservationQueryDto.getTitle() != null){
             criteria.andTitleLike("%"+reservationQueryDto.getTitle()+"%");
         }
+        if(reservationQueryDto.getLibraryId() != null){
+            criteria.andLibraryIdEqualTo(reservationQueryDto.getLibraryId());
+        }
         if(reservationQueryDto.getEmail() != null && !reservationQueryDto.getEmail().isEmpty()){
             criteria.andEmailEqualTo(reservationQueryDto.getEmail().trim());
         }

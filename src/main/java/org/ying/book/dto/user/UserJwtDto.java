@@ -17,7 +17,8 @@ public class UserJwtDto {
     Integer defaultTimes;
     List<RoleEnum> roles;
     private Date createdAt;
-    List<Library> managedLibraries;
+    List<Integer> managedLibraries;
+
 
     public boolean isSystemAdmin() {
         return roles.contains(RoleEnum.SYSTEM_ADMIN);

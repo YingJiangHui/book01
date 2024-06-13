@@ -61,8 +61,8 @@ public class UserController {
             userQueryParamsDTO.getLibraryIds().forEach(id -> {
                 set.add(id);
             });
-            user.getManagedLibraries().forEach(library -> {
-                set.add(library.getId());
+            user.getManagedLibraries().forEach(id -> {
+                set.add(id);
             });
             if (set.size() != user.getManagedLibraries().size()) {
                 throw new CustomException("无权限");

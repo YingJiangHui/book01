@@ -13,4 +13,5 @@ public class ReservationQueryWithPageDto extends PageReqDto {
     private String borrowedAt;
     private String title;
     private String email;
+    private Integer libraryId;
 }

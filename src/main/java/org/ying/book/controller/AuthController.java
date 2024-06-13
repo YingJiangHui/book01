@@ -13,12 +13,11 @@ import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserDto;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.User;
-import org.ying.book.service.AuthService;
-import org.ying.book.service.EmailService;
-import org.ying.book.service.EncodeService;
-import org.ying.book.service.UserService;
+import org.ying.book.service.*;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.Result;
+
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -37,6 +36,9 @@ public class AuthController {
 
     @Resource
     private EncodeService encodeService;
+
+    @Resource
+    private RedisService redisService;
 
     @PostMapping("/register")
     public Result register(@RequestBody UserDto userDto) {
@@ -76,6 +78,8 @@ public class AuthController {
         User userDetails = null;
         try {
             userDetails = userService.login(userDto);
+        } catch (CustomException e){
+            throw e;
         } catch (RuntimeException e) {
             e.getStackTrace();
             throw new CustomException(e.getMessage(), HttpStatus.UNAUTHORIZED);
@@ -86,17 +90,21 @@ public class AuthController {
                 .isBlacklist(userDetails.getIsBlacklist())
                 .defaultTimes(userDetails.getDefaultTimes())
                 .createdAt(userDetails.getCreatedAt())
-                .id(userDetails.getId()).managedLibraries(userDetails.getLibraries()).build();
+                .id(userDetails.getId())
+                .managedLibraries(userDetails.getLibraries().stream().map(item->item.getId()).toList())
+                .build();
         Object JWT = jwtUtil.createJWT("user_auth", userJwtDTO);
         return Result.builder().build().success("登录成功", JWT);
     }
 
-//    @PostMapping("/logout")
-//    public String logout(HttpServletRequest request) {
-//        HttpSession session = request.getSession();
-//        session.invalidate();
-//        return "Logout successful";
-//    }
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) throws Exception {
+        Object token = request.getAttribute("token");
+        if(token == null){
+            throw new CustomException("用户未登录", HttpStatus.UNAUTHORIZED);
+        }
+        redisService.setKey(token.toString(), false, jwtUtil.getExpiration(token.toString()), TimeUnit.MILLISECONDS);
+    }
 //
 //    @GetMapping("/user")
 //    public String getUser() {

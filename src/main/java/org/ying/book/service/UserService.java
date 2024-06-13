@@ -99,7 +99,7 @@ public class UserService {
     public User existUserByEmail(String email) {
         User user = getUserByEmail(email);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw new CustomException("用户不存在", HttpStatus.NOT_FOUND);
         }
         return user;
     }
@@ -165,7 +165,7 @@ public class UserService {
     public User updateUser(Integer userId, UserUpdateDto userUpdateDto ){
         User user = userMapper.selectByPrimaryKey(userId);
         if(user==null){
-            throw new RuntimeException("用户不存在");
+            throw new CustomException("用户不存在", HttpStatus.NOT_FOUND);
         }
         if(userUpdateDto.getIsBlacklist()!=null){
             user.setIsBlacklist(userUpdateDto.getIsBlacklist());

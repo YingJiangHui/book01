@@ -26,7 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         System.out.println("addInterceptors");
 
-        registry.addInterceptor(authInterceptor).addPathPatterns("/search-history").addPathPatterns("/books/borrowing").addPathPatterns("/book-shelf").addPathPatterns("/books/reservation").addPathPatterns("/users/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/auth/logout").addPathPatterns("/search-history").addPathPatterns("/books/borrowing").addPathPatterns("/book-shelf").addPathPatterns("/books/reservation").addPathPatterns("/users/**");
         registry.addInterceptor(registerUserContextInterceptor);
 //        registry.addInterceptor(systemAdminInterceptor).addPathPatterns("/users");
 //        registry.addInterceptor(libraryAdminInterceptor).addPathPatterns("/books");

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -91,6 +92,10 @@ public class JwtUtil {
         } catch (Exception e) {
             return true;
         }
+    }
+
+    public Long getExpiration(String token) throws Exception {
+        return parseJWT(token).getExpiration().getTime();
     }
     /**
      * 由字符串生成加密的key

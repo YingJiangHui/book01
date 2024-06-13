@@ -10,6 +10,7 @@ SELECT r.id,
        r.updated_at,
        r.is_deleted,
        r.borrowing_id,
+       l.id as library_id,
        b.title as title,
        u.email as email,
        CASE
