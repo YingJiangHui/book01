@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.ying.book.dto.category.CategoryDto;
+import org.ying.book.dto.category.CategoryQueryDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.exception.CustomException;
@@ -46,6 +47,9 @@ public class CategoryService {
 
     public List<Book> getBooksByCategoryId(Integer categoryId, Integer firstLibraryId){
         return bookService.getBooksByCategoryId(categoryId, firstLibraryId);
+    }
+    public PageResultDto<Book> getBooksByCategoryIdPagination(Integer categoryId, CategoryQueryDto categoryQueryDto){
+        return bookService.getBooksByCategoryIdPagination(categoryId, categoryQueryDto);
     }
 
     public void deleteCategory(Integer id) {

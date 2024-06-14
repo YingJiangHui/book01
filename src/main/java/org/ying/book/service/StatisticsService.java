@@ -18,16 +18,15 @@ public class StatisticsService {
     @Resource
     SearchMapper searchMapper;
 
-    private void borrowingWithExample(BorrowingExample borrowingExample, StatisticsQueryDto statisticsQueryDto) {
+    private BorrowingExample.Criteria borrowingWithExample(BorrowingExample borrowingExample, StatisticsQueryDto statisticsQueryDto) {
+        BorrowingExample.Criteria criteria = borrowingExample.createCriteria();
+
         Optional.ofNullable(statisticsQueryDto).ifPresent((statisticsQuery) -> {
             if (statisticsQuery.getStartTime() != null) {
-                borrowingExample.createCriteria().andBorrowedAtGreaterThan(statisticsQuery.getStartTime());
-            }
-
-            if (statisticsQuery.getEndTime() != null) {
-                borrowingExample.createCriteria().andBorrowedAtLessThan(statisticsQuery.getEndTime());
+                criteria.andBorrowedAtBetween(statisticsQuery.getStartTime(),statisticsQuery.getEndTime());
             }
         });
+        return criteria;
     }
 
     public List<HotRankStatisticsEntity> getHotBorrowedBooks(StatisticsQueryDto statisticsQueryDto) {
@@ -50,6 +49,16 @@ public class StatisticsService {
 
     public List<HotRankStatisticsEntity> selectHotSearchText(StatisticsQueryDto statisticsQueryDto) {
         SearchExample searchExample = new SearchExample();
+        Optional.ofNullable(statisticsQueryDto).ifPresent((statisticsQuery) -> {
+            SearchExample.Criteria criteria = searchExample.createCriteria();
+            if (statisticsQuery.getStartTime() != null&&statisticsQuery.getEndTime() != null){
+                criteria.andCreatedAtBetween(statisticsQuery.getStartTime(),statisticsQuery.getEndTime());
+            }
+
+
+        });
+
+
         return PaginationHelper.paginate(statisticsQueryDto, (rowBounds,queryDto)-> searchMapper.selectHotSearchText(searchExample,rowBounds));
     }
 

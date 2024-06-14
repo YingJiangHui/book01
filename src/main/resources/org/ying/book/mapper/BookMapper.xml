@@ -104,8 +104,10 @@
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from public.books
+    <include refid="Base_Column_List_2" />
+    from public.books  b
+    left join public.library_books lb on lb.book_id = b.id
+    left join public.libraries l on l.id = lb.library_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

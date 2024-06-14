@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.book.BookDto;
 import org.ying.book.dto.book.BookQueryDto;
 import org.ying.book.dto.book.BookSearchDto;
+import org.ying.book.dto.category.CategoryQueryDto;
 import org.ying.book.dto.common.IPageReq;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
@@ -116,6 +117,18 @@ public class BookService {
 
     public List<Book> getBooksByCategoryId(Integer categoryId) {
         return this.getBooksByCategoryId(categoryId,null);
+    }
+
+    public PageResultDto<Book> getBooksByCategoryIdPagination(Integer categoryId, CategoryQueryDto categoryQueryDto) {
+        BookExample bookExample = new BookExample();
+        if (categoryQueryDto.getFirstLibraryId() != null) {
+            bookExample.setOrderByClause(String.format("CASE \n" +
+                    "        WHEN l.id = %d THEN 0\n" +
+                    "        ELSE 1\n" +
+                    "    END", categoryQueryDto.getFirstLibraryId()));
+        }
+        bookExample.createCriteria().andCategoryIdEqualTo(categoryId);
+        return PaginationHelper.paginate(categoryQueryDto, (rowBounds, reqDto) -> this.getBooksByExampleWithRowbounds(bookExample, rowBounds), bookMapper.countByExample(bookExample));
     }
 
     public List<Book> getBooksByCategoryId(Integer categoryId,Integer firstLibraryId) {

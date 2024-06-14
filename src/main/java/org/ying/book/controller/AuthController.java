@@ -17,6 +17,7 @@ import org.ying.book.service.*;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.Result;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -103,7 +104,7 @@ public class AuthController {
         if(token == null){
             throw new CustomException("用户未登录", HttpStatus.UNAUTHORIZED);
         }
-        redisService.setKey(token.toString(), false, jwtUtil.getExpiration(token.toString()), TimeUnit.MILLISECONDS);
+        redisService.setKey(token.toString(), false,jwtUtil.getExpiration(token.toString()) - new Date().getTime() , TimeUnit.MILLISECONDS);
     }
 //
 //    @GetMapping("/user")

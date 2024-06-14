@@ -3,6 +3,7 @@ package org.ying.book.controller;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.dto.category.CategoryDto;
+import org.ying.book.dto.category.CategoryQueryDto;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.pojo.Book;
@@ -34,8 +35,13 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    public List<Book> getBooksByCategoryId(@PathVariable("id") Integer id, @RequestParam("firstLibraryId") Integer firstLibraryId) {
+    public List<Book> getBooksByCategoryId(@PathVariable("id") Integer id, @RequestParam(value = "firstLibraryId", required = false) Integer firstLibraryId) {
         return categoryService.getBooksByCategoryId(id,firstLibraryId);
+    }
+
+    @GetMapping("/{id}/books/pagination")
+    public PageResultDto<Book> getBooksByCategoryIdPagination(@PathVariable("id") Integer id, @ModelAttribute CategoryQueryDto categoryQueryDto) {
+        return categoryService.getBooksByCategoryIdPagination(id,categoryQueryDto);
     }
 
     @DeleteMapping("/{id}")
