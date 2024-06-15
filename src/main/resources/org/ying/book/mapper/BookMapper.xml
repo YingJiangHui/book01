@@ -27,11 +27,11 @@
   <select id="selectFilesByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.FileMapper.BaseResultMap">
     select * from public.files f join public.books_files bf on f.id = bf.file_id where bf.book_id = #{bookId}
   </select>
-  <select id="selectBorrowingByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BorrowingViewMapper.BaseResultMap">
-    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'OVERDUE_NOT_RETURNED' and bv.status = 'NOT_RETURNED'
+  <select id="selectBorrowingByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BorrowingViewMapper.BaseResultMapSimple">
+    select * from public.borrowings_view bv where bv.book_id = #{bookId} and (bv.status = 'OVERDUE_NOT_RETURNED' or bv.status = 'NOT_RETURNED')
   </select>
-  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationMapper.BaseResultMap">
-    select * from public.borrowings_view bv where bv.book_id = #{bookId} and bv.status = 'NOT_BORROWABLE' and bv.status = 'BORROWABLE'
+  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationViewMapper.BaseResultMap">
+    select * from public.reservations_view rv where rv.book_id = #{bookId} and (rv.status = 'NOT_BORROWABLE' or rv.status = 'BORROWABLE')
   </select>
   <sql id="Example_Where_Clause">
     <where>

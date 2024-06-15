@@ -50,6 +50,7 @@ public class BookService {
     public Book getBook(Integer id) {
         Book book = bookMapper.selectByPrimaryKey(id);
         book.setFiles(fileService.filesWithUrl(book.getFiles()));
+
         return book;
     }
 
