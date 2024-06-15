@@ -845,6 +845,126 @@ public class LibraryExample {
             addCriterion("closed not between", value1, value2, "closed");
             return (Criteria) this;
         }
+
+        public Criteria andDisableReserveIsNull() {
+            addCriterion("disable_reserve is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveIsNotNull() {
+            addCriterion("disable_reserve is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveEqualTo(Boolean value) {
+            addCriterion("disable_reserve =", value, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveNotEqualTo(Boolean value) {
+            addCriterion("disable_reserve <>", value, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveGreaterThan(Boolean value) {
+            addCriterion("disable_reserve >", value, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("disable_reserve >=", value, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveLessThan(Boolean value) {
+            addCriterion("disable_reserve <", value, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveLessThanOrEqualTo(Boolean value) {
+            addCriterion("disable_reserve <=", value, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveIn(List<Boolean> values) {
+            addCriterion("disable_reserve in", values, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveNotIn(List<Boolean> values) {
+            addCriterion("disable_reserve not in", values, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveBetween(Boolean value1, Boolean value2) {
+            addCriterion("disable_reserve between", value1, value2, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("disable_reserve not between", value1, value2, "disableReserve");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowIsNull() {
+            addCriterion("disable_borrow is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowIsNotNull() {
+            addCriterion("disable_borrow is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowEqualTo(Boolean value) {
+            addCriterion("disable_borrow =", value, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowNotEqualTo(Boolean value) {
+            addCriterion("disable_borrow <>", value, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowGreaterThan(Boolean value) {
+            addCriterion("disable_borrow >", value, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("disable_borrow >=", value, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowLessThan(Boolean value) {
+            addCriterion("disable_borrow <", value, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowLessThanOrEqualTo(Boolean value) {
+            addCriterion("disable_borrow <=", value, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowIn(List<Boolean> values) {
+            addCriterion("disable_borrow in", values, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowNotIn(List<Boolean> values) {
+            addCriterion("disable_borrow not in", values, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowBetween(Boolean value1, Boolean value2) {
+            addCriterion("disable_borrow between", value1, value2, "disableBorrow");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableBorrowNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("disable_borrow not between", value1, value2, "disableBorrow");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -14,6 +14,8 @@
     <result column="max_borrow_days" jdbcType="INTEGER" property="maxBorrowDays" />
     <result column="default_borrow_days" jdbcType="INTEGER" property="defaultBorrowDays" />
     <result column="closed" jdbcType="BIT" property="closed" />
+    <result column="disable_reserve" jdbcType="BIT" property="disableReserve" />
+    <result column="disable_borrow" jdbcType="BIT" property="disableBorrow" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, name, latitude, longitude, circumference, created_at, updated_at, is_deleted, 
-    address, max_borrow_days, default_borrow_days, closed
+    address, max_borrow_days, default_borrow_days, closed, disable_reserve, disable_borrow
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
     select
@@ -111,11 +113,13 @@
     insert into public.libraries (name, latitude, longitude, 
       circumference, created_at, updated_at, 
       is_deleted, address, max_borrow_days, 
-      default_borrow_days, closed)
+      default_borrow_days, closed, disable_reserve, 
+      disable_borrow)
     values (#{name,jdbcType=VARCHAR}, #{latitude,jdbcType=NUMERIC}, #{longitude,jdbcType=NUMERIC}, 
       #{circumference,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
       #{deleted,jdbcType=BIT}, #{address,jdbcType=VARCHAR}, #{maxBorrowDays,jdbcType=INTEGER}, 
-      #{defaultBorrowDays,jdbcType=INTEGER}, #{closed,jdbcType=BIT})
+      #{defaultBorrowDays,jdbcType=INTEGER}, #{closed,jdbcType=BIT}, #{disableReserve,jdbcType=BIT}, 
+      #{disableBorrow,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Library" useGeneratedKeys="true">
     insert into public.libraries
@@ -153,6 +157,12 @@
       <if test="closed != null">
         closed,
       </if>
+      <if test="disableReserve != null">
+        disable_reserve,
+      </if>
+      <if test="disableBorrow != null">
+        disable_borrow,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -187,6 +197,12 @@
       </if>
       <if test="closed != null">
         #{closed,jdbcType=BIT},
+      </if>
+      <if test="disableReserve != null">
+        #{disableReserve,jdbcType=BIT},
+      </if>
+      <if test="disableBorrow != null">
+        #{disableBorrow,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -235,6 +251,12 @@
       <if test="row.closed != null">
         closed = #{row.closed,jdbcType=BIT},
       </if>
+      <if test="row.disableReserve != null">
+        disable_reserve = #{row.disableReserve,jdbcType=BIT},
+      </if>
+      <if test="row.disableBorrow != null">
+        disable_borrow = #{row.disableBorrow,jdbcType=BIT},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -253,7 +275,9 @@
       address = #{row.address,jdbcType=VARCHAR},
       max_borrow_days = #{row.maxBorrowDays,jdbcType=INTEGER},
       default_borrow_days = #{row.defaultBorrowDays,jdbcType=INTEGER},
-      closed = #{row.closed,jdbcType=BIT}
+      closed = #{row.closed,jdbcType=BIT},
+      disable_reserve = #{row.disableReserve,jdbcType=BIT},
+      disable_borrow = #{row.disableBorrow,jdbcType=BIT}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -294,6 +318,12 @@
       <if test="closed != null">
         closed = #{closed,jdbcType=BIT},
       </if>
+      <if test="disableReserve != null">
+        disable_reserve = #{disableReserve,jdbcType=BIT},
+      </if>
+      <if test="disableBorrow != null">
+        disable_borrow = #{disableBorrow,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -309,7 +339,9 @@
       address = #{address,jdbcType=VARCHAR},
       max_borrow_days = #{maxBorrowDays,jdbcType=INTEGER},
       default_borrow_days = #{defaultBorrowDays,jdbcType=INTEGER},
-      closed = #{closed,jdbcType=BIT}
+      closed = #{closed,jdbcType=BIT},
+      disable_reserve = #{disableReserve,jdbcType=BIT},
+      disable_borrow = #{disableBorrow,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">

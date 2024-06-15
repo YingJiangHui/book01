@@ -37,12 +37,24 @@ public class LibraryService {
 
     @Transactional
     public Library insertLibrary(Library library) {
+        if(library.getClosed()!=null){
+            if(library.getClosed()){
+                library.setDisableBorrow(true);
+                library.setDisableReserve(true);
+            }
+        }
         libraryMapper.insertSelective(library);
         return library;
     }
 
     @Transactional
     public Library updateLibrary(Library library) {
+        if(library.getClosed()!=null){
+            if(library.getClosed()){
+                library.setDisableBorrow(true);
+                library.setDisableReserve(true);
+            }
+        }
         libraryMapper.updateByPrimaryKeySelective(library);
         return library;
     }

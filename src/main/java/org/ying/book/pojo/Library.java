@@ -32,4 +32,9 @@ public class Library {
     private Integer defaultBorrowDays;
 
     private Boolean closed;
+
+    private Boolean disableReserve;
+
+    private Boolean disableBorrow;
+
 }
