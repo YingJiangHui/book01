@@ -70,6 +70,14 @@ public class BorrowingService {
         return this.borrowDaysValidate(startDate, endDate, 0);
     }
 
+    public boolean hasBorrowed(Integer bookId) {
+        BorrowingViewExample borrowingViewExample = new BorrowingViewExample();
+        BorrowingViewExample.Criteria criteria = borrowingViewExample.createCriteria();
+        criteria.andBookIdEqualTo(bookId)
+                .andStatusIn(Arrays.asList(BorrowingStatusEnum.NOT_RETURNED.name(), BorrowingStatusEnum.OVERDUE_NOT_RETURNED.name()));
+        return borrowingViewMapper.countByExample(borrowingViewExample) > 0;
+    }
+
     //获取指定书籍在指定时间段下的借阅记录
     public List<Borrowing> getBorrowingsBetweenBorrowTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt) {
         //        通过判断该书籍在对应时间段是否与其他借阅记录时间区间有冲突，以判断书籍是否可以借阅
