@@ -30,7 +30,7 @@
   <select id="selectBorrowingByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.BorrowingViewMapper.BaseResultMapSimple">
     select * from public.borrowings_view bv where bv.book_id = #{bookId} and (bv.status = 'OVERDUE_NOT_RETURNED' or bv.status = 'NOT_RETURNED')
   </select>
-  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationViewMapper.BaseResultMap">
+  <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationViewMapper.BaseResultMapSimple">
     select * from public.reservations_view rv where rv.book_id = #{bookId} and (rv.status = 'NOT_BORROWABLE' or rv.status = 'BORROWABLE')
   </select>
   <sql id="Example_Where_Clause">

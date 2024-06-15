@@ -58,6 +58,11 @@ public class ReservationService {
     }
 
     @Transactional
+    public void reserveBooksV2(){
+
+    }
+
+    @Transactional
     public List<Reservation> reserveBooks(ReservationDto reservationDto) {
         List<Integer> bookIds = reservationDto.getBookIds();
 

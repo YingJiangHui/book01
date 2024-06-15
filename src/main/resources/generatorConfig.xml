@@ -158,22 +158,31 @@
         <!--                    <columnOverride column="updated_at" property="updatedAt"/>-->
         <!--                    <columnOverride column="is_deleted" property="deleted"/>-->
         <!--                </table>-->
-        <table schema="public" tableName="libraries" domainObjectName="Library">
+<!--        <table schema="public" tableName="libraries" domainObjectName="Library">-->
+<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
+<!--            <columnOverride column="name" property="name"/>-->
+<!--            <columnOverride column="circumference" property="circumference"/>-->
+<!--            <columnOverride column="address" property="address"/>-->
+<!--            <columnOverride column="longitude" property="longitude"/>-->
+<!--            <columnOverride column="closed" property="closed"/>-->
+<!--            <columnOverride column="max_borrow_days" property="maxBorrowDays"/>-->
+<!--            <columnOverride column="default_borrow_days" property="defaultBorrowDays"/>-->
+<!--            <columnOverride column="disable_reserve" property="disableReserve"/>-->
+<!--            <columnOverride column="disable_borrow" property="disableBorrow"/>-->
+<!--            <columnOverride column="created_at" property="createdAt"/>-->
+<!--            <columnOverride column="updated_at" property="updatedAt"/>-->
+<!--            <columnOverride column="is_deleted" property="deleted"/>-->
+<!--        </table>-->
+        <table schema="public" tableName="reservation_application" domainObjectName="ReservationApplication">
             <generatedKey column="id" sqlStatement="JDBC"/>
-            <columnOverride column="name" property="name"/>
-            <columnOverride column="circumference" property="circumference"/>
-            <columnOverride column="address" property="address"/>
-            <columnOverride column="longitude" property="longitude"/>
-            <columnOverride column="closed" property="closed"/>
-            <columnOverride column="max_borrow_days" property="maxBorrowDays"/>
-            <columnOverride column="default_borrow_days" property="defaultBorrowDays"/>
-            <columnOverride column="disable_reserve" property="disableReserve"/>
-            <columnOverride column="disable_borrow" property="disableBorrow"/>
+            <columnOverride column="user_id" property="userId"/>
+            <columnOverride column="book_id" property="bookId"/>
+            <columnOverride column="borrowing_id" property="borrowingId"/>
+            <columnOverride column="status" property="status"/>
             <columnOverride column="created_at" property="createdAt"/>
             <columnOverride column="updated_at" property="updatedAt"/>
             <columnOverride column="is_deleted" property="deleted"/>
         </table>
-
 <!--        <table schema="public" tableName="system_settings" domainObjectName="SystemSetting">-->
 <!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
 <!--            <columnOverride column="name" property="name"/>-->
