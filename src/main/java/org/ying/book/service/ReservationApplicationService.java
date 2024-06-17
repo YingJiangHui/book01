@@ -56,11 +56,11 @@ public class ReservationApplicationService {
     @Transactional
     public ReservationApplication reservationApply(ReservationApplication reservationApplication) {
         if (!borrowingService.hasBorrowed(reservationApplication.getBookId())) {
-            throw new CustomException("未借阅的书籍不可申请预定", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("未借阅的书籍不可申请预订", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (isRepetitionReservation(reservationApplication.getUserId(), reservationApplication.getBookId())) {
-            throw new CustomException("不可重复预定", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("不可重复预订", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         reservationApplicationMapper.insertSelective(reservationApplication);
         return reservationApplication;
@@ -93,10 +93,10 @@ public class ReservationApplicationService {
     public void cancelReservationApplication(Integer reservationApplicationId) {
         ReservationApplication reservationApplication = reservationApplicationMapper.selectByPrimaryKey(reservationApplicationId);
         if (reservationApplication.getStatus().equals(ReservationApplicationEnum.CANCELLED.name())) {
-            throw new CustomException("预定申请已取消", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("预订申请已取消", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         if (reservationApplication.getStatus().equals(ReservationApplicationEnum.FULFILLED.name())) {
-            throw new CustomException("预定申请已完成", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("预订申请已完成", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         reservationApplication.setStatus(ReservationApplicationEnum.CANCELLED.name());
