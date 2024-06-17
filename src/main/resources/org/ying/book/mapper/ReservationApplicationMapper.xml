@@ -85,8 +85,10 @@
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from public.reservation_application
+    <include refid="Base_Column_List_Relation" />
+    from public.reservation_application ra left join public.books b on ra.book_id = b.id
+    left join public.users u on ra.user_id = u.id
+    left join library_books lb on b.id = lb.book_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -168,7 +170,9 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="org.ying.book.pojo.ReservationApplicationExample" resultType="java.lang.Long">
-    select count(*) from public.reservation_application
+    select count(*) from public.reservation_application ra left join public.books b on ra.book_id = b.id
+    left join public.users u on ra.user_id = u.id
+    left join library_books lb on b.id = lb.book_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -257,13 +261,16 @@
       is_deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.ReservationApplicationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from public.reservation_application
+    <include refid="Base_Column_List_Relation" />
+    from public.reservation_application ra left join public.books b on ra.book_id = b.id
+    left join public.users u on ra.user_id = u.id
+    left join library_books lb on b.id = lb.book_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -271,4 +278,8 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <sql id="Base_Column_List_Relation">
+    ra.id as id, user_id, borrowing_id, ra.book_id as book_id, status, ra.created_at as created_at, ra.updated_at as updated_at, ra.is_deleted as is_deleted
+  </sql>
 </mapper>

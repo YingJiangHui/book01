@@ -1,8 +1,10 @@
 package org.ying.book.controller;
 
 import jakarta.annotation.Resource;
+import jakarta.mail.MessagingException;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
+import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.reservationApplication.ReservationApplicationQueryDto;
 import org.ying.book.enums.ReservationApplicationEnum;
 import org.ying.book.pojo.ReservationApplication;
@@ -25,13 +27,28 @@ public class ReservationApplicationController {
         reservationApplicationService.reservationApply(reservationApplication);
     }
 
-    @GetMapping()
-    public List<ReservationApplication> getReservationApplicationList(@ModelAttribute ReservationApplicationQueryDto reservationApplicationQueryDto) {
+    @GetMapping("/all")
+    public List<ReservationApplication> getReservationApplicationListAll(@ModelAttribute ReservationApplicationQueryDto reservationApplicationQueryDto) {
         return reservationApplicationService.getReservationApplicationList(reservationApplicationQueryDto);
+    }
+
+    @GetMapping()
+    public PageResultDto<ReservationApplication> getReservationApplicationList(@ModelAttribute ReservationApplicationQueryDto reservationApplicationQueryDto) {
+        return reservationApplicationService.getReservationApplicationListPagination(reservationApplicationQueryDto);
     }
 
     @PostMapping("/{id}")
     public void fulfillReservationApplication(@PathVariable Integer id) {
         reservationApplicationService.fulfillReservationApplication(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void cancelReservationApplication(@PathVariable Integer id) {
+        reservationApplicationService.cancelReservationApplication(id);
+    }
+
+    @PostMapping("/{id}/resend-notification")
+    public void resendNotification(@PathVariable Integer id) throws MessagingException {
+        reservationApplicationService.resendNotification(id);
     }
 }
