@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.ying.book.enums.ReservationApplicationEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.BorrowingMapper;
+import org.ying.book.mapper.BorrowingViewMapper;
 import org.ying.book.mapper.ReservationApplicationMapper;
 import org.ying.book.mapper.ReservationMapper;
 import org.ying.book.pojo.BorrowingView;
@@ -23,7 +24,7 @@ public class ReservationApplicationService {
     ReservationApplicationMapper reservationApplicationMapper;
 
     @Resource
-    BorrowingMapper borrowingViewMapper;
+    BorrowingViewMapper borrowingViewMapper;
 
     @Resource
     BorrowingService borrowingService;
