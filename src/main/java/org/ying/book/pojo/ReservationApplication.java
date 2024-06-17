@@ -1,7 +1,12 @@
 package org.ying.book.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Setter
+@Getter
 public class ReservationApplication {
     private Integer id;
 
@@ -11,6 +16,10 @@ public class ReservationApplication {
 
     private Integer bookId;
 
+    private Book book;
+
+    private User user;
+
     private String status;
 
     private Date createdAt;
@@ -18,68 +27,4 @@ public class ReservationApplication {
     private Date updatedAt;
 
     private Boolean deleted;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getBorrowingId() {
-        return borrowingId;
-    }
-
-    public void setBorrowingId(Integer borrowingId) {
-        this.borrowingId = borrowingId;
-    }
-
-    public Integer getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
 }

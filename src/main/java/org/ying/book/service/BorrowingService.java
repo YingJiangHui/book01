@@ -1,6 +1,8 @@
 package org.ying.book.service;
 
 import jakarta.annotation.Resource;
+import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class BorrowingService {
 
@@ -59,6 +62,8 @@ public class BorrowingService {
 
     @Resource
     SystemSettingsService systemSettingsService;
+    @Autowired
+    private ReservationApplicationService reservationApplicationService;
 
     public boolean borrowDaysValidate(Date startDate, Date endDate, Integer additionDays) {
         Integer maxDays = this.getMaxDays();
@@ -136,6 +141,15 @@ public class BorrowingService {
             }
             borrowing.setReturnedAt(new Date());
             borrowingMapper.updateByPrimaryKeySelective(borrowing);
+//            用户归还后查看是否有预约记录，有的话通知预约用户
+            try {
+                ReservationApplication reservationApplication = reservationApplicationService.getFirstReservationApplication(borrowing.getBookId());
+                if (reservationApplication != null)
+                    reservationApplicationService.notifiedReservationApplication(reservationApplication.getBookId());
+            } catch (Exception e) {
+                log.info(e.getMessage());
+            }
+
             return borrowing;
         }).toList();
     }
@@ -214,15 +228,15 @@ public class BorrowingService {
             criteria.andUserIdEqualTo(borrowingQueryDto.getUserId());
         }
 
-        if(borrowingQueryDto.getTitle() != null){
+        if (borrowingQueryDto.getTitle() != null) {
             criteria.andTitleLike("%" + borrowingQueryDto.getTitle() + "%");
         }
 
-        if(borrowingQueryDto.getEmail() != null && !borrowingQueryDto.getEmail().isEmpty()){
+        if (borrowingQueryDto.getEmail() != null && !borrowingQueryDto.getEmail().isEmpty()) {
             criteria.andEmailEqualTo(borrowingQueryDto.getEmail().trim());
         }
 
-        if(borrowingQueryDto.getBookId() != null){
+        if (borrowingQueryDto.getBookId() != null) {
             criteria.andBookIdEqualTo(borrowingQueryDto.getBookId());
         }
 
@@ -248,7 +262,7 @@ public class BorrowingService {
         }).toList(), borrowingViewMapper.countByExample(borrowingViewExample));
     }
 
-    public List<BorrowingView> getCurrentBorrowedBook(Integer bookId){
+    public List<BorrowingView> getCurrentBorrowedBook(Integer bookId) {
         BorrowingViewExample borrowingViewExample = new BorrowingViewExample();
         borrowingViewExample.createCriteria().andBookIdEqualTo(bookId).andStatusIn(Arrays.asList(BorrowingStatusEnum.NOT_RETURNED.name(), BorrowingStatusEnum.OVERDUE_NOT_RETURNED.name()));
         return borrowingViewMapper.selectByExample(borrowingViewExample);

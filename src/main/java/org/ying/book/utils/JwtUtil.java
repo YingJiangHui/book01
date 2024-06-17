@@ -30,8 +30,6 @@ public class JwtUtil {
     @Resource
     ObjectMapper objectMapper;
 
-    @Resource
-    private SystemSettingsService SystemSettingsService;
     @Autowired
     private SystemSettingsService systemSettingsService;
 

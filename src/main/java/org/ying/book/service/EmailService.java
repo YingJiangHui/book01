@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.ying.book.dto.email.EmailBorrowNotificationDto;
 import org.ying.book.dto.email.EmailValidationDto;
 import org.ying.book.dto.user.UserDto;
 import org.ying.book.enums.RoleEnum;
@@ -19,9 +20,7 @@ import org.ying.book.pojo.User;
 import org.ying.book.utils.GeneratorCode;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -129,6 +128,17 @@ public class EmailService {
         context.setVariable("timeout", inviteCodeTimeout);
         this.sendEmail(to,"图书管理员账号申请",context,"email-invite-template.html");
         return inviteCode;
+    }
+
+    public void sendNotificationEmail(EmailBorrowNotificationDto emailBorrowNotificationDto) throws MessagingException {
+        String to = emailBorrowNotificationDto.getEmail();
+
+        Context context = new Context();
+        context.setVariable("libraryName", emailBorrowNotificationDto.getLibraryName());
+        context.setVariable("libraryLocationLink", emailBorrowNotificationDto.getLibraryLocationLink());
+        context.setVariable("days", emailBorrowNotificationDto.getDays());
+        context.setVariable("bookName", emailBorrowNotificationDto.getBookName());
+        this.sendEmail(to,"取书通知",context,"email-borrow-notification.html");
     }
 
     public String validateEmailCode(String email, String code,String message) {

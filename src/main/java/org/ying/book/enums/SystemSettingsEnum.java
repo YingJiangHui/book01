@@ -17,4 +17,6 @@ public enum SystemSettingsEnum {
     INVITATION_URL,
     //    token过期时间
     TOKEN_EXPIRATION,
+    //    取书天数
+    GET_BOOK_DAYS,
 }
