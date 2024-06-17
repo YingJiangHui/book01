@@ -1,6 +1,7 @@
 package org.ying.book.service;
 
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class SystemSettingsService {
     @Resource
@@ -58,6 +60,7 @@ public class SystemSettingsService {
     public Object getSystemSettingValueByName(SystemSettingsEnum systemSettingsEnum) {
         List<SystemSetting> systemSettings = getSystemSettingList(systemSettingsEnum);
         if(systemSettings==null || systemSettings.isEmpty()) {
+            log.info("系统设置不存在:"+systemSettingsEnum.name());
             throw new RuntimeException("系统设置不存在");
         }
 

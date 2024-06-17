@@ -2,6 +2,8 @@ package org.ying.book.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.ying.book.Context.UserContext;
+import org.ying.book.dto.reservationApplication.ReservationApplicationQueryDto;
 import org.ying.book.enums.ReservationApplicationEnum;
 import org.ying.book.pojo.ReservationApplication;
 import org.ying.book.service.ReservationApplicationService;
@@ -17,11 +19,19 @@ public class ReservationApplicationController {
 
     @PostMapping()
     public void applyReservation(@RequestBody ReservationApplication reservationApplication) {
+         if(UserContext.getCurrentUser().getId()!=null){
+             reservationApplication.setUserId(UserContext.getCurrentUser().getId());
+         }
         reservationApplicationService.reservationApply(reservationApplication);
     }
 
     @GetMapping()
-    public List<ReservationApplication> getReservationApplicationList(@RequestParam Integer bookId, @RequestParam List<ReservationApplicationEnum> statusList) {
-        return reservationApplicationService.getReservationApplicationList(bookId, statusList);
+    public List<ReservationApplication> getReservationApplicationList(@ModelAttribute ReservationApplicationQueryDto reservationApplicationQueryDto) {
+        return reservationApplicationService.getReservationApplicationList(reservationApplicationQueryDto);
+    }
+
+    @PostMapping("/{id}")
+    public void fulfillReservationApplication(@PathVariable Integer id) {
+        reservationApplicationService.fulfillReservationApplication(id);
     }
 }

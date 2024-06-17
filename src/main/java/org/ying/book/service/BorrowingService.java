@@ -145,7 +145,7 @@ public class BorrowingService {
             try {
                 ReservationApplication reservationApplication = reservationApplicationService.getFirstReservationApplication(borrowing.getBookId());
                 if (reservationApplication != null)
-                    reservationApplicationService.notifiedReservationApplication(reservationApplication.getBookId());
+                    reservationApplicationService.notifiedReservationApplication(reservationApplication.getId());
             } catch (Exception e) {
                 log.info(e.getMessage());
             }
@@ -196,7 +196,7 @@ public class BorrowingService {
     public void borrowFromReservations(List<Integer> reservationIds) {
         List<Reservation> reservations = reservationService.getReservationsByIds(reservationIds);
         if (reservations.size() != reservationIds.size()) {
-            throw new CustomException("部分书籍未被预约，或已取消");
+            throw new CustomException("部分书籍未被预定，或已取消");
         }
 
         reservations.forEach((reservation) -> {

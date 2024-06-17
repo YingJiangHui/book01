@@ -294,7 +294,7 @@ public class BookService {
         }
         List<ReservationView> reservationViewList = reservationService.getCurrentReservedBook(id);
         if (reservationViewList != null && !reservationViewList.isEmpty()) {
-            throw new CustomException("书籍已被预约，无法下架");
+            throw new CustomException("书籍已被预定，无法下架");
         }
 
         Book book = bookMapper.selectByPrimaryKey(id);

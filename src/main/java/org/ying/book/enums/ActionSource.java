@@ -5,4 +5,6 @@ public enum ActionSource {
     DETAIL,
 //    书架
     SHELF,
+//    预约
+    RESERVATION,
 }

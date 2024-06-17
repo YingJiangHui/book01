@@ -53,7 +53,7 @@ public class ReservationService {
     public void validConflictReserveTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt) {
         List<Reservation> reservations = getReservationsBetweenBorrowTime(bookIds, borrowedAt, returnedAt);
         if (reservations != null && !reservations.isEmpty()) {
-            throw new CustomException("书籍在该时间段内已被预约", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("书籍在该时间段内已被预定", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -100,10 +100,10 @@ public class ReservationService {
     public List<Reservation> cancelReservations(List<Integer> ids) {
         List<Reservation> reservations = getReservationsByIds(ids);
         if(reservations.isEmpty()){
-            throw new CustomException("未找到预约记录");
+            throw new CustomException("未找到预定记录");
         }
         if (ids.size() != reservations.size()) {
-            throw new CustomException("部分书籍未被预约");
+            throw new CustomException("部分书籍未被预定");
         }
 
         reservations.forEach((reservation) -> {
