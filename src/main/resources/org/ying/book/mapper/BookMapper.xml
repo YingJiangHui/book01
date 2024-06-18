@@ -19,6 +19,7 @@
     <association property="library" column="id" javaType="org.ying.book.pojo.Library" select="selectLibraryByBookId"/>
     <association property="reservation" column="id" javaType="org.ying.book.pojo.ReservationView" select="selectReservationByBookId"/>
     <association property="borrowing" column="id" javaType="org.ying.book.pojo.BorrowingView" select="selectBorrowingByBookId"/>
+    <collection property="reservationApplications" column="id" ofType="org.ying.book.pojo.ReservationApplication" select="selectReservationApplicationByBookId"/>
     <collection property="files" column="id" ofType="org.ying.book.pojo.File" select="selectFilesByBookId"/>
   </resultMap>
   <select id="selectLibraryByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.LibraryMapper.BaseResultMap">
@@ -32,6 +33,10 @@
   </select>
   <select id="selectReservationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationViewMapper.BaseResultMapSimple">
     select * from public.reservations_view rv where rv.book_id = #{bookId} and (rv.status = 'NOT_BORROWABLE' or rv.status = 'BORROWABLE')
+  </select>
+
+  <select id="selectReservationApplicationByBookId" parameterType="java.lang.Integer" resultMap="org.ying.book.mapper.ReservationApplicationMapper.BaseResultMapSimple">
+    select * from public.reservation_application ra where ra.book_id = #{bookId} and (ra.status = 'NOTIFIED' or ra.status = 'PENDING')
   </select>
   <sql id="Example_Where_Clause">
     <where>

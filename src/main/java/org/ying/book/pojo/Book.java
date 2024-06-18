@@ -45,4 +45,6 @@ public class Book {
     private BorrowingView borrowing;
 
     private ReservationView reservation;
+
+    private List<ReservationApplication> reservationApplications;
 }
