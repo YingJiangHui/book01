@@ -141,6 +141,14 @@ public class EmailService {
         this.sendEmail(to,"取书通知",context,"email-borrow-notification.html");
     }
 
+    public void sendCloseLibraryNotificationEmail(EmailBorrowNotificationDto emailBorrowNotificationDto) throws MessagingException {
+        String to = emailBorrowNotificationDto.getEmail();
+
+        Context context = new Context();
+        context.setVariable("libraryName", emailBorrowNotificationDto.getLibraryName());
+        context.setVariable("bookName", emailBorrowNotificationDto.getBookName());
+        this.sendEmail(to,"图书预约取消通知",context,"email-library-close-notification.html");
+    }
     public String validateEmailCode(String email, String code,String message) {
         Object codeInRedis = redisService.getValue(email);
         EmailValidationDto emailValidationDto = (EmailValidationDto) codeInRedis;

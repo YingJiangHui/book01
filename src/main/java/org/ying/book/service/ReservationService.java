@@ -90,6 +90,9 @@ public class ReservationService {
     public List<Reservation> getReservationsByIds(List<Integer> ids) {
         ReservationExample reservationExample = new ReservationExample();
         ReservationExample.Criteria criteria = reservationExample.createCriteria();
+        if(ids==null || ids.isEmpty()){
+            return new ArrayList<>();
+        }
         criteria.andIdIn(ids);
         criteria.andDeletedNotEqualTo(true);
         List<Reservation> reservations = reservationMapper.selectByExample(reservationExample);
@@ -162,7 +165,9 @@ public class ReservationService {
         return reservationViewMapper.selectByExample(reservationExample).stream().map((item)-> {
             item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
             return item;
-        }).sorted(Comparator.comparing((ReservationView rv) -> statusOrder.get(rv.getStatus()))).toList();
+        }).sorted(Comparator.comparing((ReservationView rv) ->
+                statusOrder.get(rv.getStatus())
+        )).toList();
     }
 
     public PageResultDto<ReservationView> getReservationPagination(ReservationQueryWithPageDto reservationQueryDto){

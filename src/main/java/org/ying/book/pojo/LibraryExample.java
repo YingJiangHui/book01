@@ -965,6 +965,66 @@ public class LibraryExample {
             addCriterion("disable_borrow not between", value1, value2, "disableBorrow");
             return (Criteria) this;
         }
+
+        public Criteria andDisableReserveApplicationIsNull() {
+            addCriterion("disable_reserve_application is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationIsNotNull() {
+            addCriterion("disable_reserve_application is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationEqualTo(Boolean value) {
+            addCriterion("disable_reserve_application =", value, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationNotEqualTo(Boolean value) {
+            addCriterion("disable_reserve_application <>", value, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationGreaterThan(Boolean value) {
+            addCriterion("disable_reserve_application >", value, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("disable_reserve_application >=", value, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationLessThan(Boolean value) {
+            addCriterion("disable_reserve_application <", value, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationLessThanOrEqualTo(Boolean value) {
+            addCriterion("disable_reserve_application <=", value, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationIn(List<Boolean> values) {
+            addCriterion("disable_reserve_application in", values, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationNotIn(List<Boolean> values) {
+            addCriterion("disable_reserve_application not in", values, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationBetween(Boolean value1, Boolean value2) {
+            addCriterion("disable_reserve_application between", value1, value2, "disableReserveApplication");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisableReserveApplicationNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("disable_reserve_application not between", value1, value2, "disableReserveApplication");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

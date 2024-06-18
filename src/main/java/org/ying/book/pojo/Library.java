@@ -37,4 +37,5 @@ public class Library {
 
     private Boolean disableBorrow;
 
+    private Boolean disableReserveApplication;
 }

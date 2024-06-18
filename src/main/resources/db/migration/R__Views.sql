@@ -14,7 +14,7 @@ SELECT r.id,
        b.title as title,
        u.email as email,
        CASE
-           WHEN r.is_deleted THEN 'CANCELED'
+           WHEN r.is_deleted THEN 'CANCELLED'
            WHEN r.borrowing_id IS NOT NULL THEN 'FULFILLED'
 --         r.borrowed_t 的零点加上3天小于当前时间时状态为过期
            WHEN date_trunc('day', r.borrowed_at) +

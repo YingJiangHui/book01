@@ -16,6 +16,7 @@
     <result column="closed" jdbcType="BIT" property="closed" />
     <result column="disable_reserve" jdbcType="BIT" property="disableReserve" />
     <result column="disable_borrow" jdbcType="BIT" property="disableBorrow" />
+    <result column="disable_reserve_application" jdbcType="BIT" property="disableReserveApplication" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,7 +78,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, name, latitude, longitude, circumference, created_at, updated_at, is_deleted, 
-    address, max_borrow_days, default_borrow_days, closed, disable_reserve, disable_borrow
+    address, max_borrow_days, default_borrow_days, closed, disable_reserve, disable_borrow, 
+    disable_reserve_application
   </sql>
   <select id="selectByExample" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
     select
@@ -114,12 +116,12 @@
       circumference, created_at, updated_at, 
       is_deleted, address, max_borrow_days, 
       default_borrow_days, closed, disable_reserve, 
-      disable_borrow)
+      disable_borrow, disable_reserve_application)
     values (#{name,jdbcType=VARCHAR}, #{latitude,jdbcType=NUMERIC}, #{longitude,jdbcType=NUMERIC}, 
       #{circumference,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
       #{deleted,jdbcType=BIT}, #{address,jdbcType=VARCHAR}, #{maxBorrowDays,jdbcType=INTEGER}, 
       #{defaultBorrowDays,jdbcType=INTEGER}, #{closed,jdbcType=BIT}, #{disableReserve,jdbcType=BIT}, 
-      #{disableBorrow,jdbcType=BIT})
+      #{disableBorrow,jdbcType=BIT}, #{disableReserveApplication,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.ying.book.pojo.Library" useGeneratedKeys="true">
     insert into public.libraries
@@ -163,6 +165,9 @@
       <if test="disableBorrow != null">
         disable_borrow,
       </if>
+      <if test="disableReserveApplication != null">
+        disable_reserve_application,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -203,6 +208,9 @@
       </if>
       <if test="disableBorrow != null">
         #{disableBorrow,jdbcType=BIT},
+      </if>
+      <if test="disableReserveApplication != null">
+        #{disableReserveApplication,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -257,6 +265,9 @@
       <if test="row.disableBorrow != null">
         disable_borrow = #{row.disableBorrow,jdbcType=BIT},
       </if>
+      <if test="row.disableReserveApplication != null">
+        disable_reserve_application = #{row.disableReserveApplication,jdbcType=BIT},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -277,7 +288,8 @@
       default_borrow_days = #{row.defaultBorrowDays,jdbcType=INTEGER},
       closed = #{row.closed,jdbcType=BIT},
       disable_reserve = #{row.disableReserve,jdbcType=BIT},
-      disable_borrow = #{row.disableBorrow,jdbcType=BIT}
+      disable_borrow = #{row.disableBorrow,jdbcType=BIT},
+      disable_reserve_application = #{row.disableReserveApplication,jdbcType=BIT}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -324,6 +336,9 @@
       <if test="disableBorrow != null">
         disable_borrow = #{disableBorrow,jdbcType=BIT},
       </if>
+      <if test="disableReserveApplication != null">
+        disable_reserve_application = #{disableReserveApplication,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -341,7 +356,8 @@
       default_borrow_days = #{defaultBorrowDays,jdbcType=INTEGER},
       closed = #{closed,jdbcType=BIT},
       disable_reserve = #{disableReserve,jdbcType=BIT},
-      disable_borrow = #{disableBorrow,jdbcType=BIT}
+      disable_borrow = #{disableBorrow,jdbcType=BIT},
+      disable_reserve_application = #{disableReserveApplication,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="org.ying.book.pojo.LibraryExample" resultMap="BaseResultMap">
