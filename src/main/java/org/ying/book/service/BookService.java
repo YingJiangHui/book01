@@ -47,6 +47,9 @@ public class BookService {
     @Autowired
     private ReservationViewMapper reservationViewMapper;
 
+    @Resource
+    private ReservationApplicationService reservationApplicationService;
+
     public Book getBook(Integer id) {
         Book book = bookMapper.selectByPrimaryKey(id);
         book.setFiles(fileService.filesWithUrl(book.getFiles()));
@@ -287,15 +290,22 @@ public class BookService {
     // 下架图书
     @Transactional
     public void deleteBook(Integer id) {
+        List<ReservationApplication> reservationApplicationList = reservationApplicationService.getCurrentReservedBook(id);
+        if (reservationApplicationList != null && !reservationApplicationList.isEmpty()) {
+            throw new CustomException("书籍已被预约，无法下架");
+        }
 
         List<BorrowingView> borrowingViewList = borrowingService.getCurrentBorrowedBook(id);
         if (borrowingViewList != null && !borrowingViewList.isEmpty()) {
             throw new CustomException("书籍已被借阅，无法下架");
         }
+
         List<ReservationView> reservationViewList = reservationService.getCurrentReservedBook(id);
         if (reservationViewList != null && !reservationViewList.isEmpty()) {
             throw new CustomException("书籍已被预订，无法下架");
         }
+
+
 
         Book book = bookMapper.selectByPrimaryKey(id);
         book.setAvailable(false);
