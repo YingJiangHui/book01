@@ -29,7 +29,7 @@ public class BookShelfController {
     }
 
     @DeleteMapping
-    public List<BookShelf> deleteBookFromShelf(@RequestBody List<Integer> bookShelfIds) {
-        return bookShelfService.removeBooksFromShelf(bookShelfIds);
+    public List<BookShelf> deleteBookFromShelf(@RequestBody List<Integer> bookIds) {
+        return bookShelfService.removeBooksFromShelf(bookIds,UserContext.getCurrentUser().getId());
     }
 }

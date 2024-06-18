@@ -50,6 +50,7 @@ public class BookShelfService {
 
     public List<BookShelfGroupByLibraryDto> getBookShelfByUserId(Integer userId) {
         BookShelfExample bookShelfExample = new BookShelfExample();
+        bookShelfExample.setOrderByClause("id desc");
         bookShelfExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
 
         Map<Integer, BookShelfGroupByLibraryDto> hashMap = new HashMap<>();
@@ -62,6 +63,7 @@ public class BookShelfService {
             bookInShelfDto.setId(bookShelf.getId());
             return bookInShelfDto;
         }).forEach((bookInShelfDto) -> {
+//            对同一个图书馆的图书进行合并
             BookShelfGroupByLibraryDto bookShelfGroupByLibraryDto1 = hashMap.get(bookInShelfDto.getLibrary().getId());
             if (bookShelfGroupByLibraryDto1 != null) {
                 List<BookInShelfDto> newList = new ArrayList<>(bookShelfGroupByLibraryDto1.getBooks());
@@ -90,14 +92,14 @@ public class BookShelfService {
 
 
     @Transactional
-    public List<BookShelf> removeBooksFromShelf(List<Integer> bookShelfIds) {
+    public List<BookShelf> removeBooksFromShelf(List<Integer> bookIds,Integer userId) {
 
         BookShelfExample bookShelfExample = new BookShelfExample();
-        bookShelfExample.createCriteria().andIdIn(bookShelfIds).andDeletedEqualTo(false);
+        bookShelfExample.createCriteria().andBookIdIn(bookIds).andUserIdEqualTo(userId).andDeletedEqualTo(false);
 
         List<BookShelf> bookShelves = bookShelfMapper.selectByExample(bookShelfExample);
-        if (bookShelves.size() != bookShelfIds.size()) {
-            throw new CustomException("某图书不在书架中", HttpStatus.INTERNAL_SERVER_ERROR);
+        if (bookShelves.size() != bookIds.size()) {
+            throw new CustomException("存在不在书架中的图书", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         bookShelves.forEach((bookShelf) -> {
             bookShelf.setDeleted(true);
