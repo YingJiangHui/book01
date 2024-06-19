@@ -41,9 +41,10 @@ public class ReservationController {
     public List<ReservationView> getReservations(@ModelAttribute ReservationQueryDto reservationQueryDto) {
         UserJwtDto userJwtDto = UserContext.getCurrentUser();
 //        如果是用户进行查询
-        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
-            reservationQueryDto.setUserId(userJwtDto.getId());
-        }
+//        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
+//            reservationQueryDto.setUserId(userJwtDto.getId());
+//        }
+        reservationQueryDto.setUserId(userJwtDto.getId());
         return reservationService.getReservations(reservationQueryDto);
     }
 

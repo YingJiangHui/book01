@@ -29,6 +29,9 @@ public class ReservationApplicationController {
 
     @GetMapping("/all")
     public List<ReservationApplication> getReservationApplicationListAll(@ModelAttribute ReservationApplicationQueryDto reservationApplicationQueryDto) {
+        if(UserContext.getCurrentUser().getId()!=null){
+            reservationApplicationQueryDto.setUserId(UserContext.getCurrentUser().getId());
+        }
         return reservationApplicationService.getReservationApplicationList(reservationApplicationQueryDto);
     }
 

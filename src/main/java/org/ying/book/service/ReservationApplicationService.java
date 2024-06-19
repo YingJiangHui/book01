@@ -89,6 +89,11 @@ public class ReservationApplicationService {
     private ReservationApplicationExample.Criteria withQueryExample(ReservationApplicationQueryDto reservationApplicationQueryDto, ReservationApplicationExample reservationApplicationExample) {
         reservationApplicationExample.setOrderByClause("created_at desc");
         ReservationApplicationExample.Criteria criteria = reservationApplicationExample.createCriteria();
+
+        if (reservationApplicationQueryDto.getUserId() != null) {
+            criteria.andUserIdEqualTo(reservationApplicationQueryDto.getUserId());
+        }
+
         if (reservationApplicationQueryDto.getBookId() != null) {
             criteria.andBookIdEqualTo(reservationApplicationQueryDto.getBookId());
         }

@@ -54,9 +54,8 @@ public class BorrowingController {
     public PageResultDto<BorrowingView> getBorrowings(@ModelAttribute BorrowingQueryDto borrowingQueryDto) {
         UserJwtDto userJwtDto = UserContext.getCurrentUser();
 //        如果是用户进行查询
-        if(userJwtDto.getRoles().size() == 1 && userJwtDto.getRoles().contains(RoleEnum.READER)){
-            borrowingQueryDto.setUserId(userJwtDto.getId());
-        }
+        borrowingQueryDto.setUserId(userJwtDto.getId());
+
         return borrowingService.getBorrowingsPaginate(borrowingQueryDto);
     }
 
