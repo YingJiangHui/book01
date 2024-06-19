@@ -70,7 +70,7 @@ public class LibraryService {
         libraryBookMapper.selectByExample(libraryBookExample).forEach(libraryBook -> {
             List<BorrowingView> borrowingViewList = borrowingService.getCurrentBorrowedBook(libraryBook.getBookId());
             if (borrowingViewList != null && !borrowingViewList.isEmpty()) {
-                throw new CustomException("该图书馆存在为归还的图书，无法关闭");
+                throw new CustomException("该图书馆存在未归还的图书，无法关闭");
             }
         });
     }
