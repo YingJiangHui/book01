@@ -81,6 +81,10 @@ public class BookService {
                     "    END", bookQueryDto.getFirstLibraryId()));
         }
 
+        if(bookQueryDto.getTitle()!=null && !bookQueryDto.getTitle().isEmpty()){
+            criteria.andTitleLike("%"+bookQueryDto.getTitle()+"%");
+        }
+
         if (bookQueryDto.getIsBanner()!=null){
             criteria.andIsBannerEqualTo(bookQueryDto.getIsBanner());
         }
