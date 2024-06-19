@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.common.PageResultDto;
-import org.ying.book.dto.user.ContextUserDto;
-import org.ying.book.dto.user.UserJwtDto;
-import org.ying.book.dto.user.UserQueryParamsDTO;
-import org.ying.book.dto.user.UserUpdateDto;
+import org.ying.book.dto.user.*;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.User;
@@ -88,7 +85,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable("id") Integer id, @RequestBody UserUpdateDto userUpdateDto) {
+    public User updateUser(@PathVariable("id") Integer id, @RequestBody UserUpdateDto userUpdateDto,HttpServletRequest request) {
         UserJwtDto currentUser = UserContext.getCurrentUser();
         if (currentUser.isReaderOnly()) {
             throw new CustomException("无权限");
@@ -105,7 +102,9 @@ public class UserController {
             });
         }
 
-        return userService.updateUser(id, userUpdateDto);
+        User user = userService.updateUser(id, userUpdateDto);
+        userService.logout(UserLogoutDto.builder().email(user.getEmail()).infoChanged(true).message("用户账号信息变更请重新登录").build());
+        return user;
     }
 
 }

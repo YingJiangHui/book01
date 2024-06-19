@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.ying.book.Context.UserContext;
+import org.ying.book.dto.user.ContextUserDto;
 import org.ying.book.dto.user.UserJwtDto;
 import org.ying.book.dto.user.UserDto;
+import org.ying.book.dto.user.UserLogoutDto;
 import org.ying.book.exception.CustomException;
 import org.ying.book.pojo.User;
 import org.ying.book.service.*;
@@ -100,11 +103,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) throws Exception {
-        Object token = request.getAttribute("token");
-        if(token == null){
-            throw new CustomException("用户未登录", HttpStatus.UNAUTHORIZED);
-        }
-        redisService.setKey(token.toString(), false,jwtUtil.getExpiration(token.toString()) - new Date().getTime() , TimeUnit.MILLISECONDS);
+
+        userService.logout(UserLogoutDto.builder().email(UserContext.getCurrentUser().getEmail()).token(request.getAttribute("token")).message("用户已注销，请重新登录").build());
     }
 //
 //    @GetMapping("/user")

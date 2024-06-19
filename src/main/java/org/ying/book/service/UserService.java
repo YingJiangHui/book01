@@ -1,6 +1,7 @@
 package org.ying.book.service;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +11,7 @@ import org.ying.book.Context.UserContext;
 import org.ying.book.dto.common.PageReqDto;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.email.EmailValidationDto;
-import org.ying.book.dto.user.UserDto;
-import org.ying.book.dto.user.UserJwtDto;
-import org.ying.book.dto.user.UserQueryParamsDTO;
-import org.ying.book.dto.user.UserUpdateDto;
+import org.ying.book.dto.user.*;
 import org.ying.book.enums.RoleEnum;
 import org.ying.book.enums.SystemSettingsEnum;
 import org.ying.book.exception.CustomException;
@@ -27,6 +25,7 @@ import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.PaginationHelper;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -69,19 +68,19 @@ public class UserService {
         List<RoleEnum> roleNames = userQueryParamsDTO.getRoleNames();
         String email = userQueryParamsDTO.getEmail();
         Boolean isBlacklist = userQueryParamsDTO.getIsBlacklist();
-        if(userQueryParamsDTO.getId()!=null){
+        if (userQueryParamsDTO.getId() != null) {
             criteria.andIdEqualTo(userQueryParamsDTO.getId());
         }
-        if(libraryIds!=null && !libraryIds.isEmpty()){
+        if (libraryIds != null && !libraryIds.isEmpty()) {
             criteria.andLibraryIdIn(libraryIds);
         }
-        if(roleNames != null && !roleNames.isEmpty()){
+        if (roleNames != null && !roleNames.isEmpty()) {
             criteria.andRoleIn(roleNames);
         }
-        if(isBlacklist != null){
+        if (isBlacklist != null) {
             criteria.andIsBlacklistEqualTo(isBlacklist);
         }
-        if(email!=null && !email.isEmpty()){
+        if (email != null && !email.isEmpty()) {
             criteria.andEmailEqualTo(email.trim());
         }
 
@@ -151,30 +150,81 @@ public class UserService {
     }
 
 
-
     public void defaultTimesAddOne(Integer userId) {
         Integer maxDefaultTimes = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.MAX_OVERDUE_TIMES).toString());
         User user = userMapper.selectByPrimaryKey(userId);
         user.setDefaultTimes(user.getDefaultTimes() + 1);
-        if(user.getDefaultTimes()>maxDefaultTimes){
+        if (user.getDefaultTimes() > maxDefaultTimes) {
             user.setIsBlacklist(true);
         }
         userMapper.updateByPrimaryKeySelective(user);
     }
+
     @Transactional
-    public User updateUser(Integer userId, UserUpdateDto userUpdateDto ){
+    public User updateUser(Integer userId, UserUpdateDto userUpdateDto) {
         User user = userMapper.selectByPrimaryKey(userId);
-        if(user==null){
+        if (user == null) {
             throw new CustomException("用户不存在", HttpStatus.NOT_FOUND);
         }
-        if(userUpdateDto.getIsBlacklist()!=null){
+        if (userUpdateDto.getIsBlacklist() != null) {
             user.setIsBlacklist(userUpdateDto.getIsBlacklist());
         }
         roleService.userRelativeRoles(userId, userUpdateDto.getRoles());
         userMapper.updateByPrimaryKeySelective(user);
         //      Bind library
         libraryService.userRelativeLibraries(user.getId(), userUpdateDto.getLibraryIds());
+
         return user;
+    }
+
+    public String checkUserIsLogout(String email, String token) {
+        Object object = redisService.getValue("logout" + email);
+        UserLogoutDto userLogoutDto = (UserLogoutDto) object;
+//        当被注销用户的请求到达
+        if (userLogoutDto!=null && userLogoutDto.getInfoChanged()) {
+            deleteLogoutInfo(email);
+            userLogoutDto.setInfoChanged(false);
+            userLogoutDto.setToken(token);
+            logout(userLogoutDto);
+            return userLogoutDto.getMessage();
+        }
+
+        Object tokenObj = redisService.getValue(token);
+        if(tokenObj!=null){
+            return tokenObj.toString();
+        }
+
+        return null;
+    }
+
+    public void disableUserToken(String token, String message) {
+        try {
+            redisService.setKey(token, message, jwtUtil.getExpiration(token) - new Date().getTime(), TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public String checkUserTokenIsDisable(String token) {
+        Object object = redisService.getValue(token);
+        return object != null ? (String) object : null;
+    }
+
+    public void deleteLogoutInfo(String email) {
+        redisService.deleteKey("logout" + email);
+    }
+
+    public void logout( UserLogoutDto userLogoutDto) {
+        try {
+            if (userLogoutDto.getInfoChanged()!=null && userLogoutDto.getInfoChanged()) {
+                Integer expiration = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.TOKEN_EXPIRATION).toString());
+                redisService.setKey("logout" + userLogoutDto.getEmail(), userLogoutDto, expiration * 60 * 60 * 1000, TimeUnit.MILLISECONDS);
+            } else {
+                disableUserToken(userLogoutDto.getToken().toString(), userLogoutDto.getMessage());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

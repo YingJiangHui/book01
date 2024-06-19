@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.ying.book.Context.UserContext;
 import org.ying.book.dto.user.UserJwtDto;
+import org.ying.book.dto.user.UserLogoutDto;
 import org.ying.book.service.RedisService;
+import org.ying.book.service.UserService;
 import org.ying.book.utils.JwtUtil;
 import org.ying.book.utils.Result;
 
@@ -21,6 +23,7 @@ import java.io.IOException;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
+    private final UserService userService;
     ObjectMapper objectMapper;
 
     JwtUtil jwtUtil;
@@ -28,10 +31,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     RedisService redisService;
 
     @Autowired
-    public AuthInterceptor(ObjectMapper objectMapper, JwtUtil jwtUtil, RedisService redisService){
+    public AuthInterceptor(ObjectMapper objectMapper, JwtUtil jwtUtil, RedisService redisService, UserService userService){
         this.objectMapper = objectMapper;
         this.jwtUtil = jwtUtil;
         this.redisService = redisService;
+        this.userService = userService;
     }
 
     @Override
@@ -46,10 +50,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         // 提取token部分
         String token = authorizationHeader.substring(7); // 去掉 "Bearer " 前缀
-
-        Object isLogout = redisService.getValue(token);
-        if(isLogout != null){
-            setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"用户已注销，请重新登录");
+        UserJwtDto userJwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token).getSubject(), UserJwtDto.class);
+        String message = userService.checkUserIsLogout(userJwtDTO.getEmail(), token);
+        if(message != null){
+            setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,message);
             return false;
         }
         request.setAttribute("token",token);
@@ -61,9 +65,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        UserJwtDto userJwtDTO = objectMapper.readValue(jwtUtil.parseJWT(token.toString()).getSubject(), UserJwtDto.class);
         if(userJwtDTO.isBlacklist()){
-            setReturn(response, HttpServletResponse.SC_UNAUTHORIZED,"用户已禁用，请联系管理员");
+            setReturn(response, HttpServletResponse.SC_FORBIDDEN,"用户已禁用，请联系管理员");
             return false;
         }
         return true;
