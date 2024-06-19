@@ -2,6 +2,7 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +15,7 @@ import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.exception.CustomException;
 import org.ying.book.mapper.ReservationMapper;
 import org.ying.book.mapper.ReservationViewMapper;
-import org.ying.book.pojo.Reservation;
-import org.ying.book.pojo.ReservationExample;
-import org.ying.book.pojo.ReservationView;
-import org.ying.book.pojo.ReservationViewExample;
+import org.ying.book.pojo.*;
 import org.ying.book.utils.PaginationHelper;
 
 import java.util.*;
@@ -38,6 +36,8 @@ public class ReservationService {
 
     @Resource
     FileService fileService;
+    @Autowired
+    private LibraryService libraryService;
 
     //获取指定书籍在指定时间段下的借阅记录
     public List<Reservation> getReservationsBetweenBorrowTime(List<Integer> bookIds, Date borrowedAt, Date returnedAt) {
@@ -65,6 +65,15 @@ public class ReservationService {
     @Transactional
     public List<Reservation> reserveBooks(ReservationDto reservationDto) {
         List<Integer> bookIds = reservationDto.getBookIds();
+
+        if(bookIds!=null&&!bookIds.isEmpty()){
+            Library library = libraryService.getLibraryByBookId(bookIds.get(0));
+            if(library.getDisableReserve()){
+                throw new CustomException("该图书馆已关闭预订功能");
+            }
+        }else{
+            throw new CustomException("未找到书籍");
+        }
 
         borrowingService.validConflictBorrowTime(bookIds, reservationDto.getBorrowedAt(), reservationDto.getExpectedReturnAt());
         this.validConflictReserveTime(bookIds, reservationDto.getBorrowedAt(), reservationDto.getExpectedReturnAt());

@@ -208,4 +208,14 @@ public class LibraryService {
         bookService.withCriteria(bookExample, criteria, booksInLibraryDto);
         return bookService.getBooksWithPaginate(bookExample, booksInLibraryDto);
     }
+
+    public Library getLibraryByBookId(Integer bookId) {
+        LibraryBookExample libraryBookExample = new LibraryBookExample();
+        libraryBookExample.createCriteria().andBookIdEqualTo(bookId);
+        List<LibraryBook> libraryBooks = libraryBookMapper.selectByExample(libraryBookExample);
+        if (libraryBooks.isEmpty()) {
+            return null;
+        }
+        return libraryMapper.selectByPrimaryKey(libraryBooks.get(0).getLibraryId());
+    }
 }

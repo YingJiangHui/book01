@@ -64,6 +64,8 @@ public class BorrowingService {
     SystemSettingsService systemSettingsService;
     @Autowired
     private ReservationApplicationService reservationApplicationService;
+    @Autowired
+    private LibraryService libraryService;
 
     public boolean borrowDaysValidate(Date startDate, Date endDate, Integer additionDays) {
         Integer maxDays = this.getMaxDays();
@@ -134,6 +136,16 @@ public class BorrowingService {
         BorrowingExample.Criteria criteria = borrowingExample.createCriteria();
         criteria.andIdIn(borrowingIds);
         List<Borrowing> borrowings = borrowingMapper.selectByExample(borrowingExample);
+
+        if(borrowings!=null&&!borrowings.isEmpty()){
+            Library library = libraryService.getLibraryByBookId(borrowings.get(0).getBookId());
+            if(library.getClosed()){
+                throw new CustomException("该图书馆已闭馆");
+            }
+        }else{
+            throw new CustomException("未找到书籍");
+        }
+
         borrowings.stream().map(borrowing -> {
             if (borrowing.getExpectedReturnAt().getTime() < new Date().getTime()) {
 //              违约归还
@@ -164,6 +176,16 @@ public class BorrowingService {
     @Transactional
     public List<Borrowing> borrowBooks(BorrowingDto borrowingDto) {
         List<Integer> bookIds = borrowingDto.getBookIds();
+//        判断图书的借阅功能是否关闭
+        if(bookIds!=null&&!bookIds.isEmpty()){
+            Library library = libraryService.getLibraryByBookId(bookIds.get(0));
+            if(library.getDisableBorrow()){
+                throw new CustomException("该图书馆已关闭借阅功能");
+            }
+        }else{
+            throw new CustomException("未找到书籍");
+        }
+
         int maxBorrowSize = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.MAX_BORROW_SIZE).toString());
         if (bookIds.size() > maxBorrowSize) {
             throw new CustomException("在借书籍+本次借阅不能超过" + maxBorrowSize + "本书籍");

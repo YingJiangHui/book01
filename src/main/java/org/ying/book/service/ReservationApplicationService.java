@@ -54,6 +54,8 @@ public class ReservationApplicationService {
 
     @Resource
     private ReservationApplicationService reservationApplicationService;
+    @Autowired
+    private LibraryService libraryService;
 
     public Boolean isRepetitionReservation(Integer userId, Integer BookId) {
         ReservationApplicationExample reservationApplicationExample = new ReservationApplicationExample();
@@ -63,6 +65,16 @@ public class ReservationApplicationService {
 
     @Transactional
     public ReservationApplication reservationApply(ReservationApplication reservationApplication) {
+
+        if(reservationApplication.getBookId()!=null){
+            Library library = libraryService.getLibraryByBookId(reservationApplication.getBookId());
+            if(library.getDisableReserveApplication()){
+                throw new CustomException("该图书馆已关闭预约功能");
+            }
+        }else{
+            throw new CustomException("未找到书籍");
+        }
+
         if (!borrowingService.hasBorrowed(reservationApplication.getBookId())) {
             throw new CustomException("未借阅的书籍不可申请预约", HttpStatus.INTERNAL_SERVER_ERROR);
         }
