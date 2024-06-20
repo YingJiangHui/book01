@@ -25,6 +25,9 @@ public class StatisticsService {
             if (statisticsQuery.getStartTime() != null) {
                 criteria.andBorrowedAtBetween(statisticsQuery.getStartTime(),statisticsQuery.getEndTime());
             }
+            if (statisticsQuery.getLibraryId() != null){
+                criteria.andLibraryIdEqualTo(statisticsQuery.getLibraryId());
+            }
         });
         return criteria;
     }
@@ -44,7 +47,7 @@ public class StatisticsService {
     public List<HotRankStatisticsEntity> getHotBorrowedLibraries(StatisticsQueryDto statisticsQueryDto) {
         BorrowingExample borrowingExample = new BorrowingExample();
         borrowingWithExample(borrowingExample, statisticsQueryDto);
-        return PaginationHelper.paginate(statisticsQueryDto, (rowBounds,queryDto)-> borrowingMapper.selectHotBorrowedLibraries(borrowingExample,rowBounds));
+        return PaginationHelper.paginate(statisticsQueryDto, (rowBounds,queryDto)-> borrowingMapper.selectHotBorrowedLibraries(borrowingExample,statisticsQueryDto.getDateTrunc(),rowBounds));
     }
 
     public List<HotRankStatisticsEntity> selectHotSearchText(StatisticsQueryDto statisticsQueryDto) {
@@ -54,7 +57,6 @@ public class StatisticsService {
             if (statisticsQuery.getStartTime() != null&&statisticsQuery.getEndTime() != null){
                 criteria.andCreatedAtBetween(statisticsQuery.getStartTime(),statisticsQuery.getEndTime());
             }
-
 
         });
 

@@ -225,6 +225,13 @@ public class BorrowingExample {
             return (Criteria) this;
         }
 
+
+        public Criteria andLibraryIdEqualTo(Integer value) {
+            addCriterion("l.id =", value, "libraryId");
+            return (Criteria) this;
+        }
+
+
         public Criteria andBookIdIsNull() {
             addCriterion("book_id is null");
             return (Criteria) this;

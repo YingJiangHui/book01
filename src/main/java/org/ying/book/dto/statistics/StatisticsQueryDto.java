@@ -15,5 +15,7 @@ public class StatisticsQueryDto extends PageReqDto implements IStatisticsQueryDt
     Date startTime = null;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     Date endTime = null;
-    Integer firstLibraryId;
+    Integer libraryId;
+
+    String dateTrunc="day";
 }

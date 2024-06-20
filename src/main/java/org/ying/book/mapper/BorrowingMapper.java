@@ -32,5 +32,5 @@ public interface BorrowingMapper {
 
     List<HotRankStatisticsEntity> selectHotBorrowedBooks(BorrowingExample example, RowBounds rowBounds);
     List<HotRankStatisticsEntity> selectHotBorrowedCategories(BorrowingExample example, RowBounds rowBounds);
-    List<HotRankStatisticsEntity> selectHotBorrowedLibraries(BorrowingExample example, RowBounds rowBounds);
+    List<HotRankStatisticsEntity> selectHotBorrowedLibraries(@Param("example") BorrowingExample example,@Param("dateTrunc") String dateTrunc, RowBounds rowBounds);
 }

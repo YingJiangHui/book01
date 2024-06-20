@@ -284,10 +284,11 @@
     <result column="item_id" jdbcType="INTEGER" property="id" />
     <result column="item_count" jdbcType="INTEGER" property="count" />
     <result column="item_name" jdbcType="INTEGER" property="name" />
+    <result column="date_range" jdbcType="INTEGER" property="dateRange" />
   </resultMap>
 
   <select id="selectHotBorrowedBooks" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
-    select b.id as item_id, b.title as item_name, count(book_id) as item_count from public.borrowings join public.books b on book_id = b.id
+    select b.id as item_id, b.title as item_name, count(bw.book_id) as item_count from public.borrowings bw join public.books b on bw.book_id = b.id join public.library_books lb on b.id = lb.book_id join public.libraries l on lb.library_id = l.id
     <if test="_parameter != null">
 
       <include refid="Example_Where_Clause" />
@@ -297,18 +298,32 @@
 
   <select id="selectHotBorrowedCategories" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
     select bc.id as item_id, bc.category_name as item_name,count(bc.id) as item_count from public.borrowings bw join
-    public.books b on bw.book_id = b.id join public.book_categories bc on b.category_id = bc.id
+    public.books b on bw.book_id = b.id join public.book_categories bc on b.category_id = bc.id join public.library_books lb on b.id = lb.book_id join public.libraries l on lb.library_id = l.id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause"/>
     </if>
     group by bc.id order by item_count desc
   </select>
 
-  <select id="selectHotBorrowedLibraries" parameterType="org.ying.book.pojo.BorrowingExample" resultMap="RankBaseResultMap">
-    select  l.id as item_id, l.name as item_name,count(l.id) as item_count from borrowings bw left join books b on bw.book_id = b.id left  join library_books lb on b.id = lb.book_id left join libraries l on lb.library_id = l.id
-      <if test="_parameter != null">
-        <include refid="Example_Where_Clause"/>
-      </if>
-    group by l.id order by item_count desc
+  <select id="selectHotBorrowedLibraries" parameterType="map" resultMap="RankBaseResultMap">
+    select
+    l.id as item_id,
+    l.name as item_name,
+    DATE_TRUNC(#{dateTrunc}, bw.borrowed_at) as date_range,
+    count(l.id) as item_count
+    from
+    borrowings bw
+    left join books b on bw.book_id = b.id
+    left join library_books lb on b.id = lb.book_id
+    left join libraries l on lb.library_id = l.id
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause"/>
+    </if>
+    group by
+    l.id,
+    date_range
+    order by
+    item_count desc
   </select>
+
 </mapper>

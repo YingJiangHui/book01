@@ -225,6 +225,11 @@ public class SearchExample {
             return (Criteria) this;
         }
 
+        public Criteria andLibraryIdEqualTo(Integer value) {
+            addCriterion("l.id =", value, "libraryId");
+            return (Criteria) this;
+        }
+
         public Criteria andKeywordIsNull() {
             addCriterion("keyword is null");
             return (Criteria) this;
