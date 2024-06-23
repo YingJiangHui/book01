@@ -117,11 +117,12 @@ public class UserService {
             log.info("密码校验通过");
             return user;
         }
-        throw new RuntimeException("密码错误");
+        throw new CustomException("密码错误");
     }
 
     @Transactional
     public void register(UserDto userDto) {
+        // Get validation code
         Object codeInRedis = redisService.getValue(userDto.getEmail());
         EmailValidationDto emailValidationDto = (EmailValidationDto) codeInRedis;
         //      Create User Entity

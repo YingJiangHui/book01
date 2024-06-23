@@ -38,6 +38,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         this.userService = userService;
     }
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //从header中获取token

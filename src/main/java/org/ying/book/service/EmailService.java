@@ -98,13 +98,10 @@ public class EmailService {
             if(role!=null){
                 emailValidationDto.setRoles(Arrays.asList(role.getRoleName()));
             }
-        }else{
-//            任意用户在重置密码
-//        用户的话 READER 图书馆管理员 LIBRARY_ADMIN
-//            emailValidationDto.setRoleIds(user.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
         }
 
         Integer validateCodeTimeout = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.CAPTCHA_EXPIRE_TIME).toString());
+//            验证码存到redis
         redisService.setKey(to, emailValidationDto, validateCodeTimeout);
         Context context = new Context();
         context.setVariable("verificationCode", validateCode);
@@ -120,6 +117,7 @@ public class EmailService {
         String inviteCode = GeneratorCode.generator(validateCodeLength);
         emailValidationDto.setCode(inviteCode);
 //        可以存一些待注册管理员的权限信息
+        redisService.setKey(to, emailValidationDto, inviteCodeTimeout);
         Integer inviteCodeTimeout = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.INVITATION_EXPIRE_TIME).toString());
         String inviteRegisterLink = systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.INVITATION_URL).toString();
         String link = String.format("%s?inviteCode=%s&email=%s", inviteRegisterLink,inviteCode,to);

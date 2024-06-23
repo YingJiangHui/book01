@@ -66,6 +66,8 @@ public class BorrowingService {
     private ReservationApplicationService reservationApplicationService;
     @Autowired
     private LibraryService libraryService;
+    @Autowired
+    private BookService bookService;
 
     public boolean borrowDaysValidate(Date startDate, Date endDate, Integer additionDays) {
         Integer maxDays = this.getMaxDays();
@@ -185,7 +187,11 @@ public class BorrowingService {
         }else{
             throw new CustomException("未找到书籍");
         }
-
+        bookService.getBooksByIds(bookIds).forEach((book)->{
+            if(!book.getAvailable()){
+                throw new CustomException("图书已下架");
+            }
+        });
         int maxBorrowSize = Integer.parseInt(systemSettingsService.getSystemSettingValueByName(SystemSettingsEnum.MAX_BORROW_SIZE).toString());
         if (bookIds.size() > maxBorrowSize) {
             throw new CustomException("在借书籍+本次借阅不能超过" + maxBorrowSize + "本书籍");
