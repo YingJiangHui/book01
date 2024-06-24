@@ -280,9 +280,10 @@ public class BookService {
         searchWith(criteriaPublisher, bookSearchDto);
 
         BookExample.Criteria criteriaIsbn = bookExample.createCriteria();
-        criteriaIsbn.andIsbnEqualTo("%" + bookSearchDto.getKeyword() + "%");
-        searchWith(criteriaIsbn, bookSearchDto);
-
+        if(bookSearchDto.getKeyword()!=null&&!bookSearchDto.getKeyword().isEmpty()){
+            criteriaIsbn.andIsbnEqualTo(bookSearchDto.getKeyword());
+            searchWith(criteriaIsbn, bookSearchDto);
+        }
 //        bookExample.setDistinct(true);
         bookExample.or(criteriaTitle);
         bookExample.or(criteriaAuthor);

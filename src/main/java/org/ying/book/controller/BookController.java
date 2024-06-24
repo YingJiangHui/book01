@@ -61,6 +61,7 @@ public class BookController {
         PageResultDto<Book> bookPageResultDto = bookService.searchBook(bookSearchDto);
         UserJwtDto currentUser = UserContext.getCurrentUser();
         if (bookPageResultDto.getTotal() != 0 && currentUser != null) {
+
             searchHistoryService.saveSearchHistory(currentUser.getId(), bookSearchDto.getKeyword(), SearchTargetEnum.BOOK);
         }
         return bookPageResultDto;
