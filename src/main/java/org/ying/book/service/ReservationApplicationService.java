@@ -2,9 +2,15 @@ package org.ying.book.service;
 
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.ying.book.dto.borrowing.BorrowingDto;
 import org.ying.book.dto.common.PageReqDto;
@@ -33,6 +39,7 @@ import java.util.Objects;
 @Service
 public class ReservationApplicationService {
 
+    private static final Logger log = LoggerFactory.getLogger(ReservationApplicationService.class);
     @Resource
     ReservationApplicationMapper reservationApplicationMapper;
 
@@ -57,6 +64,12 @@ public class ReservationApplicationService {
     @Autowired
     private LibraryService libraryService;
 
+    @Autowired
+    private PlatformTransactionManager platformTransactionManager;
+
+    @Autowired
+    private TransactionDefinition transactionDefinition;
+
     public Boolean isRepetitionReservation(Integer userId, Integer BookId) {
         ReservationApplicationExample reservationApplicationExample = new ReservationApplicationExample();
         reservationApplicationExample.createCriteria().andUserIdEqualTo(userId).andBookIdEqualTo(BookId).andStatusIn(Arrays.asList(ReservationApplicationEnum.PENDING.name(), ReservationApplicationEnum.NOTIFIED.name()));
@@ -74,20 +87,24 @@ public class ReservationApplicationService {
         }else{
             throw new CustomException("未找到书籍");
         }
+        if (isRepetitionReservation(reservationApplication.getUserId(), reservationApplication.getBookId())) {
+            throw new CustomException("不可重复预约", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if(this.getFirstReservationApplication(reservationApplication.getBookId())!=null){
+            reservationApplicationMapper.insertSelective(reservationApplication);
+            return reservationApplication;
+        }
 
         if (!borrowingService.hasBorrowed(reservationApplication.getBookId())) {
             throw new CustomException("未借阅的书籍不可申请预约", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (isRepetitionReservation(reservationApplication.getUserId(), reservationApplication.getBookId())) {
-            throw new CustomException("不可重复预约", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
         reservationApplicationMapper.insertSelective(reservationApplication);
         return reservationApplication;
     }
 
     private ReservationApplicationExample.Criteria withQueryExample(ReservationApplicationQueryDto reservationApplicationQueryDto, ReservationApplicationExample reservationApplicationExample) {
-        reservationApplicationExample.setOrderByClause("created_at desc");
         ReservationApplicationExample.Criteria criteria = reservationApplicationExample.createCriteria();
 
         if (reservationApplicationQueryDto.getUserId() != null) {
@@ -119,6 +136,7 @@ public class ReservationApplicationService {
 
     public List<ReservationApplication> getReservationApplicationList(ReservationApplicationQueryDto reservationApplicationQueryDto) {
         ReservationApplicationExample reservationApplicationExample = new ReservationApplicationExample();
+        reservationApplicationExample.setOrderByClause(reservationApplicationQueryDto.getOrderByClause()!=null?reservationApplicationQueryDto.getOrderByClause():"created_at desc");
         withQueryExample(reservationApplicationQueryDto, reservationApplicationExample);
         return reservationApplicationMapper.selectByExample(reservationApplicationExample).stream().map((item) -> {
             item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
@@ -128,6 +146,8 @@ public class ReservationApplicationService {
 
     public PageResultDto<ReservationApplication> getReservationApplicationListPagination(ReservationApplicationQueryDto reservationApplicationQueryDto) {
         ReservationApplicationExample reservationApplicationExample = new ReservationApplicationExample();
+        reservationApplicationExample.setOrderByClause("created_at desc");
+
         withQueryExample(reservationApplicationQueryDto, reservationApplicationExample);
         return PaginationHelper.paginate(reservationApplicationQueryDto, (rowBounds, reqDto) -> reservationApplicationMapper.selectByExampleWithRowbounds(reservationApplicationExample, rowBounds).stream().map((item) -> {
             item.getBook().setFiles(fileService.filesWithUrl(item.getBook().getFiles()));
@@ -136,7 +156,16 @@ public class ReservationApplicationService {
     }
 
     public ReservationApplication getFirstReservationApplication(Integer bookId) {
-        ReservationApplicationQueryDto reservationApplicationQueryDto = ReservationApplicationQueryDto.builder().bookId(bookId).status(Arrays.asList(ReservationApplicationEnum.PENDING, ReservationApplicationEnum.NOTIFIED)).build();
+        ReservationApplicationQueryDto reservationApplicationQueryDto = ReservationApplicationQueryDto.builder().bookId(bookId).orderByClause("created_at asc").status(Arrays.asList(ReservationApplicationEnum.PENDING, ReservationApplicationEnum.NOTIFIED)).build();
+        List<ReservationApplication> reservationApplications = getReservationApplicationList(reservationApplicationQueryDto);
+        if (reservationApplications.isEmpty()) {
+            return null;
+        }
+        return reservationApplications.get(0);
+    }
+
+    public ReservationApplication getFirstPendingReservationApplication(Integer bookId) {
+        ReservationApplicationQueryDto reservationApplicationQueryDto = ReservationApplicationQueryDto.builder().bookId(bookId).orderByClause("created_at asc").status(Arrays.asList(ReservationApplicationEnum.PENDING)).build();
         List<ReservationApplication> reservationApplications = getReservationApplicationList(reservationApplicationQueryDto);
         if (reservationApplications.isEmpty()) {
             return null;
@@ -147,6 +176,21 @@ public class ReservationApplicationService {
     @Transactional
     public void cancelReservationApplication(Integer reservationApplicationId) {
         ReservationApplication reservationApplication = reservationApplicationMapper.selectByPrimaryKey(reservationApplicationId);
+        String prevStatus = reservationApplication.getStatus();
+        reservationApplicationService.cancelReservationApplication(reservationApplication);
+        if(Objects.equals(prevStatus, "NOTIFIED")){
+            try {
+                ReservationApplication firstReservationApplication = reservationApplicationService.getFirstPendingReservationApplication(reservationApplication.getBookId());
+                if (firstReservationApplication != null)
+                    reservationApplicationService.notifiedReservationApplication(firstReservationApplication.getId());
+            } catch (Exception e) {
+                log.info("借阅通知发送失败");
+            }
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void cancelReservationApplication(ReservationApplication reservationApplication){
         if (reservationApplication.getStatus().equals(ReservationApplicationEnum.CANCELLED.name())) {
             throw new CustomException("预约申请已取消", HttpStatus.INTERNAL_SERVER_ERROR);
         }

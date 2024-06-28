@@ -61,21 +61,21 @@ public class UserController {
         if (user.isReaderOnly()) {
             throw new CustomException("无权限");
         }
-        if (user.isLibraryAdminOnly()) {
-            if (userQueryParamsDTO.getLibraryIds() == null || userQueryParamsDTO.getLibraryIds().isEmpty()) {
-                throw new CustomException("无权限");
-            }
-            Set set = new HashSet();
-            userQueryParamsDTO.getLibraryIds().forEach(id -> {
-                set.add(id);
-            });
-            user.getManagedLibraryIds().forEach(id -> {
-                set.add(id);
-            });
-            if (set.size() != user.getManagedLibraryIds().size()) {
-                throw new CustomException("无权限");
-            }
-        }
+//        if (user.isLibraryAdminOnly()) {
+//            if (userQueryParamsDTO.getLibraryIds() == null || userQueryParamsDTO.getLibraryIds().isEmpty()) {
+//                throw new CustomException("无权限");
+//            }
+//            Set set = new HashSet();
+//            userQueryParamsDTO.getLibraryIds().forEach(id -> {
+//                set.add(id);
+//            });
+//            user.getManagedLibraryIds().forEach(id -> {
+//                set.add(id);
+//            });
+//            if (set.size() != user.getManagedLibraryIds().size()) {
+//                throw new CustomException("无权限");
+//            }
+//        }
         return userService.getUsersWithTotal(userQueryParamsDTO);
     }
 

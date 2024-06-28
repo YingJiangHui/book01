@@ -27,13 +27,17 @@ public class ReaderInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        UserJwtDto userJwtDTO = UserContext.getCurrentUser();
-        if (userJwtDTO.getRoles().contains(RoleEnum.READER)) {
-            return true;
-        } else {
-            AuthInterceptor.setReturn(response, HttpServletResponse.SC_FORBIDDEN, "账号权限不足");
+        String method = request.getMethod();//获取请求方式
+        if ("POST".equals(method)) {
+            UserJwtDto userJwtDTO = UserContext.getCurrentUser();
+            if (userJwtDTO.getRoles().contains(RoleEnum.READER)) {
+                return true;
+            } else {
+                AuthInterceptor.setReturn(response, HttpServletResponse.SC_FORBIDDEN, "账号权限不足");
 //           返回权限不足
-            return false;
+                return false;
+            }
         }
+        return true;
     }
 }
