@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.library.BooksInLibraryDto;
 import org.ying.book.dto.library.LibraryDto;
+import org.ying.book.dto.statistics.StatisticsQueryDto;
 import org.ying.book.pojo.Book;
 import org.ying.book.pojo.Library;
 import org.ying.book.service.LibraryService;
@@ -38,8 +39,8 @@ public class LibraryController {
     }
 
     @GetMapping("/all")
-    public List<Library> getLibrariesAll() {
-        return libraryService.getLibrariesAll();
+    public List<Library> getLibrariesAll(@ModelAttribute StatisticsQueryDto statisticsQueryDto) {
+        return libraryService.getLibrariesAll(statisticsQueryDto);
     }
 
     @GetMapping("{libraryId}/books")
