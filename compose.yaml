@@ -1,23 +1,26 @@
 services:
-#  book:
-#    image: book:0.0.1-SNAPSHOT
-#    environment:
-##      ELASTIC_APM_ENABLED: false
-##      APPLICATION_SAIKUL_PAY_BASE_URL: https://ep-test.saikul.com/api
-#      SERVER_SERVLET_CONTEXT_PATH: /api
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: rootroot
-#      SPRING_FLYWAY_USER: root
-#      SPRING_FLYWAY_PASSWORD: rootroot
-##      SPRING_RABBITMQ_HOST: rabbitmq
-##      SPRING_DATA_REDIS_HOST: redis
-#    ports:
-#      - 8098:8099
-#    networks:
-#      - network
-#    links:
-#      - postgres
+  book_server:
+    container_name: book_server
+    image: registry.cn-shanghai.aliyuncs.com/makabaka/book
+    environment:
+#      ELASTIC_APM_ENABLED: false
+#      APPLICATION_SAIKUL_PAY_BASE_URL: https://ep-test.saikul.com/api
+      SERVER_SERVLET_CONTEXT_PATH: /api
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootroot
+      SPRING_FLYWAY_USER: root
+      SPRING_FLYWAY_PASSWORD: rootroot
+#      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_DATA_REDIS_HOST: redis
+    ports:
+      - 8098:8099
+    networks:
+      - network
+    links:
+      - postgres
+    depends_on:
+      - postgres
   minio:
     image: minio/minio
     ports:
@@ -26,11 +29,15 @@ services:
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
-    command: server /data --console-address ":9001"
+    command: server --address ":9000" --console-address ":9001" /data
+    volumes:
+#      - C:\app-data\docker\volumns\minio\certs:/root/.minio/certs
+      - minio_data:/data
     networks:
       - network
 
   postgres:
+    container_name: postgres_01
     image: 'postgres:latest'
     environment:
       POSTGRES_DB: postgres
@@ -40,6 +47,8 @@ services:
       - 5432:5432
     networks:
       - network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   redis:
     image: 'redis:latest'
     ports:
@@ -60,7 +69,40 @@ services:
       - network
     ports:
       - 5050:80
+  book-user-ui:
+    container_name: book-user-ui_01
+    image: registry.cn-shanghai.aliyuncs.com/makabaka/book-user-ui:latest
+    ports:
+      - 8080:443
+    depends_on:
+      - book_server
+    networks:
+      - network
+  book-admin-ui:
+    container_name: book-admin-ui_01
+    image: registry.cn-shanghai.aliyuncs.com/makabaka/book-admin-ui:latest
+    ports:
+      - 8081:443
+    depends_on:
+      - book_server
+    networks:
+      - network
+  book-gateway:
+    container_name: book-gateway_01
+    image: registry.cn-shanghai.aliyuncs.com/makabaka/book-gateway:latest
+    ports:
+      - 443:443
+    depends_on:
+      - book-user-ui
+      - book-admin-ui
+    networks:
+      - network
 
 networks:
   network:
     driver: bridge
+
+
+volumes:
+  postgres_data:
+  minio_data:

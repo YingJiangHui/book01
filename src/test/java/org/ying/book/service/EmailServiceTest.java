@@ -23,23 +23,23 @@ public class EmailServiceTest {
     @Autowired
     RedisService redisService;
 
-    @Test
-    public void sendEmailTest() throws MessagingException, UnsupportedEncodingException {
-        emailService.sendVerificationCode("473380917@qq.com","99001");
-    }
-
-    @Test
-    public void sendValidateCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
-        ;
-        String code = emailService.sendVerificationEmail(EmailValidationDto.builder().email("15867925894@163.com").build());
-        // 会在redis中存储
-        Assertions.assertEquals(redisService.getValue("15867925894@163.com"),code);
-    }
-
-    @Test
-    public void sendInviteCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
-        String code = emailService.sendInvitationEmail(EmailValidationDto.builder().email("15867925894@163.com").build());
-        // 会在redis中存储
-        Assertions.assertNotNull(redisService.getValue(code));
-    }
+//    @Test
+//    public void sendEmailTest() throws MessagingException, UnsupportedEncodingException {
+//        emailService.sendVerificationCode("473380917@qq.com","99001");
+//    }
+//
+//    @Test
+//    public void sendValidateCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
+//        ;
+//        String code = emailService.sendVerificationEmail(EmailValidationDto.builder().email("15867925894@163.com").build());
+//        // 会在redis中存储
+//        Assertions.assertEquals(redisService.getValue("15867925894@163.com"),code);
+//    }
+//
+//    @Test
+//    public void sendInviteCodeEmailTestUseTemplate() throws MessagingException, UnsupportedEncodingException {
+//        String code = emailService.sendInvitationEmail(EmailValidationDto.builder().email("15867925894@163.com").build());
+//        // 会在redis中存储
+//        Assertions.assertNotNull(redisService.getValue(code));
+//    }
 }

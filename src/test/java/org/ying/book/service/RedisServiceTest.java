@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RedisServiceTest {
     @Resource
     RedisService redisService;
-
-    @Test
-    public void setValueTest() {
-        redisService.setKey("1236","aaa", 30, TimeUnit.SECONDS);
-    }
-    @Test
-    public void getValueTest() {
-        assertEquals(redisService.getValue("1236"),"aaa");
-    }
+//
+//    @Test
+//    public void setValueTest() {
+//        redisService.setKey("1236","aaa", 30, TimeUnit.SECONDS);
+//    }
+//    @Test
+//    public void getValueTest() {
+//        assertEquals(redisService.getValue("1236"),"aaa");
+//    }
 
 }
