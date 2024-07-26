@@ -49,6 +49,10 @@ jobs:
           name: Rename Docker Image
           command: docker tag book:0.0.1-SNAPSHOT $CI_REGISTRY/makabaka/book-server:latest
       - run:
+          name: Docker Login
+          command: |
+            echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+      - run:
           name: Push Docker Image
           command: docker push $CI_REGISTRY/makabaka/book-server:latest
       - store_artifacts:
