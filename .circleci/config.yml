@@ -1,0 +1,58 @@
+version: 2.1
+
+executors:
+  maven:
+    docker:
+      - image: cimg/openjdk:17.0
+
+jobs:
+#  build-java:
+#    executor: maven
+#    steps:
+#      - checkout
+#      - run:
+#          name: Calculate cache key
+#          command: |
+#            find . -name 'pom.xml' -o -name 'gradlew*' -o -name '*.gradle*' | \
+#                    sort | xargs cat > /tmp/CIRCLECI_CACHE_KEY
+#      - restore_cache:
+#          key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
+#      - run:
+#          name: Run Maven Verify
+#          command: mvn verify -Dmaven.test.skip=true
+#      - store_test_results:
+#          path: target/surefire-reports
+#      - save_cache:
+#          key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
+#          paths:
+#            - ~/.m2/repository
+#      - persist_to_workspace:
+#          root: target
+#          paths:
+#            - .
+
+  build-docker-image:
+    executor: maven
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+#      - attach_workspace:
+#          at: target
+#      - restore_cache:
+#          key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
+      - run:
+          name: Build Docker Image
+          command: mvn spring-boot:build-image
+      - store_artifacts:
+          path: target
+          destination: build-artifacts
+
+workflows:
+  build-and-deploy:
+    jobs:
+#      - build-java
+      - build-docker-image
+#          requires:
+#            - test-java

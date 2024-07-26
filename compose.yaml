@@ -13,6 +13,9 @@ services:
       SPRING_FLYWAY_PASSWORD: rootroot
 #      SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_DATA_REDIS_HOST: redis
+      MINIO_URL: http://oss.admin.makkapakka.cn
+      MINIO_ENDPOINT: http://oss.makkapakka.cn
+      CUSTOM_INVITE-REGISTER_REGISTER-LINK: http://book.admin.makkapakka.cn/register
     ports:
       - 8098:8099
     networks:
@@ -73,7 +76,7 @@ services:
     container_name: book-user-ui_01
     image: registry.cn-shanghai.aliyuncs.com/makabaka/book-user-ui:latest
     ports:
-      - 8080:443
+      - 8080:80
     depends_on:
       - book_server
     networks:
@@ -82,7 +85,7 @@ services:
     container_name: book-admin-ui_01
     image: registry.cn-shanghai.aliyuncs.com/makabaka/book-admin-ui:latest
     ports:
-      - 8081:443
+      - 8081:80
     depends_on:
       - book_server
     networks:
@@ -91,7 +94,7 @@ services:
     container_name: book-gateway_01
     image: registry.cn-shanghai.aliyuncs.com/makabaka/book-gateway:latest
     ports:
-      - 443:443
+      - 80:80
     depends_on:
       - book-user-ui
       - book-admin-ui
