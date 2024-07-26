@@ -71,7 +71,7 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-#      - build-java
       - build-docker-image
-#          requires:
-#            - test-java
+      - deploy:
+          requires:
+            - build-docker-image
