@@ -54,19 +54,19 @@ jobs:
       - store_artifacts:
           path: target
           destination: build-artifacts
-      - deploy:
-          executor: maven
-          steps:
-            # Replace this with steps to deploy to users
-            - run:
-                name: Login Server
-                command: |
-                  ssh -o StrictHostKeyChecking=no book@ssh.makkapakka.cn '
-                    ls &&
-                    cd server && 
-                    docker pull '"$CI_REGISTRY"'/makabaka/book-server:latest &&
-                    docker compose up -d --no-deps --build book-server
-                  '
+  deploy:
+    executor: maven
+    steps:
+      # Replace this with steps to deploy to users
+      - run:
+          name: Login Server
+          command: |
+            ssh -o StrictHostKeyChecking=no book@ssh.makkapakka.cn '
+              ls &&
+              cd server && 
+              docker pull '"$CI_REGISTRY"'/makabaka/book-server:latest &&
+              docker compose up -d --no-deps --build book-server
+            '
 
 workflows:
   build-and-deploy:
