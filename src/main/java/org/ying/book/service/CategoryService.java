@@ -28,6 +28,7 @@ public class CategoryService {
 
     public List<BookCategory> getAllCategories() {
         BookCategoryExample bookCategoryExample = new BookCategoryExample();
+        bookCategoryExample.setOrderByClause("updated_at desc");
         bookCategoryExample.createCriteria().andDeletedEqualTo(false);
         return bookCategoryMapper.selectByExample(bookCategoryExample);
     }

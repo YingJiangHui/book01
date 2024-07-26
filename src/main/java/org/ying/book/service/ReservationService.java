@@ -45,6 +45,7 @@ public class ReservationService {
         ReservationExample borrowingExample = new ReservationExample();
         ReservationExample.Criteria criteria = borrowingExample.createCriteria();
         criteria.andBookIdIn(bookIds);
+        criteria.andBorrowingIdIsNull();
         criteria.andDeletedNotEqualTo(true);
         criteria.andReturnedAtGreaterThan(borrowedAt);
         criteria.andBorrowedAtLessThan(returnedAt);

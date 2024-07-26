@@ -12,6 +12,7 @@ import org.ying.book.dto.common.PageResultDto;
 import org.ying.book.dto.email.EmailBorrowNotificationDto;
 import org.ying.book.dto.library.BooksInLibraryDto;
 import org.ying.book.dto.library.LibraryDto;
+import org.ying.book.dto.statistics.StatisticsQueryDto;
 import org.ying.book.enums.ReservationApplicationEnum;
 import org.ying.book.enums.ReservationStatusEnum;
 import org.ying.book.exception.CustomException;
@@ -169,9 +170,11 @@ public class LibraryService {
         return PaginationHelper.paginate(new PageReqDto(), (rowBounds1, pageDto) -> libraryMapper.selectByExampleWithRowbounds(example, rowBounds1), libraryMapper.countByExample(example));
     }
 
-    public List<Library> getLibrariesAll() {
+    public List<Library> getLibrariesAll(StatisticsQueryDto statisticsQueryDto) {
         LibraryExample example = new LibraryExample();
-        example.createCriteria().andDeletedEqualTo(false);
+        if(statisticsQueryDto.getStartTime()!=null&&statisticsQueryDto.getEndTime()!=null){
+            example.createCriteria().andDeletedEqualTo(false).andCreatedAtBetween(statisticsQueryDto.getStartTime(),statisticsQueryDto.getEndTime());
+        }
         return libraryMapper.selectByExample(example);
     }
 

@@ -16,4 +16,5 @@ public class ReservationApplicationQueryDto extends PageReqDto {
     String email;
     Integer libraryId;
     Integer userId;
+    String orderByClause;
 }

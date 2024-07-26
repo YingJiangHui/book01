@@ -30,6 +30,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(registerUserContextInterceptor);
 //        registry.addInterceptor(systemAdminInterceptor).addPathPatterns("/users");
 //        registry.addInterceptor(libraryAdminInterceptor).addPathPatterns("/books");
-//        registry.addInterceptor(readerInterceptor).excludePathPatterns("/users");
+        registry.addInterceptor(readerInterceptor).addPathPatterns("/reservation-application").addPathPatterns("/books/reservation").addPathPatterns("/books/borrowing");
     }
 }
