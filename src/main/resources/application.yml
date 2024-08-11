@@ -80,10 +80,10 @@ springdoc:
 
 # 将如上minio 转换为yml语法
 minio:
-  url: http://oss.makkapakka.cn:9000
+  url: http://localhost:9000
   access-key: minio
   secret-key: minio123
   bucket-name: book01
   expiration: 3600000 # 1 hour
   region: us-east-1
-  endpoint: http://oss.makkapakka.cn:9000
+  endpoint: http://localhost:9000
